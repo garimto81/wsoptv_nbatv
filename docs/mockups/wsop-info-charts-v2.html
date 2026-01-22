@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Hand Charts - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 25px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active { font-weight: bold; border-bottom-color: #000; }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 20px;
+      border-bottom: var(--border);
+    }
+    .ad-image {
+      width: 150px;
+      height: 60px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: var(--bg-light);
+    }
+    .ad-content { flex: 1; font-size: 14px; }
+    .ad-cta {
+      padding: 10px 30px;
+      border: var(--border);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Charts Section */
+    .charts-container {
+      padding: 30px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: var(--border-thin);
+    }
+    .filter-select {
+      padding: 8px 15px;
+      border: var(--border);
+      background: #fff;
+      font-family: inherit;
+      font-size: 12px;
+    }
+
+    /* Head-to-Head Comparison (= Shot Charts 대응) */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .player-card {
+      border: var(--border);
+    }
+    .player-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: var(--bg-medium);
+      border-bottom: var(--border-thin);
+    }
+    .player-card-title {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .player-card-date {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Position Map (= Shot Chart 대응) */
+    .position-map {
+      aspect-ratio: 16/10;
+      background: var(--bg-light);
+      border-bottom: var(--border-thin);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .poker-table-outline {
+      width: 80%;
+      height: 70%;
+      border: 2px solid #000;
+      border-radius: 50%;
+      position: relative;
+    }
+    .position-marker {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: var(--border-thin);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      background: #fff;
+    }
+    .position-marker.highlight { background: #000; color: #fff; }
+    .position-marker.miss { background: var(--bg-light); }
+
+    .player-card-stats {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stat-highlight {
+      font-size: 14px;
+    }
+    .stat-highlight strong {
+      color: #000;
+    }
+    .download-btn {
+      padding: 8px 20px;
+      background: #000;
+      color: #fff;
+      border: var(--border);
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Stack Tracker (= Lead Tracker) */
+    .stack-tracker {
+      border: var(--border);
+      margin-bottom: 30px;
+    }
+    .stack-tracker-header {
+      padding: 15px;
+      background: var(--bg-medium);
+      border-bottom: var(--border-thin);
+      font-weight: bold;
+    }
+    .stack-tracker-chart {
+      height: 200px;
+      background: var(--bg-light);
+      position: relative;
+      padding: 20px;
+    }
+    .chart-grid {
+      position: absolute;
+      top: 20px;
+      left: 60px;
+      right: 20px;
+      bottom: 40px;
+      border-left: var(--border-thin);
+      border-bottom: var(--border-thin);
+    }
+    .chart-y-axis {
+      position: absolute;
+      left: 10px;
+      top: 20px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .chart-x-axis {
+      position: absolute;
+      left: 60px;
+      right: 20px;
+      bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .chart-area {
+      position: absolute;
+      top: 20px;
+      left: 60px;
+      right: 20px;
+      bottom: 40px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 24px,
+        #ddd 24px,
+        #ddd 25px
+      );
+    }
+    .chart-line-placeholder {
+      position: absolute;
+      top: 30%;
+      left: 60px;
+      right: 20px;
+      height: 2px;
+      background: #000;
+    }
+
+    .stack-tracker-summary {
+      display: flex;
+      justify-content: space-around;
+      padding: 20px;
+      border-top: var(--border-thin);
+    }
+    .summary-item {
+      text-align: center;
+    }
+    .summary-value {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .summary-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v2.0 - HAND CHARTS</div>
+
+  <!-- Info Tabs -->
+  <div class="info-tabs">
+    <div class="info-tab">Summary</div>
+    <div class="info-tab">Player Stats</div>
+    <div class="info-tab active">Hand Charts</div>
+    <div class="info-tab">Hand History</div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-image">[GGPoker<br>Ad]</div>
+    <div class="ad-content">Play the WSOP Main Event Online at GGPoker</div>
+    <button class="ad-cta">PLAY NOW</button>
+  </div>
+
+  <!-- Charts Container -->
+  <div class="charts-container">
+    <div class="section-title">HEAD-TO-HEAD COMPARISON</div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <select class="filter-select">
+        <option>Position Map</option>
+        <option>Win Rate</option>
+        <option>Equity Graph</option>
+      </select>
+      <select class="filter-select">
+        <option>Level 38</option>
+        <option>Level 37</option>
+        <option>Level 36</option>
+        <option>All Levels</option>
+      </select>
+      <span style="margin-left:auto;font-size:12px;color:#666">Range Filter ▼</span>
+    </div>
+
+    <!-- Head-to-Head Comparison (= Shot Charts) -->
+    <div class="comparison-grid">
+      <!-- Player 1: Negreanu -->
+      <div class="player-card">
+        <div class="player-card-header">
+          <div>
+            <div class="player-card-title">Daniel Negreanu</div>
+            <div>All Positions</div>
+          </div>
+          <div class="player-card-date">Final Table • 01/21/2026</div>
+        </div>
+        <div class="position-map">
+          <div class="poker-table-outline">
+            <!-- Position markers -->
+            <div class="position-marker highlight" style="top:-12px;left:50%;transform:translateX(-50%)">BTN</div>
+            <div class="position-marker" style="top:15%;left:10%">SB</div>
+            <div class="position-marker" style="top:15%;right:10%">BB</div>
+            <div class="position-marker highlight" style="top:50%;left:-5%">UTG</div>
+            <div class="position-marker" style="top:50%;right:-5%">CO</div>
+            <div class="position-marker miss" style="bottom:15%;left:10%">MP</div>
+            <div class="position-marker" style="bottom:15%;right:10%">HJ</div>
+          </div>
+        </div>
+        <div class="player-card-stats">
+          <span class="stat-highlight">Win Rate: <strong>55%</strong> (42/76 hands)</span>
+          <button class="download-btn">DOWNLOAD</button>
+        </div>
+      </div>
+
+      <!-- Player 2: Ivey -->
+      <div class="player-card">
+        <div class="player-card-header">
+          <div>
+            <div class="player-card-title">Phil Ivey</div>
+            <div>All Positions</div>
+          </div>
+          <div class="player-card-date">Final Table • 01/21/2026</div>
+        </div>
+        <div class="position-map">
+          <div class="poker-table-outline">
+            <div class="position-marker" style="top:-12px;left:50%;transform:translateX(-50%)">BTN</div>
+            <div class="position-marker highlight" style="top:15%;left:10%">SB</div>
+            <div class="position-marker" style="top:15%;right:10%">BB</div>
+            <div class="position-marker" style="top:50%;left:-5%">UTG</div>
+            <div class="position-marker highlight" style="top:50%;right:-5%">CO</div>
+            <div class="position-marker" style="bottom:15%;left:10%">MP</div>
+            <div class="position-marker miss" style="bottom:15%;right:10%">HJ</div>
+          </div>
+        </div>
+        <div class="player-card-stats">
+          <span class="stat-highlight">Win Rate: <strong>62%</strong> (38/61 hands)</span>
+          <button class="download-btn">DOWNLOAD</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stack Tracker (= Lead Tracker) -->
+    <div class="stack-tracker">
+      <div class="stack-tracker-header">STACK TRACKER</div>
+      <div class="stack-tracker-chart">
+        <div class="chart-y-axis">
+          <span>15M</span>
+          <span>12M</span>
+          <span>9M</span>
+          <span>6M</span>
+          <span>3M</span>
+          <span>0</span>
+        </div>
+        <div class="chart-area"></div>
+        <div class="chart-line-placeholder"></div>
+        <div class="chart-x-axis">
+          <span>L35</span>
+          <span>L36</span>
+          <span>L37</span>
+          <span>L38</span>
+        </div>
+      </div>
+      <div class="stack-tracker-summary">
+        <div class="summary-item">
+          <div class="summary-value">[DN] 12.4M</div>
+          <div class="summary-label">Chip Leader</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-value">5</div>
+          <div class="summary-label">Lead Changes</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-value">+4.2M</div>
+          <div class="summary-label">Biggest Swing</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-value">[PI] 9.8M</div>
+          <div class="summary-label">2nd Place</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

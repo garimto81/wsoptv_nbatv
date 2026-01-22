@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Main Streaming - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --bg-dark: #333;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* ========== 1. SCOREBOARD TICKER ========== */
+    .scoreboard-ticker {
+      display: flex;
+      border-bottom: var(--border);
+      background: #fff;
+      height: 110px;
+    }
+    .ticker-date {
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: var(--border-thin);
+      font-size: 11px;
+    }
+    .ticker-date .day { font-weight: bold; }
+    .ticker-games {
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .ticker-game {
+      min-width: 180px;
+      padding: 10px 15px;
+      border-right: var(--border-thin);
+    }
+    .game-status {
+      font-size: 10px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-live { color: #000; font-weight: bold; }
+    .status-live::before {
+      content: "●";
+      color: #c00;
+    }
+    .game-teams {
+      font-size: 13px;
+    }
+    .team-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 0;
+    }
+    .team-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .team-logo {
+      width: 20px;
+      height: 20px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      background: var(--bg-light);
+    }
+    .team-score { font-weight: bold; }
+    .game-tag {
+      margin-top: 5px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .league-pass-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border: var(--border-thin);
+      font-size: 9px;
+    }
+
+    /* ========== 2. AD BANNER ========== */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      height: 100px;
+      border-bottom: var(--border);
+      background: var(--bg-light);
+    }
+    .ad-image {
+      width: 180px;
+      height: 80px;
+      margin: 0 20px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: #fff;
+    }
+    .ad-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .ad-logo {
+      width: 50px;
+      height: 50px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: #fff;
+    }
+    .ad-text {
+      font-size: 14px;
+    }
+    .ad-cta {
+      padding: 12px 30px;
+      border: var(--border);
+      background: #c00;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .ad-promo {
+      width: 200px;
+      height: 80px;
+      margin-right: 20px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: #fff;
+      text-align: center;
+    }
+
+    /* ========== 3. GAME HEADER ========== */
+    .game-header {
+      padding: 15px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+    }
+    .game-title {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .broadcast-info {
+      font-size: 12px;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .broadcast-info .icon {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    /* ========== 4. VIDEO PLAYER ========== */
+    .video-player {
+      aspect-ratio: 16/9;
+      background: #111;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-placeholder {
+      color: #444;
+      font-size: 24px;
+      letter-spacing: 5px;
+    }
+
+    /* ========== 5. STREAM TABS ========== */
+    .stream-tabs {
+      display: flex;
+      gap: 10px;
+      padding: 15px 20px;
+      background: var(--bg-dark);
+    }
+    .stream-tab {
+      padding: 10px 20px;
+      border: var(--border);
+      background: #444;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 20px;
+    }
+    .stream-tab.active {
+      background: #fff;
+      color: #000;
+    }
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+      border: 1px solid currentColor;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      border-radius: 50%;
+    }
+    .tab-count {
+      background: var(--bg-medium);
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
+
+    /* ========== 6. TIMELINE ========== */
+    .timeline {
+      padding: 10px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+    }
+    .timeline-time {
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .timeline-bar {
+      height: 4px;
+      background: #444;
+      position: relative;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #c00;
+      width: 85%;
+    }
+    .timeline-live {
+      position: absolute;
+      right: 0;
+      top: -8px;
+      font-size: 10px;
+      color: #c00;
+      font-weight: bold;
+    }
+
+    /* ========== 7. PLAYER CONTROLS ========== */
+    .player-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+      border-top: 1px solid #444;
+    }
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .control-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .control-btn:hover { background: #444; }
+    .control-btn.large {
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+    }
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      background: #444;
+      position: relative;
+    }
+    .volume-level {
+      width: 60%;
+      height: 100%;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - NBA TV MAIN STREAMING</div>
+
+  <!-- 1. SCOREBOARD TICKER -->
+  <div class="scoreboard-ticker">
+    <div class="ticker-date">
+      <span class="day">TUE</span>
+      <span>JAN</span>
+      <span>20</span>
+    </div>
+    <div class="ticker-games">
+      <div class="ticker-game">
+        <div class="game-status"><span class="status-live">Q3 4:49</span></div>
+        <div class="game-teams">
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[C]</span> Clippers</span>
+            <span class="team-score">74</span>
+          </div>
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[B]</span> Bulls</span>
+            <span class="team-score">84</span>
+          </div>
+        </div>
+        <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+      </div>
+      <div class="ticker-game">
+        <div class="game-status"><span class="status-live">Q2 :07.4</span> AWS NBA Rivals Week</div>
+        <div class="game-teams">
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[S]</span> Spurs</span>
+            <span class="team-score">70</span>
+          </div>
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[R]</span> Rockets</span>
+            <span class="team-score">59</span>
+          </div>
+        </div>
+        <div class="game-tag"><span class="league-pass-tag">League Pass</span> Coupang Play</div>
+      </div>
+      <div class="ticker-game">
+        <div class="game-status"><span class="status-live">END Q1</span></div>
+        <div class="game-teams">
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[T]</span> Timberwolves</span>
+            <span class="team-score">34</span>
+          </div>
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[J]</span> Jazz</span>
+            <span class="team-score">29</span>
+          </div>
+        </div>
+        <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+      </div>
+      <div class="ticker-game">
+        <div class="game-status">PREGAME 12:00 PM KST</div>
+        <div class="game-teams">
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[L]</span> Lakers</span>
+            <span>25-16</span>
+          </div>
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[N]</span> Nuggets</span>
+            <span>29-14</span>
+          </div>
+        </div>
+        <div class="game-tag"><span class="league-pass-tag">League Pass</span> Coupang Play</div>
+      </div>
+      <div class="ticker-game">
+        <div class="game-status">PREGAME 12:00 PM KST</div>
+        <div class="game-teams">
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[R]</span> Raptors</span>
+            <span>25-19</span>
+          </div>
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[W]</span> Warriors</span>
+            <span>25-19</span>
+          </div>
+        </div>
+        <div class="game-tag"><span class="league-pass-tag">League Pass</span> Coupang Play</div>
+      </div>
+      <div class="ticker-game">
+        <div class="game-status">FINAL</div>
+        <div class="game-teams">
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[S]</span> Suns</span>
+            <span></span>
+          </div>
+          <div class="team-row">
+            <span class="team-name"><span class="team-logo">[7]</span> 76ers</span>
+            <span></span>
+          </div>
+        </div>
+        <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. AD BANNER -->
+  <div class="ad-banner">
+    <div class="ad-image">[Product Image]<br>H60 Pro</div>
+    <div class="ad-content">
+      <div class="ad-logo">[Logo]</div>
+      <div class="ad-text">최대 90도 구부러지는 로보락 신제품 H60 Pro 청소기</div>
+      <button class="ad-cta">열기</button>
+    </div>
+    <div class="ad-promo">AWS<br>NBA<br>RIVALS WEEK<br><small>SEE SCHEDULE</small></div>
+  </div>
+
+  <!-- 3. GAME HEADER -->
+  <div class="game-header">
+    <div class="game-title">CLIPPERS @ BULLS</div>
+    <div class="broadcast-info">
+      <span class="icon">[B]</span>
+      <span>Bulls (In-Arena)</span>
+      <span>⏱</span>
+    </div>
+  </div>
+
+  <!-- 4. VIDEO PLAYER -->
+  <div class="video-player">
+    <div class="video-placeholder">[LIVE VIDEO STREAM]</div>
+  </div>
+
+  <!-- 5. STREAM TABS -->
+  <div class="stream-tabs">
+    <button class="stream-tab active">
+      <span class="tab-icon">📡</span>
+      Streams
+      <span class="tab-count">9</span>
+    </button>
+    <button class="stream-tab">
+      <span class="tab-icon">⊞</span>
+      MultiView
+    </button>
+    <button class="stream-tab">
+      <span class="tab-icon">🔥</span>
+      Key Plays
+    </button>
+  </div>
+
+  <!-- 6. TIMELINE -->
+  <div class="timeline">
+    <div class="timeline-time">01:35:55</div>
+    <div class="timeline-bar">
+      <div class="timeline-progress"></div>
+      <span class="timeline-live">LIVE</span>
+    </div>
+  </div>
+
+  <!-- 7. PLAYER CONTROLS -->
+  <div class="player-controls">
+    <div class="controls-left">
+      <button class="control-btn large">[||]</button>
+      <button class="control-btn">[<<]</button>
+      <button class="control-btn">[10]</button>
+      <button class="control-btn">[>>]</button>
+      <button class="control-btn">[🔊]</button>
+      <div class="volume-slider">
+        <div class="volume-level"></div>
+      </div>
+    </div>
+    <div class="controls-right">
+      <button class="control-btn">[CC]</button>
+      <button class="control-btn">[⚙]</button>
+      <button class="control-btn">[⊞]</button>
+      <button class="control-btn">[🖼]</button>
+      <button class="control-btn">[⛶]</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Featured Hands Player - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #fff;
+    }
+    :root {
+      --border: 2px solid #fff;
+      --border-thin: 1px solid #444;
+      --bg-dark: #1a1a1a;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Header */
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 25px;
+      background: var(--bg-dark);
+      border-bottom: var(--border-thin);
+    }
+    .header-title {
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .header-close {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Video Area */
+    .video-area {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-placeholder {
+      color: #333;
+      font-size: 14px;
+    }
+
+    /* Poker Overlays */
+    .board-overlay {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+    .board-card {
+      width: 45px;
+      height: 65px;
+      border: 2px solid #fff;
+      background: #fff;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .pot-overlay {
+      position: absolute;
+      bottom: 160px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #fff;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    /* Player HUDs */
+    .player-hud {
+      position: absolute;
+      padding: 10px 15px;
+      background: rgba(0,0,0,0.9);
+      border: 1px solid #fff;
+      min-width: 120px;
+    }
+    .player-hud.left { left: 10%; bottom: 30%; }
+    .player-hud.right { right: 10%; bottom: 30%; }
+    .hud-name {
+      font-weight: bold;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .hud-cards {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 5px;
+    }
+    .hud-card {
+      width: 30px;
+      height: 42px;
+      border: 1px solid #fff;
+      background: #fff;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .hud-stack {
+      font-size: 11px;
+      color: #0f0;
+    }
+    .hud-equity {
+      font-size: 10px;
+      color: #ff0;
+      margin-top: 3px;
+    }
+    .hud-action {
+      font-size: 10px;
+      color: #f00;
+      font-weight: bold;
+      margin-top: 3px;
+    }
+
+    /* Hand Info Bar */
+    .hand-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 25px;
+      background: var(--bg-dark);
+      border-top: var(--border-thin);
+      border-bottom: var(--border-thin);
+    }
+    .hand-info-left {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .hand-number-display {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .hand-level-display {
+      font-size: 12px;
+      color: #888;
+    }
+    .hand-tag-display {
+      padding: 4px 10px;
+      background: #c00;
+      color: #fff;
+      font-size: 10px;
+    }
+    .hand-info-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .equity-display {
+      font-size: 11px;
+      padding: 5px 10px;
+      background: #333;
+    }
+
+    /* Control Bar */
+    .control-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 25px;
+      background: #000;
+    }
+    .control-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .control-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .control-btn:hover { background: #333; }
+    .control-btn.primary {
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      color: #000;
+    }
+    .control-btn.text {
+      width: auto;
+      padding: 0 15px;
+      font-size: 11px;
+    }
+
+    /* Timeline */
+    .timeline-section {
+      flex: 1;
+      margin: 0 30px;
+    }
+    .street-markers {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    .street-marker.active { color: #fff; font-weight: bold; }
+    .timeline-bar {
+      height: 6px;
+      background: #333;
+      position: relative;
+      border-radius: 3px;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #c00;
+      width: 65%;
+      border-radius: 3px;
+    }
+    .timeline-markers {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+    }
+    .timeline-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      top: -1px;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 15px;
+      background: var(--bg-dark);
+    }
+    .nav-btn {
+      padding: 12px 25px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: #fff;
+      font-family: inherit;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .nav-btn:hover { background: #333; }
+    .nav-btn.primary {
+      background: #c00;
+      border-color: #c00;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - WSOP FEATURED HANDS PLAYER</div>
+
+  <!-- Header -->
+  <div class="player-header">
+    <div class="header-title">🃏 FEATURED HAND #245</div>
+    <button class="header-close">[X]</button>
+  </div>
+
+  <!-- Video Area -->
+  <div class="video-area">
+    <div class="video-placeholder">[POKER TABLE - FEATURED HAND PLAYBACK]</div>
+
+    <!-- POT Overlay -->
+    <div class="pot-overlay">POT: $19,800,000</div>
+
+    <!-- Board -->
+    <div class="board-overlay">
+      <div class="board-card">7♦</div>
+      <div class="board-card">2♠</div>
+      <div class="board-card">9♣</div>
+      <div class="board-card">K♥</div>
+      <div class="board-card">3♦</div>
+    </div>
+
+    <!-- Player HUDs -->
+    <div class="player-hud left">
+      <div class="hud-name">D. Negreanu</div>
+      <div class="hud-cards">
+        <div class="hud-card">A♠</div>
+        <div class="hud-card">A♥</div>
+      </div>
+      <div class="hud-stack">$12.4M</div>
+      <div class="hud-equity">Equity: 96%</div>
+      <div class="hud-action">WINNER</div>
+    </div>
+
+    <div class="player-hud right">
+      <div class="hud-name">P. Ivey</div>
+      <div class="hud-cards">
+        <div class="hud-card">K♠</div>
+        <div class="hud-card">K♦</div>
+      </div>
+      <div class="hud-stack">$9.8M</div>
+      <div class="hud-equity">Equity: 4%</div>
+    </div>
+  </div>
+
+  <!-- Hand Info Bar -->
+  <div class="hand-info-bar">
+    <div class="hand-info-left">
+      <div class="hand-number-display">Hand #245 of 248</div>
+      <div class="hand-level-display">Level 38 • 200K/400K/400K</div>
+      <span class="hand-tag-display">ALL-IN</span>
+    </div>
+    <div class="hand-info-right">
+      <div class="equity-display">Negreanu: 96% | Ivey: 4%</div>
+    </div>
+  </div>
+
+  <!-- Control Bar -->
+  <div class="control-bar">
+    <div class="control-group">
+      <button class="control-btn">[|◀]</button>
+      <button class="control-btn">[◀◀]</button>
+      <button class="control-btn primary">[▶]</button>
+      <button class="control-btn">[▶▶]</button>
+      <button class="control-btn">[▶|]</button>
+    </div>
+
+    <div class="timeline-section">
+      <div class="street-markers">
+        <span class="street-marker">PREFLOP</span>
+        <span class="street-marker">FLOP</span>
+        <span class="street-marker">TURN</span>
+        <span class="street-marker active">RIVER</span>
+        <span class="street-marker">SHOWDOWN</span>
+      </div>
+      <div class="timeline-bar">
+        <div class="timeline-progress"></div>
+        <div class="timeline-markers">
+          <div class="timeline-dot" style="left:0%"></div>
+          <div class="timeline-dot" style="left:25%"></div>
+          <div class="timeline-dot" style="left:50%"></div>
+          <div class="timeline-dot" style="left:75%"></div>
+          <div class="timeline-dot" style="left:100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <button class="control-btn">[🔊]</button>
+      <button class="control-btn text">[CARDS]</button>
+      <button class="control-btn text">[EQUITY]</button>
+      <button class="control-btn">[⛶]</button>
+    </div>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="nav-buttons">
+    <button class="nav-btn">[◀] PREV HAND</button>
+    <button class="nav-btn">[📋] HAND LIST</button>
+    <button class="nav-btn">[▶] NEXT HAND</button>
+    <button class="nav-btn primary">[▶▶] JUMP TO LIVE</button>
+  </div>
+</body>
+</html>

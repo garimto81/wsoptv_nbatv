@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Main Streaming - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+      min-height: 100vh;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-white: #FFFFFF;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --bg-dark: #000000;
+      --text-muted: #666666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* ===== [1] TOURNAMENT TICKER ===== */
+    .tournament-ticker {
+      display: flex;
+      background: var(--bg-white);
+      border-bottom: var(--border);
+      height: 110px;
+      overflow-x: auto;
+    }
+    .day-column {
+      min-width: 60px;
+      padding: 10px;
+      border-right: var(--border-thin);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-light);
+    }
+    .day-column .weekday { font-size: 14px; font-weight: bold; }
+    .day-column .day-info { font-size: 12px; }
+    .table-card {
+      min-width: 180px;
+      padding: 10px 15px;
+      border-right: var(--border-thin);
+      cursor: pointer;
+    }
+    .table-card:hover { background: var(--bg-light); }
+    .table-card.active { background: var(--bg-medium); }
+    .table-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+    .status-live { display: flex; align-items: center; gap: 4px; }
+    .status-live::before {
+      content: "●";
+      color: #000;
+      font-size: 8px;
+    }
+    .status-tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border: var(--border-thin);
+      background: var(--bg-light);
+    }
+    .status-tag.rivals { background: #000; color: #fff; }
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2px 0;
+      font-size: 13px;
+    }
+    .table-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .table-icon {
+      width: 20px;
+      height: 20px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+    .stack { font-weight: bold; }
+    .provider-tag {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .provider-tag::before { content: "○"; }
+
+    /* ===== [2] AD BANNER ===== */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 20px;
+      background: var(--bg-white);
+      border-bottom: var(--border);
+      height: 100px;
+    }
+    .ad-image {
+      width: 150px;
+      height: 70px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: var(--bg-light);
+    }
+    .ad-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    .ad-logo {
+      width: 40px;
+      height: 40px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+    .ad-text { font-size: 14px; }
+    .ad-cta {
+      padding: 12px 40px;
+      border: var(--border);
+      background: var(--bg-white);
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .ad-cta:hover { background: #000; color: #fff; }
+    .ad-promo {
+      width: 180px;
+      height: 70px;
+      border: var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+    .ad-promo .title { font-size: 16px; font-weight: bold; }
+
+    /* ===== [3] TOURNAMENT HEADER ===== */
+    .tournament-header {
+      background: var(--bg-medium);
+      padding: 15px 20px;
+      border-bottom: var(--border);
+      height: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .tournament-title {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .tournament-sub {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    .broadcast-icon {
+      width: 20px;
+      height: 20px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    /* ===== [4] VIDEO PLAYER ===== */
+    .video-container {
+      position: relative;
+      background: #000;
+      aspect-ratio: 16/9;
+      max-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-placeholder {
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      border: 2px dashed #444;
+      padding: 30px 50px;
+    }
+    .video-overlay-top {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #fff;
+    }
+    .video-overlay-top .title { font-size: 18px; font-weight: bold; }
+    .video-overlay-top .sub { font-size: 12px; color: #aaa; }
+    .video-overlay-watermark {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 60px;
+      height: 40px;
+      border: 1px dashed #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 10px;
+    }
+    .video-overlay-pot {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.9);
+      color: #000;
+      padding: 8px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: var(--border);
+    }
+    .video-overlay-board {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      color: #000;
+      padding: 10px 25px;
+      font-size: 14px;
+      border: var(--border);
+      letter-spacing: 4px;
+    }
+    .video-overlay-seats {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.8);
+      color: #000;
+      padding: 6px 15px;
+      font-size: 11px;
+      border: var(--border-thin);
+    }
+    .video-catch-up {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: var(--border);
+      padding: 10px 20px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .video-catch-up:hover { background: #000; color: #fff; }
+
+    /* ===== [5] STREAM TABS ===== */
+    .stream-tabs {
+      display: flex;
+      gap: 10px;
+      padding: 10px 20px;
+      background: var(--bg-medium);
+      border-bottom: var(--border);
+      height: 50px;
+      align-items: center;
+    }
+    .stream-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #000;
+      color: #fff;
+      border: var(--border);
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .stream-tab:hover { background: #333; }
+    .stream-tab .icon { font-size: 14px; }
+    .stream-tab .badge {
+      padding: 2px 8px;
+      border: 1px solid #fff;
+      font-size: 11px;
+    }
+
+    /* ===== [6] TIMELINE ===== */
+    .timeline {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 10px 20px;
+      background: var(--bg-light);
+      border-bottom: var(--border);
+      height: 40px;
+    }
+    .timeline-time {
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+    }
+    .timeline-level {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border: var(--border-thin);
+      background: #fff;
+    }
+    .timeline-bar {
+      flex: 1;
+      height: 6px;
+      background: #fff;
+      border: var(--border-thin);
+      position: relative;
+    }
+    .timeline-progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 85%;
+      background: #000;
+    }
+    .timeline-live {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 2px 10px;
+      border: var(--border);
+    }
+
+    /* ===== [7] PLAYER CONTROLS ===== */
+    .player-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: var(--bg-white);
+      border-bottom: var(--border);
+      height: 50px;
+    }
+    .controls-left, .controls-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .control-btn {
+      width: 36px;
+      height: 36px;
+      border: var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .control-btn:hover { background: #000; color: #fff; }
+    .control-btn.wide {
+      width: auto;
+      padding: 0 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v2.0 - WSOP MAIN</div>
+
+  <!-- [1] TOURNAMENT TICKER (= Scoreboard Ticker) -->
+  <div class="tournament-ticker">
+    <div class="day-column">
+      <span class="weekday">DAY</span>
+      <span class="day-info">2A</span>
+    </div>
+
+    <div class="table-card active">
+      <div class="table-status">
+        <span class="status-live">Level 38</span>
+        <span class="status-tag rivals">[Final]</span>
+      </div>
+      <div class="table-row">
+        <span class="table-name"><span class="table-icon">♠</span>Table 1</span>
+        <span class="stack">9 Players</span>
+      </div>
+      <div class="table-row">
+        <span class="table-name"><span class="table-icon">♥</span>Blinds</span>
+        <span class="stack">100K/200K</span>
+      </div>
+      <div class="provider-tag">Featured Table</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="status-live">Level 15</span>
+        <span class="status-tag">[Featured]</span>
+      </div>
+      <div class="table-row">
+        <span class="table-name"><span class="table-icon">♦</span>Table 42</span>
+        <span class="stack">8 Players</span>
+      </div>
+      <div class="table-row">
+        <span class="table-name"><span class="table-icon">♣</span>Blinds</span>
+        <span class="stack">1K/2K</span>
+      </div>
+      <div class="provider-tag">Featured Table</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="status-live">Level 14</span>
+        <span class="status-tag">[Bubble]</span>
+      </div>
+      <div class="table-row">
+        <span class="table-name"><span class="table-icon">♠</span>Table 78</span>
+        <span class="stack">7 Players</span>
+      </div>
+      <div class="table-row">
+        <span class="table-name"><span class="table-icon">♥</span>Blinds</span>
+        <span class="stack">800/1.6K</span>
+      </div>
+      <div class="provider-tag">GGPoker Partner</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span>BREAK</span>
+        <span>15:00</span>
+      </div>
+      <div class="table-row" style="color:#666">
+        <span class="table-name"><span class="table-icon">♦</span>Table 23</span>
+        <span class="stack">6 Players</span>
+      </div>
+      <div class="table-row" style="color:#666">
+        <span class="table-name"><span class="table-icon">♣</span>Blinds</span>
+        <span class="stack">600/1.2K</span>
+      </div>
+      <div class="provider-tag">Featured Table</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="status-live">Level 15</span>
+      </div>
+      <div class="table-row">
+        <span class="table-name"><span class="table-icon">♠</span>Table 55</span>
+        <span class="stack">8 Players</span>
+      </div>
+      <div class="table-row">
+        <span class="table-name"><span class="table-icon">♥</span>Blinds</span>
+        <span class="stack">1K/2K</span>
+      </div>
+      <div class="provider-tag">Featured Table</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span>COMPLETED</span>
+      </div>
+      <div class="table-row" style="color:#666">
+        <span class="table-name"><span class="table-icon">X</span>Table 12</span>
+        <span class="stack">-</span>
+      </div>
+      <div class="table-row" style="color:#666">
+        <span>Eliminated</span>
+        <span>-</span>
+      </div>
+      <div class="provider-tag">Featured Table</div>
+    </div>
+  </div>
+
+  <!-- [2] AD BANNER -->
+  <div class="ad-banner">
+    <div class="ad-image">[GGPoker<br>Ad Image<br>150x70]</div>
+    <div class="ad-content">
+      <div class="ad-logo">[GG]</div>
+      <span class="ad-text">Play the WSOP Main Event Online at GGPoker</span>
+      <button class="ad-cta">PLAY NOW</button>
+    </div>
+    <div class="ad-promo">
+      <small>[WSOP.com]</small>
+      <span class="title">$10M GTD</span>
+      <small>[REGISTER]</small>
+    </div>
+  </div>
+
+  <!-- [3] TOURNAMENT HEADER (= Game Header) -->
+  <div class="tournament-header">
+    <div class="tournament-title">[♠♥♦♣] WSOP MAIN EVENT 2024 - FINAL TABLE</div>
+    <div class="tournament-sub">
+      <span class="broadcast-icon">[T]</span>
+      <span>Table 1 (Featured) ⏱</span>
+    </div>
+  </div>
+
+  <!-- [4] VIDEO PLAYER -->
+  <div class="video-container">
+    <div class="video-overlay-top">
+      <div class="title">[♠♥♦♣] WSOP MAIN EVENT</div>
+      <div class="sub">Table 1 (Featured)</div>
+    </div>
+    <div class="video-overlay-watermark">[WSOP<br>Logo]</div>
+    <div class="video-overlay-pot">[POT: $2,450,000]</div>
+    <div class="video-overlay-board">[BOARD: A♠ K♥ 7♦ 2♣ __]</div>
+    <div class="video-overlay-seats">[SEAT 1] [2] [3] [4] [5] [6] [7] [8] [9]</div>
+    <div class="video-placeholder">
+      [ POKER TABLE VIEW ]<br><br>
+      16:9 Aspect Ratio<br>
+      Live Tournament Stream
+    </div>
+    <div class="video-catch-up">[🔥] Catch up with Featured Hands</div>
+  </div>
+
+  <!-- [5] STREAM TABS -->
+  <div class="stream-tabs">
+    <div class="stream-tab">
+      <span class="icon">[📡]</span>
+      <span>Tables</span>
+      <span class="badge">45</span>
+    </div>
+    <div class="stream-tab">
+      <span class="icon">[⊞]</span>
+      <span>MultiView</span>
+    </div>
+    <div class="stream-tab">
+      <span class="icon">[🔥]</span>
+      <span>Featured Hands</span>
+    </div>
+  </div>
+
+  <!-- [6] TIMELINE -->
+  <div class="timeline">
+    <span class="timeline-level">Level 38</span>
+    <span class="timeline-time">02:45:30</span>
+    <div class="timeline-bar">
+      <div class="timeline-progress"></div>
+    </div>
+    <span class="timeline-live">LIVE</span>
+  </div>
+
+  <!-- [7] PLAYER CONTROLS -->
+  <div class="player-controls">
+    <div class="controls-left">
+      <button class="control-btn">[||]</button>
+      <button class="control-btn">[<<]</button>
+      <button class="control-btn">[↺]</button>
+      <button class="control-btn wide">[CARDS]</button>
+      <button class="control-btn wide">[STACK]</button>
+      <button class="control-btn">[>>]</button>
+      <button class="control-btn">[🔊]</button>
+    </div>
+    <div class="controls-right">
+      <button class="control-btn">[CC]</button>
+      <button class="control-btn">[⊞]</button>
+      <button class="control-btn">[⚙]</button>
+      <button class="control-btn wide">[CAM]</button>
+      <button class="control-btn">[PIP]</button>
+      <button class="control-btn">[⛶]</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Streaming UI Wireframe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+      min-height: 100vh;
+    }
+
+    /* Wireframe Variables */
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #f5f5f5;
+      --bg-dark: #e0e0e0;
+      --text-muted: #666;
+    }
+
+    /* Tournament Tables Ticker */
+    .tournament-ticker {
+      display: flex;
+      background: #fff;
+      border-bottom: var(--border);
+      overflow-x: auto;
+    }
+
+    .day-column {
+      min-width: 70px;
+      padding: 10px;
+      border-right: var(--border-thin);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+
+    .day-column .day {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .table-card {
+      min-width: 160px;
+      padding: 10px 15px;
+      border-right: var(--border-thin);
+      cursor: pointer;
+    }
+
+    .table-card:hover {
+      background: var(--bg-light);
+    }
+
+    .table-status {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .table-status .live::before {
+      content: "[LIVE]";
+      margin-right: 4px;
+      font-weight: bold;
+    }
+
+    .table-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 0;
+      font-size: 13px;
+    }
+
+    .table-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .table-icon {
+      width: 16px;
+      height: 16px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+    }
+
+    .stack {
+      font-weight: bold;
+    }
+
+    .table-tag {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      border: var(--border-thin);
+      padding: 2px 4px;
+      display: inline-block;
+    }
+
+    .table-tag.featured {
+      background: #000;
+      color: #fff;
+    }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      background: #fff;
+      padding: 15px;
+      align-items: center;
+      gap: 20px;
+      border-bottom: var(--border);
+    }
+
+    .ad-left {
+      width: 150px;
+      height: 80px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+
+    .ad-left::before {
+      content: "[WSOP SPONSOR]";
+    }
+
+    .ad-center {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .ad-text {
+      font-size: 14px;
+      border-bottom: var(--border-thin);
+      padding-bottom: 2px;
+    }
+
+    .ad-button {
+      background: #fff;
+      color: #000;
+      border: var(--border);
+      padding: 12px 40px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+    }
+
+    .ad-button:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .ad-right {
+      width: 180px;
+      height: 80px;
+      border: var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+
+    .ad-right .title {
+      font-size: 16px;
+      font-weight: bold;
+      border-bottom: var(--border-thin);
+    }
+
+    /* Tournament Header */
+    .tournament-header {
+      background: var(--bg-dark);
+      padding: 15px 20px;
+      border-bottom: var(--border);
+    }
+
+    .tournament-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      letter-spacing: 2px;
+    }
+
+    .tournament-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .tournament-info .chip-icon {
+      border: var(--border-thin);
+      padding: 2px 4px;
+      font-size: 12px;
+    }
+
+    .prize-pool {
+      border: var(--border-thin);
+      padding: 2px 8px;
+      background: #fff;
+    }
+
+    /* Video Player */
+    .video-container {
+      background: var(--bg-light);
+      aspect-ratio: 16/9;
+      max-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: var(--border);
+      border-top: none;
+    }
+
+    .video-placeholder {
+      color: var(--text-muted);
+      font-size: 18px;
+      text-align: center;
+      padding: 20px;
+      border: 2px dashed #999;
+    }
+
+    /* Diagonal lines for placeholder */
+    .video-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        #eee 20px,
+        #eee 21px
+      );
+      pointer-events: none;
+    }
+
+    .video-placeholder {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      padding: 20px 40px;
+    }
+
+    /* Poker Overlay Indicators */
+    .overlay-indicators {
+      position: absolute;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 15px;
+      pointer-events: none;
+    }
+
+    .pot-display {
+      align-self: center;
+      background: #000;
+      color: #fff;
+      padding: 8px 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .community-cards {
+      align-self: center;
+      background: #fff;
+      border: var(--border);
+      padding: 10px 25px;
+      font-size: 14px;
+      letter-spacing: 4px;
+    }
+
+    .seat-positions {
+      align-self: center;
+      background: var(--bg-light);
+      border: var(--border-thin);
+      padding: 6px 15px;
+      font-size: 12px;
+    }
+
+    /* Stream Tabs */
+    .stream-tabs {
+      background: var(--bg-dark);
+      padding: 10px 20px;
+      display: flex;
+      gap: 10px;
+      border-bottom: var(--border);
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border: var(--border);
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+    }
+
+    .tab:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .tab.active {
+      background: #000;
+      color: #fff;
+    }
+
+    .tab .count {
+      border: var(--border-thin);
+      padding: 2px 6px;
+      font-size: 11px;
+    }
+
+    .tab.active .count {
+      border-color: #fff;
+    }
+
+    /* Timeline */
+    .timeline {
+      background: var(--bg-light);
+      padding: 10px 20px;
+      border-bottom: var(--border);
+    }
+
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .level-time {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .current-level {
+      font-size: 14px;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+    }
+
+    .current-time {
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .live-badge {
+      font-size: 12px;
+      font-weight: bold;
+      border: var(--border);
+      padding: 2px 8px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: #fff;
+      border: var(--border-thin);
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #000;
+      width: 95%;
+    }
+
+    /* Controls */
+    .controls {
+      background: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: var(--border);
+    }
+
+    .controls-left {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .control-btn {
+      background: #fff;
+      border: var(--border);
+      color: #000;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px 12px;
+      font-family: 'Courier New', monospace;
+      min-width: 40px;
+    }
+
+    .control-btn:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .controls-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Wireframe Label */
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      font-family: 'Courier New', monospace;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v1.0 - WSOP</div>
+
+  <!-- Tournament Tables Ticker -->
+  <div class="tournament-ticker">
+    <div class="day-column">
+      <span class="day">DAY</span>
+      <span>2A</span>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 15</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">T</span>Table 42</span>
+        <span class="stack">8 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">1K/2K/200</span>
+        <span class="stack">Avg: 125K</span>
+      </div>
+      <div class="table-tag featured">[Featured]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 15</span>
+        <span style="font-size:10px">[Final Table]</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">F</span>Table 1</span>
+        <span class="stack">9 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">100K/200K/25K</span>
+        <span class="stack">Avg: 8.2M</span>
+      </div>
+      <div class="table-tag featured">[Final Table]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 14</span>
+        <span style="font-size:10px">[Bubble]</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">B</span>Table 78</span>
+        <span class="stack">7 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">800/1.6K/200</span>
+        <span class="stack">Avg: 98K</span>
+      </div>
+      <div class="table-tag">[Bubble]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span>BREAK</span>
+        <span>15:00</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">T</span>Table 23</span>
+        <span class="stack" style="color:#666">6 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px;color:#666">600/1.2K/100</span>
+        <span class="stack" style="color:#666">Avg: 72K</span>
+      </div>
+      <div class="table-tag">BREAK</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 15</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">T</span>Table 55</span>
+        <span class="stack">8 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">1K/2K/200</span>
+        <span class="stack">Avg: 115K</span>
+      </div>
+      <div class="table-tag">[Featured]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 15</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">T</span>Table 89</span>
+        <span class="stack">9 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">1K/2K/200</span>
+        <span class="stack">Avg: 108K</span>
+      </div>
+      <div class="table-tag">[Featured]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span>COMPLETED</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">X</span>Table 12</span>
+        <span class="stack">-</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px;color:#666">Busted Out</span>
+        <span class="stack" style="color:#666">-</span>
+      </div>
+      <div class="table-tag">COMPLETED</div>
+    </div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-left"></div>
+    <div class="ad-center">
+      <span class="ad-text">[GGPoker - Official WSOP Partner]</span>
+      <button class="ad-button">[ PLAY NOW ]</button>
+    </div>
+    <div class="ad-right">
+      <small>[WSOP.com]</small>
+      <span class="title">$10M GTD</span>
+      <small>[Register]</small>
+    </div>
+  </div>
+
+  <!-- Tournament Header -->
+  <div class="tournament-header">
+    <div class="tournament-title">[♠♥♦♣] WSOP MAIN EVENT 2024</div>
+    <div class="tournament-info">
+      <span class="chip-icon">[CHIP]</span>
+      <span>Final Table - 9 Players Remaining</span>
+      <span class="prize-pool">[Prize Pool: $93,000,000]</span>
+    </div>
+  </div>
+
+  <!-- Video Player -->
+  <div class="video-container">
+    <div class="overlay-indicators">
+      <div class="pot-display">[POT: $2,450,000]</div>
+      <div class="community-cards">[BOARD: A♠ K♥ 7♦ 2♣ __]</div>
+      <div class="seat-positions">[SEAT 1] [2] [3] [4] [5] [6] [7] [8] [9]</div>
+    </div>
+    <span class="video-placeholder">
+      [ POKER TABLE VIEW ]<br><br>
+      16:9 Aspect Ratio<br>
+      Live Tournament Stream
+    </span>
+  </div>
+
+  <!-- Stream Tabs (6 tabs) -->
+  <div class="stream-tabs">
+    <div class="tab active">
+      <span>[T]</span>
+      <span>Active Tables</span>
+      <span class="count">45</span>
+    </div>
+    <div class="tab">
+      <span>[#]</span>
+      <span>Multi-Table</span>
+    </div>
+    <div class="tab">
+      <span>[H]</span>
+      <span>Featured Hands</span>
+    </div>
+    <div class="tab">
+      <span>[S]</span>
+      <span>Player Stats</span>
+    </div>
+    <div class="tab">
+      <span>[$]</span>
+      <span>Payouts</span>
+    </div>
+    <div class="tab">
+      <span>[B]</span>
+      <span>Blinds</span>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline">
+    <div class="time-display">
+      <div class="level-time">
+        <span class="current-level">Level 38</span>
+        <span class="current-time">02:45:30</span>
+      </div>
+      <span class="live-badge">LIVE</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="controls-left">
+      <button class="control-btn">||</button>
+      <button class="control-btn">&lt;&lt;</button>
+      <button class="control-btn">[CARDS]</button>
+      <button class="control-btn">[STACK]</button>
+      <button class="control-btn">&gt;&gt;</button>
+      <button class="control-btn">[)]</button>
+    </div>
+    <div class="controls-right">
+      <button class="control-btn">CC</button>
+      <button class="control-btn">[CAM]</button>
+      <button class="control-btn">[P]</button>
+      <button class="control-btn">[F]</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP Featured Hands Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+      padding: 20px;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #f5f5f5;
+      --bg-dark: #e0e0e0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+    h2 {
+      margin: 20px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: var(--border);
+    }
+    .modal {
+      max-width: 400px;
+      border: var(--border);
+      background: #fff;
+      margin-bottom: 30px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: var(--border-thin);
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .close-btn {
+      width: 24px;
+      height: 24px;
+      border: var(--border-thin);
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .hands-list {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .hand-item {
+      display: flex;
+      padding: 12px 15px;
+      gap: 12px;
+      border-bottom: var(--border-thin);
+      cursor: pointer;
+    }
+    .hand-item:hover { background: var(--bg-light); }
+    .hand-thumbnail {
+      width: 100px;
+      height: 60px;
+      border: var(--border-thin);
+      background: var(--bg-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      text-align: center;
+      position: relative;
+    }
+    .hand-thumbnail::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 8px, #ddd 8px, #ddd 9px
+      );
+    }
+    .hand-thumbnail span {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      padding: 2px 4px;
+    }
+    .hand-info { flex: 1; }
+    .hand-title { font-weight: bold; font-size: 13px; margin-bottom: 4px; }
+    .hand-meta { font-size: 11px; color: var(--text-muted); }
+    .hand-cards {
+      font-size: 12px;
+      margin-top: 4px;
+      font-weight: bold;
+    }
+
+    .player-controls {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      background: var(--bg-dark);
+      border-top: var(--border-thin);
+    }
+    .nav-btn {
+      border: var(--border);
+      background: #fff;
+      padding: 8px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .nav-btn:hover { background: #000; color: #fff; }
+    .nav-btn.primary { background: #000; color: #fff; }
+    .nav-btn.primary:hover { background: var(--bg-dark); color: #000; }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v1.0 - FEATURED HANDS</div>
+
+  <h2>Featured Hands - 주요 핸드</h2>
+
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">FEATURED HANDS</span>
+      <button class="close-btn">[X]</button>
+    </div>
+    <div class="hands-list">
+      <div class="hand-item">
+        <div class="hand-thumbnail"><span>[THUMB]</span></div>
+        <div class="hand-info">
+          <div class="hand-title">AA vs KK All-in on Bubble</div>
+          <div class="hand-meta">Level 38 • Hand #245</div>
+          <div class="hand-cards">[A♠A♥] vs [K♦K♣]</div>
+        </div>
+      </div>
+      <div class="hand-item">
+        <div class="hand-thumbnail"><span>[THUMB]</span></div>
+        <div class="hand-info">
+          <div class="hand-title">Negreanu's Monster Bluff</div>
+          <div class="hand-meta">Level 37 • Hand #198</div>
+          <div class="hand-cards">[7♠2♣] bluffs [Q♥Q♦]</div>
+        </div>
+      </div>
+      <div class="hand-item">
+        <div class="hand-thumbnail"><span>[THUMB]</span></div>
+        <div class="hand-info">
+          <div class="hand-title">Ivey's River Call</div>
+          <div class="hand-meta">Level 36 • Hand #156</div>
+          <div class="hand-cards">[J♣T♣] calls [A♠K♠]</div>
+        </div>
+      </div>
+      <div class="hand-item">
+        <div class="hand-thumbnail"><span>[THUMB]</span></div>
+        <div class="hand-info">
+          <div class="hand-title">Set Over Set Cooler</div>
+          <div class="hand-meta">Level 35 • Hand #122</div>
+          <div class="hand-cards">[8♠8♥] vs [5♦5♣]</div>
+        </div>
+      </div>
+      <div class="hand-item">
+        <div class="hand-thumbnail"><span>[THUMB]</span></div>
+        <div class="hand-info">
+          <div class="hand-title">Royal Flush Draw Makes It</div>
+          <div class="hand-meta">Level 34 • Hand #089</div>
+          <div class="hand-cards">[A♥K♥] makes Royal</div>
+        </div>
+      </div>
+      <div class="hand-item">
+        <div class="hand-thumbnail"><span>[THUMB]</span></div>
+        <div class="hand-info">
+          <div class="hand-title">Chip Leader Elimination</div>
+          <div class="hand-meta">Level 33 • Hand #045</div>
+          <div class="hand-cards">[A♣A♦] busts [K♠K♥]</div>
+        </div>
+      </div>
+    </div>
+    <div class="player-controls">
+      <button class="nav-btn">[<< Prev]</button>
+      <button class="nav-btn primary">[▶ Jump to Live]</button>
+      <button class="nav-btn">[Next >>]</button>
+    </div>
+  </div>
+</body>
+</html>

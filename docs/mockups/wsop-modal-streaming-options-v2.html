@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Streaming Options Modal - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: rgba(0,0,0,0.5);
+      color: #000;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Modal */
+    .modal {
+      width: 420px;
+      background: #fff;
+      border: var(--border);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: var(--border-thin);
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .modal-close {
+      width: 28px;
+      height: 28px;
+      border: var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .modal-close:hover { background: #000; color: #fff; }
+
+    /* Tabs */
+    .modal-tabs {
+      display: flex;
+      border-bottom: var(--border-thin);
+    }
+    .modal-tab {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .modal-tab:hover { background: var(--bg-light); }
+    .modal-tab.active {
+      font-weight: bold;
+      border-bottom-color: #000;
+    }
+
+    /* Options List */
+    .options-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      gap: 15px;
+      cursor: pointer;
+      border-bottom: var(--border-thin);
+    }
+    .option-item:last-child { border-bottom: none; }
+    .option-item:hover { background: var(--bg-light); }
+    .option-icon {
+      width: 40px;
+      height: 40px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+    .option-info {
+      flex: 1;
+    }
+    .option-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    .option-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .option-check {
+      width: 24px;
+      height: 24px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .option-check.checked {
+      background: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v2.0 - STREAMING OPTIONS</div>
+
+  <!-- Modal: Camera Tab -->
+  <div class="modal" style="margin-right: 30px;">
+    <div class="modal-header">
+      <span class="modal-title">STREAMING OPTIONS</span>
+      <button class="modal-close">[X]</button>
+    </div>
+    <div class="modal-tabs">
+      <div class="modal-tab active">Camera</div>
+      <div class="modal-tab">Commentary</div>
+    </div>
+    <div class="options-list">
+      <div class="option-item">
+        <div class="option-icon">[📹]</div>
+        <div class="option-info">
+          <div class="option-title">Main Table</div>
+          <div class="option-desc">Standard broadcast view of the poker table</div>
+        </div>
+        <div class="option-check checked">[✓]</div>
+      </div>
+      <div class="option-item">
+        <div class="option-icon">[📷]</div>
+        <div class="option-info">
+          <div class="option-title">Rail Cam</div>
+          <div class="option-desc">Spectator perspective from the rail</div>
+        </div>
+        <div class="option-check">[ ]</div>
+      </div>
+      <div class="option-item">
+        <div class="option-icon">[🂠]</div>
+        <div class="option-info">
+          <div class="option-title">Hole Cards Cam</div>
+          <div class="option-desc">Close-up view of dealt cards (30min delay)</div>
+        </div>
+        <div class="option-check">[ ]</div>
+      </div>
+      <div class="option-item">
+        <div class="option-icon">[🎰]</div>
+        <div class="option-info">
+          <div class="option-title">Dealer Cam</div>
+          <div class="option-desc">Dealer's point of view of the action</div>
+        </div>
+        <div class="option-check">[ ]</div>
+      </div>
+      <div class="option-item">
+        <div class="option-icon">[👤]</div>
+        <div class="option-info">
+          <div class="option-title">Player Focus Cam</div>
+          <div class="option-desc">Focus on specific player reactions</div>
+        </div>
+        <div class="option-check">[ ]</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Commentary Tab -->
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">STREAMING OPTIONS</span>
+      <button class="modal-close">[X]</button>
+    </div>
+    <div class="modal-tabs">
+      <div class="modal-tab">Camera</div>
+      <div class="modal-tab active">Commentary</div>
+    </div>
+    <div class="options-list">
+      <div class="option-item">
+        <div class="option-icon">[🔊]</div>
+        <div class="option-info">
+          <div class="option-title">English Commentary</div>
+          <div class="option-desc">Norman Chad & Lon McEachern</div>
+        </div>
+        <div class="option-check checked">[✓]</div>
+      </div>
+      <div class="option-item">
+        <div class="option-icon">[🔊]</div>
+        <div class="option-info">
+          <div class="option-title">Spanish Commentary</div>
+          <div class="option-desc">Comentario en Español</div>
+        </div>
+        <div class="option-check">[ ]</div>
+      </div>
+      <div class="option-item">
+        <div class="option-icon">[🔊]</div>
+        <div class="option-info">
+          <div class="option-title">Portuguese Commentary</div>
+          <div class="option-desc">Comentário em Português</div>
+        </div>
+        <div class="option-check">[ ]</div>
+      </div>
+      <div class="option-item">
+        <div class="option-icon">[🔊]</div>
+        <div class="option-info">
+          <div class="option-title">Korean Commentary</div>
+          <div class="option-desc">한국어 해설</div>
+        </div>
+        <div class="option-check">[ ]</div>
+      </div>
+      <div class="option-item" style="background:var(--bg-light)">
+        <div style="font-size:11px;color:var(--text-muted);padding:5px 0">Other Options</div>
+      </div>
+      <div class="option-item">
+        <div class="option-icon">[🔇]</div>
+        <div class="option-info">
+          <div class="option-title">Table Sound Only</div>
+          <div class="option-desc">No commentary, ambient table audio</div>
+        </div>
+        <div class="option-check">[ ]</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

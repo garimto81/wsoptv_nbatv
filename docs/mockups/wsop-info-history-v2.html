@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Hand History - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 25px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active { font-weight: bold; border-bottom-color: #000; }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 20px;
+      border-bottom: var(--border);
+    }
+    .ad-image {
+      width: 150px;
+      height: 60px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: var(--bg-light);
+    }
+    .ad-content { flex: 1; font-size: 14px; }
+    .ad-cta {
+      padding: 10px 30px;
+      border: var(--border);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* History Container */
+    .history-container {
+      padding: 20px 30px;
+    }
+
+    /* Level Tabs (= Quarter Tabs) */
+    .level-tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+    .level-tab {
+      padding: 10px 20px;
+      border: var(--border);
+      background: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .level-tab:hover { background: var(--bg-light); }
+    .level-tab.active { background: #000; color: #fff; }
+
+    /* Controls Row */
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px 15px;
+      background: var(--bg-light);
+      border: var(--border-thin);
+    }
+    .toggle-group {
+      display: flex;
+      gap: 20px;
+      font-size: 12px;
+    }
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toggle-switch {
+      width: 40px;
+      height: 20px;
+      border: var(--border-thin);
+      background: var(--bg-medium);
+      position: relative;
+      cursor: pointer;
+    }
+    .toggle-switch.on { background: #000; }
+    .toggle-switch::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border: var(--border-thin);
+      top: 2px;
+      left: 2px;
+    }
+    .toggle-switch.on::after { left: 22px; }
+    .live-badge {
+      padding: 4px 12px;
+      border: var(--border);
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* Timeline (= Play-By-Play) */
+    .timeline-header {
+      display: flex;
+      border-bottom: var(--border);
+      background: var(--bg-medium);
+    }
+    .timeline-header-left, .timeline-header-right {
+      flex: 1;
+      padding: 15px 20px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .timeline-header-left { border-right: var(--border-thin); }
+    .timeline-header-right { text-align: right; }
+
+    .timeline {
+      position: relative;
+    }
+    .timeline-center {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #000;
+    }
+    .timeline-event {
+      display: flex;
+      min-height: 60px;
+      border-bottom: var(--border-thin);
+    }
+    .timeline-left, .timeline-right {
+      flex: 1;
+      padding: 15px 20px;
+    }
+    .timeline-left { text-align: right; padding-right: 40px; }
+    .timeline-right { padding-left: 40px; }
+    .timeline-center-marker {
+      width: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      background: #000;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .timeline-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .action-item {
+      margin-bottom: 5px;
+    }
+    .action-type {
+      display: inline-block;
+      padding: 2px 8px;
+      border: var(--border-thin);
+      font-size: 10px;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .action-type.raise { background: #000; color: #fff; }
+    .action-type.call { background: var(--bg-medium); }
+    .action-type.fold { background: var(--bg-light); color: var(--text-muted); }
+    .action-type.allin { background: #000; color: #fff; }
+    .action-type.check { background: #fff; }
+
+    .action-cards {
+      font-weight: bold;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+    .action-score {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--bg-light);
+      border: var(--border-thin);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    /* Board / Pot Info */
+    .board-info {
+      text-align: center;
+      padding: 12px;
+      background: #fff;
+      border-bottom: var(--border-thin);
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .pot-info {
+      text-align: center;
+      padding: 10px;
+      background: var(--bg-light);
+      border-bottom: var(--border-thin);
+      font-size: 12px;
+    }
+    .winner-info {
+      text-align: center;
+      padding: 15px;
+      background: #000;
+      color: #fff;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* Street Label */
+    .street-label {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      padding: 2px 10px;
+      font-size: 10px;
+      color: var(--text-muted);
+      border: var(--border-thin);
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v2.0 - HAND HISTORY</div>
+
+  <!-- Info Tabs -->
+  <div class="info-tabs">
+    <div class="info-tab">Summary</div>
+    <div class="info-tab">Player Stats</div>
+    <div class="info-tab">Hand Charts</div>
+    <div class="info-tab active">Hand History</div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-image">[GGPoker<br>Ad]</div>
+    <div class="ad-content">Play the WSOP Main Event Online at GGPoker</div>
+    <button class="ad-cta">PLAY NOW</button>
+  </div>
+
+  <!-- History Container -->
+  <div class="history-container">
+    <!-- Level Tabs (= Quarter Tabs) -->
+    <div class="level-tabs">
+      <div class="level-tab">L35</div>
+      <div class="level-tab">L36</div>
+      <div class="level-tab">L37</div>
+      <div class="level-tab active">L38</div>
+      <div class="level-tab">ALL</div>
+    </div>
+
+    <!-- Controls Row -->
+    <div class="controls-row">
+      <div class="toggle-group">
+        <div class="toggle">
+          <span>Auto Switch Level</span>
+          <div class="toggle-switch on"></div>
+        </div>
+        <div class="toggle">
+          <span>Latest First</span>
+          <div class="toggle-switch on"></div>
+        </div>
+      </div>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- Timeline Header -->
+    <div class="timeline-header">
+      <div class="timeline-header-left">[DN] Daniel Negreanu</div>
+      <div class="timeline-header-right">Phil Ivey [PI]</div>
+    </div>
+
+    <div class="pot-info">POT: $0 → Starting Hand #245</div>
+
+    <!-- Timeline Events -->
+    <div class="timeline">
+      <div class="timeline-center"></div>
+
+      <!-- PREFLOP -->
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="action-item">
+            <span class="action-type raise">RAISE</span>
+            $150,000
+          </div>
+          <div class="action-cards">[A♠K♥]</div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="street-label">PREFLOP</span>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="action-item">
+            <span class="action-type raise">3-BET</span>
+            $450,000
+          </div>
+          <div class="action-cards">[Q♣Q♦]</div>
+        </div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="action-item">
+            <span class="action-type call">CALL</span>
+            $300,000
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+    </div>
+
+    <div class="pot-info">POT: $900,000</div>
+    <div class="board-info">FLOP: [A♠] [K♥] [7♦]</div>
+
+    <!-- FLOP Actions -->
+    <div class="timeline">
+      <div class="timeline-center"></div>
+
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="action-item">
+            <span class="action-type check">CHECK</span>
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="street-label">FLOP</span>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="action-item">
+            <span class="action-type raise">BET</span>
+            $300,000
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="action-item">
+            <span class="action-type call">CALL</span>
+            $300,000
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+    </div>
+
+    <div class="pot-info">POT: $1,500,000</div>
+    <div class="board-info">TURN: [A♠] [K♥] [7♦] [2♣]</div>
+
+    <!-- TURN Actions -->
+    <div class="timeline">
+      <div class="timeline-center"></div>
+
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="action-item">
+            <span class="action-type allin">ALL-IN</span>
+            $2,450,000
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="street-label">TURN</span>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <div class="timeline-event">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="action-item">
+            <span class="action-type fold">FOLD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Winner -->
+    <div class="winner-info">D. Negreanu WINS $1,500,000</div>
+  </div>
+</body>
+</html>

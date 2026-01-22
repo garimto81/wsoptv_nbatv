@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV MultiView 2x2 Layout - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #fff;
+    }
+    :root {
+      --border: 2px solid #fff;
+      --border-thin: 1px solid #444;
+      --bg-dark: #1a1a1a;
+      --bg-light: #F5F5F5;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Scoreboard Ticker */
+    .scoreboard-ticker {
+      display: flex;
+      border-bottom: 2px solid #333;
+      background: #fff;
+      color: #000;
+      height: 100px;
+    }
+    .ticker-date {
+      width: 55px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #ddd;
+      font-size: 10px;
+    }
+    .ticker-games {
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .ticker-game {
+      min-width: 160px;
+      padding: 8px 12px;
+      border-right: 1px solid #ddd;
+      font-size: 11px;
+    }
+    .game-status {
+      font-size: 9px;
+      margin-bottom: 4px;
+    }
+    .status-live::before {
+      content: "● ";
+      color: #c00;
+    }
+    .team-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+    }
+    .team-logo {
+      width: 16px;
+      height: 16px;
+      border: 1px solid #ddd;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7px;
+      margin-right: 5px;
+    }
+    .league-pass-tag {
+      font-size: 8px;
+      padding: 1px 4px;
+      border: 1px solid #ddd;
+      margin-top: 3px;
+      display: inline-block;
+    }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      height: 90px;
+      background: var(--bg-light);
+      color: #000;
+      border-bottom: 2px solid #333;
+      padding: 0 15px;
+      gap: 15px;
+    }
+    .ad-image {
+      width: 140px;
+      height: 60px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: #fff;
+    }
+    .ad-text {
+      flex: 1;
+      font-size: 13px;
+    }
+    .ad-cta {
+      padding: 10px 25px;
+      border: 2px solid #000;
+      background: #c00;
+      color: #fff;
+      font-size: 11px;
+    }
+    .ad-promo {
+      width: 160px;
+      height: 60px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      text-align: center;
+      background: #fff;
+    }
+
+    /* MultiView Container */
+    .multiview-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: calc(100vh - 280px);
+      gap: 3px;
+      background: #000;
+    }
+    .video-cell {
+      background: var(--bg-dark);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .video-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+    }
+    .video-placeholder {
+      color: #333;
+      font-size: 12px;
+    }
+    .cell-header {
+      padding: 8px 12px;
+      background: #000;
+    }
+    .cell-title {
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .cell-subtitle {
+      font-size: 10px;
+      color: #888;
+    }
+
+    /* Empty Cell */
+    .empty-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #222;
+      color: #666;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .empty-cell:hover { background: #333; }
+
+    /* Bottom Bar */
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      background: #000;
+    }
+    .stream-tab {
+      padding: 8px 16px;
+      border: 1px solid #444;
+      background: #333;
+      color: #fff;
+      font-size: 11px;
+      border-radius: 15px;
+    }
+    .timeline-section {
+      flex: 1;
+      margin: 0 20px;
+    }
+    .timeline-time {
+      font-size: 10px;
+      color: #888;
+    }
+    .timeline-bar {
+      height: 3px;
+      background: #333;
+      position: relative;
+      margin-top: 4px;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #c00;
+      width: 92%;
+    }
+    .timeline-live {
+      position: absolute;
+      right: 0;
+      top: -5px;
+      font-size: 9px;
+      color: #c00;
+    }
+    .layout-selector {
+      display: flex;
+      gap: 5px;
+    }
+    .layout-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #444;
+      background: #333;
+      color: #fff;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .layout-btn.active {
+      background: #fff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - MULTIVIEW 2x2 LAYOUT</div>
+
+  <!-- Scoreboard Ticker -->
+  <div class="scoreboard-ticker">
+    <div class="ticker-date">
+      <span style="font-weight:bold">TUE</span>
+      <span>JAN</span>
+      <span>20</span>
+    </div>
+    <div class="ticker-games">
+      <div class="ticker-game">
+        <div class="game-status"><span class="status-live">Q3 3:05</span></div>
+        <div class="team-row"><span><span class="team-logo">[C]</span>Clippers</span><span>77</span></div>
+        <div class="team-row"><span><span class="team-logo">[B]</span>Bulls</span><span>90</span></div>
+        <span class="league-pass-tag">League Pass</span>
+      </div>
+      <div class="ticker-game">
+        <div class="game-status"><span class="status-live">HALF</span> AWS Rivals</div>
+        <div class="team-row"><span><span class="team-logo">[S]</span>Spurs</span><span>70</span></div>
+        <div class="team-row"><span><span class="team-logo">[R]</span>Rockets</span><span>60</span></div>
+        <span class="league-pass-tag">League Pass</span>
+      </div>
+      <div class="ticker-game">
+        <div class="game-status"><span class="status-live">Q2 10:52</span></div>
+        <div class="team-row"><span><span class="team-logo">[T]</span>Timberwolves</span><span>36</span></div>
+        <div class="team-row"><span><span class="team-logo">[J]</span>Jazz</span><span>33</span></div>
+        <span class="league-pass-tag">League Pass</span>
+      </div>
+      <div class="ticker-game">
+        <div class="game-status">PREGAME 12:00 PM</div>
+        <div class="team-row"><span><span class="team-logo">[L]</span>Lakers</span><span>25-16</span></div>
+        <div class="team-row"><span><span class="team-logo">[N]</span>Nuggets</span><span>29-14</span></div>
+        <span class="league-pass-tag">League Pass</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-image">[Product]<br>H60 Pro</div>
+    <div class="ad-text">최대 90도 구부러지는 로보락 신제품 H60 Pro 청소기</div>
+    <button class="ad-cta">열기</button>
+    <div class="ad-promo">AWS<br>NBA RIVALS WEEK</div>
+  </div>
+
+  <!-- MultiView 2x2 -->
+  <div class="multiview-container">
+    <div class="video-cell">
+      <div class="cell-header">
+        <div class="cell-title">CLIPPERS @ BULLS</div>
+        <div class="cell-subtitle">Bulls (In-Arena)</div>
+      </div>
+      <div class="video-area"><div class="video-placeholder">[VIDEO]</div></div>
+    </div>
+    <div class="empty-cell">Add a Game from Score Strip</div>
+    <div class="empty-cell">Add a Game from Score Strip</div>
+    <div class="empty-cell">Add a Game from Score Strip</div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="bottom-bar">
+    <button class="stream-tab">📡 Streams <span style="background:#555;padding:1px 5px;border-radius:8px;font-size:9px">9</span></button>
+    <div class="timeline-section">
+      <div class="timeline-time">01:38:59</div>
+      <div class="timeline-bar">
+        <div class="timeline-progress"></div>
+        <span class="timeline-live">LIVE</span>
+      </div>
+    </div>
+    <div class="layout-selector">
+      <button class="layout-btn">[1]</button>
+      <button class="layout-btn">[1:2]</button>
+      <button class="layout-btn active">[2x2]</button>
+    </div>
+  </div>
+</body>
+</html>

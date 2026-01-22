@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP Hand History Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+      padding: 20px;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #f5f5f5;
+      --bg-dark: #e0e0e0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+    h2 {
+      margin: 20px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: var(--border);
+    }
+    .tabs {
+      display: flex;
+      border-bottom: var(--border);
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      border-bottom: 3px solid transparent;
+    }
+    .tab:hover { background: var(--bg-light); }
+    .tab.active {
+      border-bottom-color: #000;
+      font-weight: bold;
+    }
+    .level-filter {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .level-btn {
+      padding: 8px 12px;
+      border: var(--border);
+      background: #fff;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .level-btn:hover { background: var(--bg-light); }
+    .level-btn.active { background: #000; color: #fff; }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: var(--bg-light);
+      border: var(--border-thin);
+    }
+    .toggle-group {
+      display: flex;
+      gap: 15px;
+      font-size: 12px;
+    }
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toggle-switch {
+      width: 36px;
+      height: 18px;
+      border: var(--border-thin);
+      background: var(--bg-dark);
+      position: relative;
+      cursor: pointer;
+    }
+    .toggle-switch.on { background: #000; }
+    .toggle-switch::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border: var(--border-thin);
+      top: 2px;
+      left: 2px;
+      transition: left 0.2s;
+    }
+    .toggle-switch.on::after { left: 20px; }
+
+    .hand-history {
+      border: var(--border);
+    }
+    .hand-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 15px;
+      background: var(--bg-dark);
+      border-bottom: var(--border-thin);
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .timeline {
+      position: relative;
+    }
+    .timeline-center {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #000;
+    }
+    .timeline-item {
+      display: flex;
+      padding: 12px 15px;
+      border-bottom: var(--border-thin);
+      position: relative;
+    }
+    .timeline-left {
+      flex: 1;
+      text-align: right;
+      padding-right: 30px;
+    }
+    .timeline-center-content {
+      width: 80px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      position: relative;
+    }
+    .timeline-center-content::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background: #000;
+      border-radius: 50%;
+    }
+    .timeline-right {
+      flex: 1;
+      padding-left: 30px;
+    }
+    .action {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .action-type {
+      font-weight: bold;
+      display: inline-block;
+      padding: 2px 6px;
+      border: var(--border-thin);
+      font-size: 10px;
+      margin-right: 4px;
+    }
+    .action-type.raise { background: #000; color: #fff; }
+    .action-type.call { background: var(--bg-dark); }
+    .action-type.fold { background: var(--bg-light); color: var(--text-muted); }
+    .action-type.allin { background: #000; color: #fff; }
+    .cards {
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .pot-info {
+      text-align: center;
+      padding: 10px;
+      background: var(--bg-light);
+      font-size: 12px;
+      border-bottom: var(--border-thin);
+    }
+    .board-info {
+      text-align: center;
+      padding: 10px;
+      background: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      border-bottom: var(--border-thin);
+    }
+    .player-label {
+      font-weight: bold;
+      font-size: 14px;
+      padding: 8px 15px;
+      background: var(--bg-light);
+    }
+    .player-label.left { text-align: left; border-right: var(--border-thin); }
+    .player-label.right { text-align: right; border-left: var(--border-thin); }
+    .players-header {
+      display: flex;
+      border-bottom: var(--border-thin);
+    }
+    .players-header > div { flex: 1; }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v1.0 - HAND HISTORY</div>
+
+  <h2>Hand History - 핸드 히스토리</h2>
+
+  <div class="tabs">
+    <div class="tab">Summary</div>
+    <div class="tab">Player Stats</div>
+    <div class="tab">Hand Charts</div>
+    <div class="tab active">Hand History</div>
+  </div>
+
+  <div class="level-filter">
+    <button class="level-btn">L35</button>
+    <button class="level-btn">L36</button>
+    <button class="level-btn">L37</button>
+    <button class="level-btn active">L38</button>
+    <button class="level-btn">ALL</button>
+  </div>
+
+  <div class="controls-row">
+    <div class="toggle-group">
+      <div class="toggle">
+        <span>Auto Switch Level</span>
+        <div class="toggle-switch on"></div>
+      </div>
+      <div class="toggle">
+        <span>Latest First</span>
+        <div class="toggle-switch on"></div>
+      </div>
+    </div>
+    <span style="font-size:12px;color:var(--text-muted)">[LIVE]</span>
+  </div>
+
+  <div class="hand-history">
+    <div class="hand-header">
+      <span>Level 38 | Hand #245</span>
+      <span>02:45:30</span>
+    </div>
+
+    <div class="players-header">
+      <div class="player-label left">D. Negreanu [BTN]</div>
+      <div class="player-label right">P. Ivey [SB]</div>
+    </div>
+
+    <div class="pot-info">POT: $0 → Starting Hand</div>
+
+    <div class="timeline">
+      <div class="timeline-center"></div>
+
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="action">
+            <span class="action-type raise">RAISE</span>
+            $150,000
+          </div>
+          <div class="cards">[A♠K♥]</div>
+        </div>
+        <div class="timeline-center-content">PREFLOP</div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-content"></div>
+        <div class="timeline-right">
+          <div class="action">
+            <span class="action-type raise">3-BET</span>
+            $450,000
+          </div>
+          <div class="cards">[Q♣Q♦]</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="action">
+            <span class="action-type call">CALL</span>
+            $300,000
+          </div>
+        </div>
+        <div class="timeline-center-content"></div>
+        <div class="timeline-right"></div>
+      </div>
+    </div>
+
+    <div class="pot-info">POT: $900,000</div>
+    <div class="board-info">FLOP: [A♠] [K♥] [7♦]</div>
+
+    <div class="timeline">
+      <div class="timeline-center"></div>
+
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="action">
+            <span class="action-type">CHECK</span>
+          </div>
+        </div>
+        <div class="timeline-center-content">FLOP</div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-content"></div>
+        <div class="timeline-right">
+          <div class="action">
+            <span class="action-type raise">BET</span>
+            $300,000
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="action">
+            <span class="action-type call">CALL</span>
+            $300,000
+          </div>
+        </div>
+        <div class="timeline-center-content"></div>
+        <div class="timeline-right"></div>
+      </div>
+    </div>
+
+    <div class="pot-info">POT: $1,500,000</div>
+    <div class="board-info">TURN: [A♠] [K♥] [7♦] [2♣]</div>
+
+    <div class="timeline">
+      <div class="timeline-center"></div>
+
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="action">
+            <span class="action-type allin">ALL-IN</span>
+            $2,450,000
+          </div>
+        </div>
+        <div class="timeline-center-content">TURN</div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-content"></div>
+        <div class="timeline-right">
+          <div class="action">
+            <span class="action-type fold">FOLD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pot-info" style="background:#000;color:#fff;font-weight:bold">
+      D. Negreanu WINS $1,500,000
+    </div>
+  </div>
+</body>
+</html>

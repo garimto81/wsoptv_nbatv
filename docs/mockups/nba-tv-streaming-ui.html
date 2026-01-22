@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Streaming UI Wireframe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+      min-height: 100vh;
+    }
+
+    /* Wireframe Variables */
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #f5f5f5;
+      --bg-dark: #e0e0e0;
+      --text-muted: #666;
+    }
+
+    /* Scoreboard Ticker */
+    .scoreboard-ticker {
+      display: flex;
+      background: #fff;
+      border-bottom: var(--border);
+      overflow-x: auto;
+    }
+
+    .date-column {
+      min-width: 60px;
+      padding: 10px;
+      border-right: var(--border-thin);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+
+    .date-column .day {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .game-card {
+      min-width: 140px;
+      padding: 10px 15px;
+      border-right: var(--border-thin);
+      cursor: pointer;
+    }
+
+    .game-card:hover {
+      background: var(--bg-light);
+    }
+
+    .game-status {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .game-status .live::before {
+      content: "[LIVE]";
+      margin-right: 4px;
+      font-weight: bold;
+    }
+
+    .team-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 0;
+      font-size: 13px;
+    }
+
+    .team-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .team-logo {
+      width: 16px;
+      height: 16px;
+      border: var(--border-thin);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+    }
+
+    .score {
+      font-weight: bold;
+    }
+
+    .league-pass {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      border: var(--border-thin);
+      padding: 2px 4px;
+      display: inline-block;
+    }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      background: #fff;
+      padding: 15px;
+      align-items: center;
+      gap: 20px;
+      border-bottom: var(--border);
+    }
+
+    .ad-left {
+      width: 150px;
+      height: 80px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+
+    .ad-left::before {
+      content: "[AD IMAGE]";
+    }
+
+    .ad-center {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .ad-text {
+      font-size: 14px;
+      border-bottom: var(--border-thin);
+      padding-bottom: 2px;
+    }
+
+    .ad-button {
+      background: #fff;
+      color: #000;
+      border: var(--border);
+      padding: 12px 40px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+    }
+
+    .ad-button:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .ad-right {
+      width: 180px;
+      height: 80px;
+      border: var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+
+    .ad-right .title {
+      font-size: 16px;
+      font-weight: bold;
+      border-bottom: var(--border-thin);
+    }
+
+    /* Game Header */
+    .game-header {
+      background: var(--bg-dark);
+      padding: 15px 20px;
+      border-bottom: var(--border);
+    }
+
+    .game-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      letter-spacing: 2px;
+    }
+
+    .arena-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .arena-info .bull-icon {
+      border: var(--border-thin);
+      padding: 2px 4px;
+      font-size: 12px;
+    }
+
+    /* Video Player */
+    .video-container {
+      background: var(--bg-light);
+      aspect-ratio: 16/9;
+      max-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: var(--border);
+      border-top: none;
+    }
+
+    .video-placeholder {
+      color: var(--text-muted);
+      font-size: 18px;
+      text-align: center;
+      padding: 20px;
+      border: 2px dashed #999;
+    }
+
+    /* Diagonal lines for placeholder */
+    .video-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        #eee 20px,
+        #eee 21px
+      );
+      pointer-events: none;
+    }
+
+    .video-placeholder {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      padding: 20px 40px;
+    }
+
+    /* Stream Tabs */
+    .stream-tabs {
+      background: var(--bg-dark);
+      padding: 10px 20px;
+      display: flex;
+      gap: 15px;
+      border-bottom: var(--border);
+    }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: var(--border);
+      background: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+    }
+
+    .tab:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .tab .count {
+      border: var(--border-thin);
+      padding: 2px 8px;
+      font-size: 12px;
+    }
+
+    /* Timeline */
+    .timeline {
+      background: var(--bg-light);
+      padding: 10px 20px;
+      border-bottom: var(--border);
+    }
+
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .current-time {
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .live-badge {
+      font-size: 12px;
+      font-weight: bold;
+      border: var(--border);
+      padding: 2px 8px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: #fff;
+      border: var(--border-thin);
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #000;
+      width: 95%;
+    }
+
+    /* Controls */
+    .controls {
+      background: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: var(--border);
+    }
+
+    .controls-left {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .control-btn {
+      background: #fff;
+      border: var(--border);
+      color: #000;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px 12px;
+      font-family: 'Courier New', monospace;
+      min-width: 40px;
+    }
+
+    .control-btn:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .controls-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Wireframe Label */
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      font-family: 'Courier New', monospace;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v1.0</div>
+
+  <!-- Scoreboard Ticker -->
+  <div class="scoreboard-ticker">
+    <div class="date-column">
+      <span class="day">TUE</span>
+      <span>JAN</span>
+      <span>20</span>
+    </div>
+
+    <div class="game-card">
+      <div class="game-status">
+        <span class="live">Q3 4:49</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">C</span>Clippers</span>
+        <span class="score">74</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">B</span>Bulls</span>
+        <span class="score">84</span>
+      </div>
+      <div class="league-pass">League Pass</div>
+    </div>
+
+    <div class="game-card">
+      <div class="game-status">
+        <span class="live">Q2 :07.4</span>
+        <span style="font-size:10px">[Rivals]</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">S</span>Spurs</span>
+        <span class="score">70</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">R</span>Rockets</span>
+        <span class="score">59</span>
+      </div>
+      <div class="league-pass">League Pass</div>
+    </div>
+
+    <div class="game-card">
+      <div class="game-status">
+        <span class="live">END Q1</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">T</span>T-wolves</span>
+        <span class="score">34</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">J</span>Jazz</span>
+        <span class="score">29</span>
+      </div>
+      <div class="league-pass">League Pass</div>
+    </div>
+
+    <div class="game-card">
+      <div class="game-status">
+        <span>PREGAME</span>
+        <span>12:00 KST</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">L</span>Lakers</span>
+        <span class="score" style="color:#666">25-16</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">N</span>Nuggets</span>
+        <span class="score" style="color:#666">29-14</span>
+      </div>
+      <div class="league-pass">League Pass</div>
+    </div>
+
+    <div class="game-card">
+      <div class="game-status">
+        <span>PREGAME</span>
+        <span>12:00 KST</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">R</span>Raptors</span>
+        <span class="score" style="color:#666">25-19</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">W</span>Warriors</span>
+        <span class="score" style="color:#666">25-19</span>
+      </div>
+      <div class="league-pass">League Pass</div>
+    </div>
+
+    <div class="game-card">
+      <div class="game-status">
+        <span>PREGAME</span>
+        <span>12:00 KST</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">H</span>Heat</span>
+        <span class="score" style="color:#666">22-21</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">K</span>Kings</span>
+        <span class="score" style="color:#666">12-31</span>
+      </div>
+      <div class="league-pass">League Pass</div>
+    </div>
+
+    <div class="game-card">
+      <div class="game-status">
+        <span>FINAL</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">S</span>Suns</span>
+        <span class="score">-</span>
+      </div>
+      <div class="team-row">
+        <span class="team-name"><span class="team-logo">7</span>76ers</span>
+        <span class="score">-</span>
+      </div>
+      <div class="league-pass">League Pass</div>
+    </div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-left"></div>
+    <div class="ad-center">
+      <span class="ad-text">[Advertisement Text Area]</span>
+      <button class="ad-button">[ CTA ]</button>
+    </div>
+    <div class="ad-right">
+      <small>[SPONSOR]</small>
+      <span class="title">PROMO</span>
+      <small>[Link]</small>
+    </div>
+  </div>
+
+  <!-- Game Header -->
+  <div class="game-header">
+    <div class="game-title">CLIPPERS @ BULLS</div>
+    <div class="arena-info">
+      <span class="bull-icon">[ICON]</span>
+      <span>Bulls (In-Arena)</span>
+      <span>[Clock]</span>
+    </div>
+  </div>
+
+  <!-- Video Player -->
+  <div class="video-container">
+    <span class="video-placeholder">
+      [ VIDEO PLAYER ]<br><br>
+      16:9 Aspect Ratio<br>
+      Live Stream Area
+    </span>
+  </div>
+
+  <!-- Stream Tabs -->
+  <div class="stream-tabs">
+    <div class="tab">
+      <span>[~]</span>
+      <span>Streams</span>
+      <span class="count">9</span>
+    </div>
+    <div class="tab">
+      <span>[#]</span>
+      <span>MultiView</span>
+    </div>
+    <div class="tab">
+      <span>[*]</span>
+      <span>Key Plays</span>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline">
+    <div class="time-display">
+      <span class="current-time">01:35:55</span>
+      <span class="live-badge">LIVE</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="controls-left">
+      <button class="control-btn">||</button>
+      <button class="control-btn">&lt;&lt;</button>
+      <button class="control-btn">[@]</button>
+      <button class="control-btn">[x]</button>
+      <button class="control-btn">&gt;&gt;</button>
+      <button class="control-btn">[)]</button>
+    </div>
+    <div class="controls-right">
+      <button class="control-btn">CC</button>
+      <button class="control-btn">[=]</button>
+      <button class="control-btn">[P]</button>
+      <button class="control-btn">[F]</button>
+    </div>
+  </div>
+</body>
+</html>

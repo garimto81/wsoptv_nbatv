@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV MultiView - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+      min-height: 100vh;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-white: #FFFFFF;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --bg-dark: #000000;
+      --text-muted: #666666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Tournament Ticker (축소버전) */
+    .tournament-ticker-mini {
+      display: flex;
+      background: var(--bg-white);
+      border-bottom: var(--border);
+      height: 80px;
+      overflow-x: auto;
+    }
+    .day-column {
+      min-width: 50px;
+      padding: 8px;
+      border-right: var(--border-thin);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-light);
+      font-size: 12px;
+    }
+    .table-card-mini {
+      min-width: 140px;
+      padding: 8px 12px;
+      border-right: var(--border-thin);
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .table-card-mini:hover { background: var(--bg-light); }
+    .table-card-mini .status { font-size: 10px; margin-bottom: 4px; }
+    .table-card-mini .info { font-weight: bold; }
+
+    /* Ad Banner (축소버전) */
+    .ad-banner-mini {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px;
+      background: var(--bg-light);
+      border-bottom: var(--border);
+      height: 50px;
+      font-size: 12px;
+    }
+
+    /* Tournament Header */
+    .tournament-header {
+      background: var(--bg-medium);
+      padding: 10px 20px;
+      border-bottom: var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tournament-title { font-size: 18px; font-weight: bold; }
+    .tournament-sub { font-size: 12px; }
+
+    /* Layout Selector */
+    .layout-selector {
+      display: flex;
+      gap: 10px;
+      padding: 10px 20px;
+      background: var(--bg-medium);
+      border-bottom: var(--border);
+    }
+    .layout-btn {
+      width: 50px;
+      height: 35px;
+      border: var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .layout-btn:hover { background: var(--bg-light); }
+    .layout-btn.active { background: #000; color: #fff; }
+
+    /* MultiView Container */
+    .multiview-container {
+      background: var(--bg-light);
+      padding: 15px;
+      border-bottom: var(--border);
+    }
+    .multiview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+      aspect-ratio: 16/9;
+      max-height: 450px;
+    }
+    .multiview-cell {
+      border: var(--border);
+      background: #000;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .multiview-cell.empty {
+      background: var(--bg-medium);
+      border: 2px dashed #666;
+    }
+    .cell-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.95);
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      border-bottom: var(--border-thin);
+      display: flex;
+      justify-content: space-between;
+    }
+    .cell-content {
+      color: #fff;
+      text-align: center;
+      font-size: 12px;
+      padding: 20px;
+      border: 2px dashed #444;
+    }
+    .cell-overlay-pot {
+      position: absolute;
+      top: 45px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      color: #000;
+      padding: 4px 12px;
+      font-size: 11px;
+      border: var(--border-thin);
+    }
+    .add-game-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+      gap: 10px;
+    }
+    .add-game-cell .plus {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* Stream Tabs */
+    .stream-tabs {
+      display: flex;
+      gap: 10px;
+      padding: 10px 20px;
+      background: var(--bg-medium);
+      border-bottom: var(--border);
+    }
+    .stream-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #000;
+      color: #fff;
+      border: var(--border);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Timeline & Controls */
+    .timeline-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: var(--bg-light);
+      border-bottom: var(--border);
+    }
+    .timeline-info {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      font-size: 12px;
+    }
+    .catch-up-btn {
+      padding: 8px 16px;
+      border: var(--border);
+      background: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .catch-up-btn:hover { background: #000; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v2.0 - MULTIVIEW</div>
+
+  <!-- Tournament Ticker (축소) -->
+  <div class="tournament-ticker-mini">
+    <div class="day-column">
+      <span style="font-weight:bold">DAY</span>
+      <span>2A</span>
+    </div>
+    <div class="table-card-mini">
+      <div class="status">● Level 38 [Final]</div>
+      <div class="info">Table 1 • 9P • 100K/200K</div>
+    </div>
+    <div class="table-card-mini">
+      <div class="status">● Level 15</div>
+      <div class="info">Table 42 • 8P • 1K/2K</div>
+    </div>
+    <div class="table-card-mini">
+      <div class="status">● Level 14 [Bubble]</div>
+      <div class="info">Table 78 • 7P • 800/1.6K</div>
+    </div>
+    <div class="table-card-mini">
+      <div class="status">BREAK 15:00</div>
+      <div class="info" style="color:#666">Table 23 • 6P</div>
+    </div>
+    <div class="table-card-mini">
+      <div class="status">● Level 15</div>
+      <div class="info">Table 55 • 8P • 1K/2K</div>
+    </div>
+  </div>
+
+  <!-- Ad Banner (축소) -->
+  <div class="ad-banner-mini">
+    <span>[GGPoker]</span>
+    <span>Play WSOP Main Event Online</span>
+    <button style="padding:4px 16px;border:1px solid #000;background:#fff;cursor:pointer">PLAY NOW</button>
+  </div>
+
+  <!-- Tournament Header -->
+  <div class="tournament-header">
+    <div class="tournament-title">[♠♥♦♣] WSOP MAIN EVENT 2024</div>
+    <div class="tournament-sub">MultiView Mode - 4 Tables</div>
+  </div>
+
+  <!-- Layout Selector -->
+  <div class="layout-selector">
+    <div class="layout-btn">[1]</div>
+    <div class="layout-btn">[1:2]</div>
+    <div class="layout-btn active">[2x2]</div>
+    <span style="margin-left:15px;font-size:12px;align-self:center">Layout: 2x2 Grid</span>
+  </div>
+
+  <!-- MultiView Grid -->
+  <div class="multiview-container">
+    <div class="multiview-grid">
+      <!-- Cell 1: Final Table -->
+      <div class="multiview-cell">
+        <div class="cell-header">
+          <span>[♠] Table 1 - Final Table</span>
+          <span>[LIVE]</span>
+        </div>
+        <div class="cell-overlay-pot">[POT: $2.4M]</div>
+        <div class="cell-content">
+          [ POKER TABLE ]<br><br>
+          9 Players<br>
+          Level 38 | 100K/200K
+        </div>
+      </div>
+
+      <!-- Cell 2: Featured -->
+      <div class="multiview-cell">
+        <div class="cell-header">
+          <span>[♥] Table 42 - Featured</span>
+          <span>[LIVE]</span>
+        </div>
+        <div class="cell-overlay-pot">[POT: $45K]</div>
+        <div class="cell-content">
+          [ POKER TABLE ]<br><br>
+          8 Players<br>
+          Level 15 | 1K/2K
+        </div>
+      </div>
+
+      <!-- Cell 3: Bubble -->
+      <div class="multiview-cell">
+        <div class="cell-header">
+          <span>[♦] Table 78 - Bubble</span>
+          <span>[LIVE]</span>
+        </div>
+        <div class="cell-overlay-pot">[POT: $38K]</div>
+        <div class="cell-content">
+          [ POKER TABLE ]<br><br>
+          7 Players<br>
+          Level 14 | 800/1.6K
+        </div>
+      </div>
+
+      <!-- Cell 4: Add Game -->
+      <div class="multiview-cell empty">
+        <div class="add-game-cell">
+          <span class="plus">[ + ]</span>
+          <span>Add a Table</span>
+          <span>from Tournament Ticker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stream Tabs -->
+  <div class="stream-tabs">
+    <div class="stream-tab">
+      <span>[📡]</span>
+      <span>Tables</span>
+      <span style="border:1px solid #fff;padding:2px 6px;font-size:10px">45</span>
+    </div>
+    <div class="stream-tab" style="background:#333">
+      <span>[⊞]</span>
+      <span>MultiView</span>
+    </div>
+    <div class="stream-tab">
+      <span>[🔥]</span>
+      <span>Featured Hands</span>
+    </div>
+  </div>
+
+  <!-- Timeline & Controls -->
+  <div class="timeline-controls">
+    <div class="timeline-info">
+      <span style="font-weight:bold">Level 38</span>
+      <span>02:45:30</span>
+      <span style="border:1px solid #000;padding:2px 8px">LIVE</span>
+    </div>
+    <button class="catch-up-btn">[🔥] Catch up with Featured Hands</button>
+  </div>
+</body>
+</html>

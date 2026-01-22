@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Game Info - Play-By-Play Tab - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 30px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active {
+      font-weight: bold;
+      border-bottom-color: #000;
+    }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 25px;
+      border-bottom: var(--border);
+      background: var(--bg-light);
+    }
+    .ad-image {
+      width: 150px;
+      height: 60px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: #fff;
+    }
+    .ad-text { flex: 1; font-size: 14px; }
+    .ad-cta {
+      padding: 10px 30px;
+      border: var(--border);
+      background: #c00;
+      color: #fff;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Play-By-Play Container */
+    .pbp-container {
+      padding: 30px;
+    }
+
+    /* Quarter Tabs */
+    .quarter-tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+    .quarter-tab {
+      padding: 12px 30px;
+      border: var(--border);
+      background: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .quarter-tab:hover { background: var(--bg-light); }
+    .quarter-tab.active {
+      background: #000;
+      color: #fff;
+    }
+
+    /* Controls Row */
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .toggle-group {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .live-badge {
+      padding: 5px 15px;
+      background: #c00;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 3px;
+    }
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .toggle-switch {
+      width: 40px;
+      height: 20px;
+      border: var(--border-thin);
+      background: var(--bg-medium);
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+    }
+    .toggle-switch.on {
+      background: #4a4;
+    }
+    .toggle-switch::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border: var(--border-thin);
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: left 0.2s;
+    }
+    .toggle-switch.on::after {
+      left: 22px;
+    }
+
+    /* Timeline Header */
+    .timeline-header {
+      display: flex;
+      border-bottom: var(--border);
+      background: var(--bg-medium);
+    }
+    .timeline-header-left, .timeline-header-right {
+      flex: 1;
+      padding: 15px 25px;
+    }
+    .timeline-header-left {
+      border-right: var(--border-thin);
+    }
+    .timeline-header-right {
+      text-align: right;
+    }
+    .team-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .timeline-header-right .team-header {
+      justify-content: flex-end;
+    }
+    .team-logo {
+      width: 32px;
+      height: 32px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: #fff;
+    }
+    .team-name {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+    }
+    .timeline-center {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #000;
+    }
+
+    /* Timeline Event */
+    .timeline-event {
+      display: flex;
+      min-height: 70px;
+      border-bottom: var(--border-thin);
+    }
+    .timeline-left, .timeline-right {
+      flex: 1;
+      padding: 15px 25px;
+    }
+    .timeline-left {
+      text-align: right;
+      padding-right: 50px;
+    }
+    .timeline-right {
+      padding-left: 50px;
+    }
+    .timeline-center-marker {
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      background: #000;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .timeline-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+    .timeline-score {
+      font-size: 10px;
+      font-weight: bold;
+      margin-top: 3px;
+    }
+
+    /* Event Content */
+    .event-action {
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+    .event-player {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .player-avatar-small {
+      width: 24px;
+      height: 24px;
+      border: var(--border-thin);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      background: var(--bg-light);
+    }
+    .event-type {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 10px;
+      border: var(--border-thin);
+      background: var(--bg-light);
+      margin-left: 5px;
+    }
+    .event-type.score {
+      background: #c00;
+      color: #fff;
+      border-color: #c00;
+    }
+    .event-type.foul {
+      background: #c90;
+      color: #fff;
+      border-color: #c90;
+    }
+    .event-type.sub {
+      background: var(--bg-medium);
+    }
+
+    /* Highlight Event */
+    .timeline-event.highlight {
+      background: var(--bg-light);
+    }
+    .timeline-event.highlight .event-action {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - PLAY-BY-PLAY</div>
+
+  <!-- Info Tabs -->
+  <div class="info-tabs">
+    <div class="info-tab">Summary</div>
+    <div class="info-tab">Box Score</div>
+    <div class="info-tab">Game Charts</div>
+    <div class="info-tab active">Play-By-Play</div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-image">[Product]<br>H60 Pro</div>
+    <div class="ad-text">최대 90도 구부러지는 로보락 신제품 H60 Pro 청소기</div>
+    <button class="ad-cta">열기</button>
+  </div>
+
+  <!-- Play-By-Play Container -->
+  <div class="pbp-container">
+    <!-- Quarter Tabs -->
+    <div class="quarter-tabs">
+      <button class="quarter-tab">Q1</button>
+      <button class="quarter-tab">Q2</button>
+      <button class="quarter-tab">Q3</button>
+      <button class="quarter-tab active">Q4</button>
+      <button class="quarter-tab">ALL</button>
+    </div>
+
+    <!-- Controls Row -->
+    <div class="controls-row">
+      <div class="toggle-group">
+        <span class="live-badge">LIVE</span>
+        <div class="toggle">
+          <span>Auto Switch Quarter</span>
+          <div class="toggle-switch on"></div>
+        </div>
+        <div class="toggle">
+          <span>Latest First</span>
+          <div class="toggle-switch on"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Header -->
+    <div class="timeline-header">
+      <div class="timeline-header-left">
+        <div class="team-header">
+          <div class="team-logo">[C]</div>
+          <span class="team-name">LA Clippers</span>
+        </div>
+      </div>
+      <div class="timeline-header-right">
+        <div class="team-header">
+          <span class="team-name">Chicago Bulls</span>
+          <div class="team-logo">[B]</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="timeline-center"></div>
+
+      <!-- Event: Foul -->
+      <div class="timeline-event">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="timeline-time">10:54</span>
+        </div>
+        <div class="timeline-right">
+          <div class="event-action">
+            <span class="event-player">
+              <span class="player-avatar-small">[MB]</span>
+              M. Buzelis FOUL
+            </span>
+            <span class="event-type foul">2 PF</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event: Steal -->
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="event-action">
+            <span class="event-player">
+              <span class="player-avatar-small">[CC]</span>
+              C. Christie STEAL
+            </span>
+            <span class="event-type">2 STL</span>
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="timeline-time">11:00</span>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <!-- Event: Turnover -->
+      <div class="timeline-event">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="timeline-time">11:00</span>
+        </div>
+        <div class="timeline-right">
+          <div class="event-action">
+            <span class="event-player">
+              <span class="player-avatar-small">[KH]</span>
+              K. Huerter Lost Ball TURNOVER
+            </span>
+            <span class="event-type">2 TO</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event: Score -->
+      <div class="timeline-event highlight">
+        <div class="timeline-left">
+          <div class="event-action">
+            <span class="event-player">
+              <span class="player-avatar-small">[KB]</span>
+              K. Brown Putback Layup
+            </span>
+            <span class="event-type score">2 PTS</span>
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="timeline-time">11:19</span>
+          <span class="timeline-score">85 - 105</span>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <!-- Event: Rebound -->
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="event-action">
+            <span class="event-player">
+              <span class="player-avatar-small">[KB]</span>
+              K. Brown REBOUND
+            </span>
+            <span class="event-type">Off:1 Def:0</span>
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="timeline-time">11:19</span>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <!-- Event: Miss -->
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="event-action">
+            <span class="event-player">
+              <span class="player-avatar-small">[KB]</span>
+              MISS K. Brown Driving Layup
+            </span>
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="timeline-time">11:22</span>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+
+      <!-- Event: Big Score -->
+      <div class="timeline-event highlight">
+        <div class="timeline-left"></div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+          <span class="timeline-time">11:45</span>
+          <span class="timeline-score">83 - 105</span>
+        </div>
+        <div class="timeline-right">
+          <div class="event-action">
+            <span class="event-player">
+              <span class="player-avatar-small">[AD]</span>
+              A. Dosunmu 26' 3PT
+            </span>
+            <span class="event-type score">16 PTS</span>
+            <span style="font-size:11px;color:#666">(N. Vucević 4 AST)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event: Substitution -->
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="event-action">
+            <span class="event-type sub">SUB In:</span>
+            T. Washington Jr.
+          </div>
+          <div class="event-action">
+            <span class="event-type sub">SUB In:</span>
+            K. Brown
+          </div>
+          <div class="event-action">
+            <span class="event-type sub">SUB In:</span>
+            Y. Niederhäuser
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="event-action">
+            <span class="event-type sub">SUB In:</span>
+            C. White
+          </div>
+          <div class="event-action">
+            <span class="event-type sub">SUB In:</span>
+            N. Vucević
+          </div>
+        </div>
+      </div>
+
+      <!-- Event: Sub Out -->
+      <div class="timeline-event">
+        <div class="timeline-left">
+          <div class="event-action">
+            <span class="event-type sub">SUB Out:</span>
+            N. Batum
+          </div>
+          <div class="event-action">
+            <span class="event-type sub">SUB Out:</span>
+            B. Lopez
+          </div>
+        </div>
+        <div class="timeline-center-marker">
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-right"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

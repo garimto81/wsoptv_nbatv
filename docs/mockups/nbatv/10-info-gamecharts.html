@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Game Info - Game Charts Tab - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 30px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active {
+      font-weight: bold;
+      border-bottom-color: #000;
+    }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 25px;
+      border-bottom: var(--border);
+      background: var(--bg-light);
+    }
+    .ad-image {
+      width: 150px;
+      height: 60px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: #fff;
+    }
+    .ad-text { flex: 1; font-size: 14px; }
+    .ad-cta {
+      padding: 10px 30px;
+      border: var(--border);
+      background: #c00;
+      color: #fff;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Charts Container */
+    .charts-container {
+      padding: 30px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    .filter-select {
+      padding: 8px 15px;
+      border: var(--border);
+      background: #fff;
+      font-family: inherit;
+      font-size: 12px;
+    }
+    .range-filter {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Shot Charts Grid */
+    .shot-charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .team-chart {
+      border: var(--border);
+    }
+    .team-chart-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      background: var(--bg-medium);
+      border-bottom: var(--border-thin);
+    }
+    .team-name {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .chart-date {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Court Diagram */
+    .court-container {
+      display: flex;
+      gap: 15px;
+      padding: 15px;
+    }
+    .player-list {
+      width: 140px;
+    }
+    .player-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 11px;
+    }
+    .player-checkbox {
+      width: 16px;
+      height: 16px;
+      border: var(--border-thin);
+      background: #fff;
+    }
+    .court-diagram {
+      flex: 1;
+      aspect-ratio: 1/1;
+      max-width: 280px;
+      border: var(--border);
+      background: var(--bg-light);
+      position: relative;
+    }
+    .court-lines {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      border: var(--border-thin);
+    }
+    .three-point-arc {
+      position: absolute;
+      bottom: 0;
+      left: 10%;
+      width: 80%;
+      height: 60%;
+      border: var(--border-thin);
+      border-bottom: none;
+      border-radius: 50% 50% 0 0;
+    }
+    .paint-area {
+      position: absolute;
+      bottom: 0;
+      left: 30%;
+      width: 40%;
+      height: 40%;
+      border: var(--border-thin);
+      border-bottom: none;
+    }
+    .shot-marker {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .shot-made {
+      background: transparent;
+      border: 2px solid #000;
+    }
+    .shot-miss {
+      background: transparent;
+    }
+    .shot-miss::before, .shot-miss::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 2px;
+      background: #c00;
+      top: 4px;
+    }
+    .shot-miss::before { transform: rotate(45deg); }
+    .shot-miss::after { transform: rotate(-45deg); }
+
+    .chart-stats {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: var(--border-thin);
+    }
+    .fg-percent {
+      font-size: 13px;
+    }
+    .fg-percent strong { color: #c00; }
+    .legend {
+      display: flex;
+      gap: 15px;
+      font-size: 11px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .download-btn {
+      padding: 8px 20px;
+      background: #000;
+      color: #fff;
+      border: var(--border);
+      font-family: inherit;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    /* Lead Tracker */
+    .lead-tracker {
+      border: var(--border);
+      margin-bottom: 40px;
+    }
+    .lead-tracker-header {
+      padding: 15px;
+      background: var(--bg-medium);
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: var(--border-thin);
+    }
+    .lead-tracker-chart {
+      height: 250px;
+      background: var(--bg-light);
+      position: relative;
+      padding: 20px;
+    }
+    .chart-grid {
+      position: absolute;
+      top: 20px;
+      left: 50px;
+      right: 20px;
+      bottom: 40px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 24px,
+        #ddd 24px,
+        #ddd 25px
+      );
+    }
+    .y-axis {
+      position: absolute;
+      left: 10px;
+      top: 20px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .x-axis {
+      position: absolute;
+      left: 50px;
+      right: 20px;
+      bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .lead-area {
+      position: absolute;
+      top: 30%;
+      left: 50px;
+      right: 20px;
+      height: 40%;
+      background: #c00;
+      opacity: 0.6;
+    }
+    .lead-tracker-stats {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      padding: 20px;
+      border-top: var(--border-thin);
+    }
+    .lead-stat {
+      text-align: center;
+    }
+    .lead-stat-value {
+      font-size: 32px;
+      font-weight: bold;
+    }
+    .lead-stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .lead-stat-team {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .team-logo-small {
+      width: 28px;
+      height: 28px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: var(--bg-light);
+    }
+
+    /* Team Comparison */
+    .team-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .comparison-section {
+      border: var(--border);
+    }
+    .comparison-header {
+      padding: 15px;
+      background: var(--bg-medium);
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: var(--border-thin);
+    }
+
+    /* Leading Players - Radar Chart Placeholder */
+    .radar-chart {
+      height: 300px;
+      background: var(--bg-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .radar-placeholder {
+      width: 200px;
+      height: 200px;
+      border: var(--border);
+      border-radius: 50%;
+      position: relative;
+    }
+    .radar-label {
+      position: absolute;
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+    .player-bubble {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border: var(--border-thin);
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+    }
+
+    /* Stats Comparison Bars */
+    .stats-bars {
+      padding: 20px;
+    }
+    .stat-bar-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .stat-bar-left {
+      width: 45%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .stat-bar-center {
+      width: 10%;
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .stat-bar-right {
+      width: 45%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bar-value {
+      min-width: 30px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .bar-fill {
+      height: 16px;
+      background: #c00;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - GAME CHARTS</div>
+
+  <!-- Info Tabs -->
+  <div class="info-tabs">
+    <div class="info-tab">Summary</div>
+    <div class="info-tab">Box Score</div>
+    <div class="info-tab active">Game Charts</div>
+    <div class="info-tab">Play-By-Play</div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-image">[Product]<br>H60 Pro</div>
+    <div class="ad-text">최대 90도 구부러지는 로보락 신제품 H60 Pro 청소기</div>
+    <button class="ad-cta">열기</button>
+  </div>
+
+  <!-- Charts Container -->
+  <div class="charts-container">
+    <div class="section-title">SHOT CHARTS</div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <select class="filter-select">
+        <option>Shot Plot</option>
+      </select>
+      <select class="filter-select">
+        <option>Q1</option>
+        <option>Q2</option>
+        <option>Q3</option>
+        <option>Q4</option>
+        <option>All</option>
+      </select>
+      <span class="range-filter">Range Filter ▼</span>
+    </div>
+
+    <!-- Shot Charts Grid -->
+    <div class="shot-charts-grid">
+      <!-- LA Clippers -->
+      <div class="team-chart">
+        <div class="team-chart-header">
+          <div>
+            <div class="team-name">LA CLIPPERS</div>
+            <div>All Players</div>
+          </div>
+          <div class="chart-date">LAC vs CHI on 01/21/2026</div>
+        </div>
+        <div class="court-container">
+          <div class="player-list">
+            <div class="player-option"><span class="player-checkbox">[ ]</span> B. Lopez - #11</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> C. Christie - #12</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> I. Zubac - #40</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> J. Harden - #1</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> J. Collins - #20</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> J. Miller - #22</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> K. Sanders - #4</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> K. Brown - #24</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> K. Dunn - #8</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> N. Batum - #33</div>
+          </div>
+          <div class="court-diagram">
+            <div class="court-lines"></div>
+            <div class="three-point-arc"></div>
+            <div class="paint-area"></div>
+            <!-- Shot markers would be placed here -->
+            <div class="shot-marker shot-made" style="top:30%;left:40%"></div>
+            <div class="shot-marker shot-made" style="top:40%;left:50%"></div>
+            <div class="shot-marker shot-miss" style="top:25%;left:60%"></div>
+            <div class="shot-marker shot-miss" style="top:50%;left:30%"></div>
+            <div class="shot-marker shot-made" style="top:60%;left:45%"></div>
+          </div>
+        </div>
+        <div class="chart-stats">
+          <span class="fg-percent">FG%: <strong>52.4%</strong> (11/21)</span>
+          <div class="legend">
+            <span class="legend-item">○ Made</span>
+            <span class="legend-item">✕ Miss</span>
+          </div>
+          <button class="download-btn">DOWNLOAD</button>
+        </div>
+      </div>
+
+      <!-- Chicago Bulls -->
+      <div class="team-chart">
+        <div class="team-chart-header">
+          <div>
+            <div class="team-name">CHICAGO BULLS</div>
+            <div>All Players</div>
+          </div>
+          <div class="chart-date">LAC vs CHI on 01/21/2026</div>
+        </div>
+        <div class="court-container">
+          <div class="player-list">
+            <div class="player-option"><span class="player-checkbox">[ ]</span> A. Dosunmu - #11</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> C. White - #0</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> D. Terry - #7</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> I. Okoro - #35</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> J. Smith - #25</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> J. Carter - #5</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> J. Phillips - #15</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> K. Huerter - #13</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> L. Olbrich - #47</div>
+            <div class="player-option"><span class="player-checkbox">[ ]</span> M. Buzelis - #14</div>
+          </div>
+          <div class="court-diagram">
+            <div class="court-lines"></div>
+            <div class="three-point-arc"></div>
+            <div class="paint-area"></div>
+            <div class="shot-marker shot-made" style="top:35%;left:35%"></div>
+            <div class="shot-marker shot-miss" style="top:28%;left:55%"></div>
+            <div class="shot-marker shot-made" style="top:45%;left:48%"></div>
+            <div class="shot-marker shot-miss" style="top:55%;left:35%"></div>
+            <div class="shot-marker shot-miss" style="top:38%;left:62%"></div>
+          </div>
+        </div>
+        <div class="chart-stats">
+          <span class="fg-percent">FG%: <strong>28.0%</strong> (7/25)</span>
+          <div class="legend">
+            <span class="legend-item">○ Made</span>
+            <span class="legend-item">✕ Miss</span>
+          </div>
+          <button class="download-btn">DOWNLOAD</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead Tracker -->
+    <div class="lead-tracker">
+      <div class="lead-tracker-header">LEAD TRACKER</div>
+      <div class="lead-tracker-chart">
+        <div class="y-axis">
+          <span>25 LAC</span>
+          <span>20</span>
+          <span>15</span>
+          <span>10</span>
+          <span>5</span>
+          <span>0</span>
+          <span>5</span>
+          <span>10</span>
+          <span>15</span>
+          <span>20</span>
+          <span>25 CHI</span>
+        </div>
+        <div class="chart-grid"></div>
+        <div class="lead-area"></div>
+        <div class="x-axis">
+          <span>Q1</span>
+          <span>Q2</span>
+          <span>Q3</span>
+          <span>Q4</span>
+        </div>
+      </div>
+      <div class="lead-tracker-stats">
+        <div class="lead-stat lead-stat-team">
+          <div class="team-logo-small">[C]</div>
+          <div class="lead-stat-value">8</div>
+        </div>
+        <div class="lead-stat">
+          <div class="lead-stat-value" style="font-size:18px">Biggest Lead</div>
+        </div>
+        <div class="lead-stat lead-stat-team">
+          <div class="lead-stat-value">21</div>
+          <div class="team-logo-small">[B]</div>
+        </div>
+      </div>
+      <div class="lead-tracker-stats">
+        <div class="lead-stat">
+          <div class="lead-stat-label">TIMES TIED</div>
+          <div class="lead-stat-value">4</div>
+        </div>
+        <div class="lead-stat">
+          <div class="lead-stat-label">LONGEST RUN</div>
+          <div class="lead-stat-value">13</div>
+        </div>
+        <div class="lead-stat">
+          <div class="lead-stat-label">LEAD CHANGES</div>
+          <div class="lead-stat-value">5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Comparison -->
+    <div class="team-comparison">
+      <div class="comparison-section">
+        <div class="comparison-header">LEADING PLAYERS</div>
+        <div class="radar-chart">
+          <div class="radar-placeholder">
+            <span class="radar-label" style="top:-20px;left:50%;transform:translateX(-50%)">BLK</span>
+            <span class="radar-label" style="top:15%;left:85%">PTS</span>
+            <span class="radar-label" style="top:50%;left:100%">REB</span>
+            <span class="radar-label" style="bottom:15%;left:85%">AST</span>
+            <div class="player-bubble" style="top:-30px;left:20%">[Photo]<br>Player</div>
+            <div class="player-bubble" style="top:-30px;right:20%">[Photo]<br>Player</div>
+            <div class="player-bubble" style="top:30%;left:-30px">[Photo]<br>Player</div>
+            <div class="player-bubble" style="top:30%;right:-30px">[Photo]<br>Player</div>
+          </div>
+        </div>
+      </div>
+      <div class="comparison-section">
+        <div class="comparison-header">TEAM COMPARISON</div>
+        <div class="stats-bars">
+          <div class="stat-bar-row">
+            <div class="stat-bar-left">
+              <span class="bar-value">79</span>
+              <div class="bar-fill" style="width:70%"></div>
+            </div>
+            <div class="stat-bar-center">PTS</div>
+            <div class="stat-bar-right">
+              <div class="bar-fill" style="width:85%"></div>
+              <span class="bar-value">97</span>
+            </div>
+          </div>
+          <div class="stat-bar-row">
+            <div class="stat-bar-left">
+              <span class="bar-value">34</span>
+              <div class="bar-fill" style="width:60%"></div>
+            </div>
+            <div class="stat-bar-center">REB</div>
+            <div class="stat-bar-right">
+              <div class="bar-fill" style="width:70%"></div>
+              <span class="bar-value">40</span>
+            </div>
+          </div>
+          <div class="stat-bar-row">
+            <div class="stat-bar-left">
+              <span class="bar-value">19</span>
+              <div class="bar-fill" style="width:50%"></div>
+            </div>
+            <div class="stat-bar-center">AST</div>
+            <div class="stat-bar-right">
+              <div class="bar-fill" style="width:75%"></div>
+              <span class="bar-value">29</span>
+            </div>
+          </div>
+          <div class="stat-bar-row">
+            <div class="stat-bar-left">
+              <span class="bar-value">3</span>
+              <div class="bar-fill" style="width:25%"></div>
+            </div>
+            <div class="stat-bar-center">STL</div>
+            <div class="stat-bar-right">
+              <div class="bar-fill" style="width:55%"></div>
+              <span class="bar-value">7</span>
+            </div>
+          </div>
+          <div class="stat-bar-row">
+            <div class="stat-bar-left">
+              <span class="bar-value">4</span>
+              <div class="bar-fill" style="width:30%"></div>
+            </div>
+            <div class="stat-bar-center">BLK</div>
+            <div class="stat-bar-right">
+              <div class="bar-fill" style="width:55%"></div>
+              <span class="bar-value">7</span>
+            </div>
+          </div>
+          <div class="stat-bar-row">
+            <div class="stat-bar-left">
+              <span class="bar-value">44.9</span>
+              <div class="bar-fill" style="width:65%"></div>
+            </div>
+            <div class="stat-bar-center">FG%</div>
+            <div class="stat-bar-right">
+              <div class="bar-fill" style="width:75%"></div>
+              <span class="bar-value">53.6</span>
+            </div>
+          </div>
+          <div class="stat-bar-row">
+            <div class="stat-bar-left">
+              <span class="bar-value">39.1</span>
+              <div class="bar-fill" style="width:60%"></div>
+            </div>
+            <div class="stat-bar-center">3P%</div>
+            <div class="stat-bar-right">
+              <div class="bar-fill" style="width:70%"></div>
+              <span class="bar-value">45.5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

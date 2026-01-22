@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP Tournament Ticker Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+      padding: 20px;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #f5f5f5;
+      --bg-dark: #e0e0e0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+    h2 {
+      margin: 20px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: var(--border);
+    }
+    .tournament-ticker {
+      display: flex;
+      background: #fff;
+      border: var(--border);
+      overflow-x: auto;
+      margin-bottom: 30px;
+    }
+    .day-column {
+      min-width: 70px;
+      padding: 10px;
+      border-right: var(--border-thin);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: var(--bg-light);
+    }
+    .day-column .day { font-weight: bold; font-size: 14px; }
+    .table-card {
+      min-width: 160px;
+      padding: 10px 15px;
+      border-right: var(--border-thin);
+    }
+    .table-card:hover { background: var(--bg-light); }
+    .table-status {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .table-status .live::before {
+      content: "[LIVE]";
+      margin-right: 4px;
+      font-weight: bold;
+    }
+    .table-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 0;
+      font-size: 13px;
+    }
+    .table-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .table-icon {
+      width: 16px;
+      height: 16px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+    }
+    .stack { font-weight: bold; }
+    .table-tag {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      border: var(--border-thin);
+      padding: 2px 4px;
+      display: inline-block;
+    }
+    .table-tag.featured { background: #000; color: #fff; }
+    .table-tag.final { background: #000; color: #fff; }
+    .table-tag.bubble { background: var(--bg-dark); }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      padding: 15px;
+      border: var(--border-thin);
+      background: var(--bg-light);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v1.0 - TICKER</div>
+
+  <h2>Tournament Ticker - 토너먼트 티커</h2>
+
+  <div class="tournament-ticker">
+    <div class="day-column">
+      <span class="day">DAY</span>
+      <span>2A</span>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 15</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">T</span>Table 42</span>
+        <span class="stack">8 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">1K/2K/200</span>
+        <span class="stack">Avg: 125K</span>
+      </div>
+      <div class="table-tag featured">[Featured]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 38</span>
+        <span style="font-size:10px">[Final]</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">F</span>Table 1</span>
+        <span class="stack">9 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">100K/200K/25K</span>
+        <span class="stack">Avg: 8.2M</span>
+      </div>
+      <div class="table-tag final">[Final Table]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 14</span>
+        <span style="font-size:10px">[Bubble]</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">B</span>Table 78</span>
+        <span class="stack">7 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">800/1.6K/200</span>
+        <span class="stack">Avg: 98K</span>
+      </div>
+      <div class="table-tag bubble">[Bubble]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span>BREAK</span>
+        <span>15:00</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">T</span>Table 23</span>
+        <span class="stack" style="color:#666">6 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px;color:#666">600/1.2K/100</span>
+        <span class="stack" style="color:#666">Avg: 72K</span>
+      </div>
+      <div class="table-tag">BREAK</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span class="live">Level 15</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">T</span>Table 55</span>
+        <span class="stack">8 Players</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px">1K/2K/200</span>
+        <span class="stack">Avg: 115K</span>
+      </div>
+      <div class="table-tag">[Featured]</div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-status">
+        <span>COMPLETED</span>
+      </div>
+      <div class="table-info-row">
+        <span class="table-name"><span class="table-icon">X</span>Table 12</span>
+        <span class="stack">-</span>
+      </div>
+      <div class="table-info-row">
+        <span style="font-size:11px;color:#666">Eliminated</span>
+        <span class="stack" style="color:#666">-</span>
+      </div>
+      <div class="table-tag">COMPLETED</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="table-tag featured">[Featured]</span> 피처드 테이블</div>
+    <div class="legend-item"><span class="table-tag final">[Final Table]</span> 파이널 테이블</div>
+    <div class="legend-item"><span class="table-tag bubble">[Bubble]</span> 버블 상황</div>
+    <div class="legend-item"><span class="table-tag">BREAK</span> 휴식 중</div>
+    <div class="legend-item"><span class="table-tag">COMPLETED</span> 종료</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Multi-Table View 1:2 - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #fff;
+    }
+    :root {
+      --border: 2px solid #fff;
+      --border-thin: 1px solid #444;
+      --bg-dark: #1a1a1a;
+      --bg-light: #F5F5F5;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Tournament Ticker */
+    .tournament-ticker {
+      display: flex;
+      border-bottom: 2px solid #333;
+      background: #fff;
+      color: #000;
+      height: 80px;
+    }
+    .ticker-date {
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #ddd;
+      font-size: 9px;
+    }
+    .ticker-tables {
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .ticker-table {
+      min-width: 140px;
+      padding: 8px 10px;
+      border-right: 1px solid #ddd;
+      font-size: 9px;
+    }
+    .table-status {
+      font-size: 8px;
+      margin-bottom: 2px;
+    }
+    .status-live::before {
+      content: "● ";
+      color: #c00;
+    }
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 1px 0;
+    }
+    .wsop-pass-tag {
+      font-size: 7px;
+      padding: 1px 3px;
+      border: 1px solid #ddd;
+      margin-top: 2px;
+      display: inline-block;
+    }
+
+    /* MultiView Container - 1:2 Layout */
+    .multiview-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      height: calc(100vh - 160px);
+      gap: 3px;
+      background: #000;
+    }
+
+    /* Main Table (Left - Larger) */
+    .main-table {
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+    }
+    .table-header {
+      padding: 10px 15px;
+      background: #000;
+    }
+    .table-title {
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .table-subtitle {
+      font-size: 10px;
+      color: #888;
+    }
+    .table-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      position: relative;
+    }
+    .table-placeholder {
+      color: #333;
+      font-size: 14px;
+    }
+    .pot-display {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #fff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .blinds-display {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 5px 12px;
+      background: rgba(0,0,0,0.9);
+      font-size: 11px;
+      color: #0f0;
+    }
+    .catchup-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border: 1px solid #fff;
+      background: #fff;
+      color: #000;
+      font-family: inherit;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    /* Side Tables (Right - Smaller) */
+    .side-tables {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .side-table {
+      flex: 1;
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+    }
+    .side-table .table-header {
+      padding: 8px 12px;
+    }
+    .side-table .table-title {
+      font-size: 11px;
+    }
+    .side-table .table-subtitle {
+      font-size: 9px;
+    }
+    .side-table .table-area {
+      position: relative;
+    }
+    .side-table .table-placeholder {
+      font-size: 11px;
+    }
+    .mini-pot {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 3px 8px;
+      background: rgba(0,0,0,0.9);
+      border: 1px solid #fff;
+      font-size: 9px;
+    }
+    .mini-blinds {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 2px 6px;
+      background: rgba(0,0,0,0.9);
+      font-size: 8px;
+      color: #0f0;
+    }
+
+    /* Empty Slot */
+    .empty-slot {
+      flex: 1;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .empty-slot:hover { background: #333; }
+
+    /* Bottom Bar */
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background: #000;
+    }
+    .stream-tab {
+      padding: 8px 16px;
+      border: 1px solid #444;
+      background: #333;
+      color: #fff;
+      font-size: 10px;
+      border-radius: 15px;
+    }
+    .timeline-section {
+      flex: 1;
+      margin: 0 20px;
+    }
+    .timeline-time {
+      font-size: 10px;
+      color: #888;
+    }
+    .timeline-bar {
+      height: 3px;
+      background: #333;
+      position: relative;
+      margin-top: 4px;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #c00;
+      width: 75%;
+    }
+    .timeline-live {
+      position: absolute;
+      right: 0;
+      top: -5px;
+      font-size: 9px;
+      color: #c00;
+    }
+    .layout-selector {
+      display: flex;
+      gap: 5px;
+    }
+    .layout-btn {
+      width: 26px;
+      height: 26px;
+      border: 1px solid #444;
+      background: #333;
+      color: #fff;
+      font-size: 9px;
+      cursor: pointer;
+    }
+    .layout-btn.active {
+      background: #fff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - WSOP MULTI-TABLE VIEW 1:2</div>
+
+  <!-- Tournament Ticker -->
+  <div class="tournament-ticker">
+    <div class="ticker-date">
+      <span style="font-weight:bold">DAY</span>
+      <span>7</span>
+      <span>FT</span>
+    </div>
+    <div class="ticker-tables">
+      <div class="ticker-table">
+        <div class="table-status"><span class="status-live">L38 • LIVE</span></div>
+        <div class="table-row"><span>[♠] Main Event FT</span></div>
+        <div class="table-row"><span>5 Players</span></div>
+        <span class="wsop-pass-tag">WSOP+</span>
+      </div>
+      <div class="ticker-table">
+        <div class="table-status"><span class="status-live">L24 • LIVE</span></div>
+        <div class="table-row"><span>[♥] $10K PLO</span></div>
+        <div class="table-row"><span>8 Players</span></div>
+        <span class="wsop-pass-tag">WSOP+</span>
+      </div>
+      <div class="ticker-table">
+        <div class="table-status"><span class="status-live">L18 • LIVE</span></div>
+        <div class="table-row"><span>[♦] $5K NLH</span></div>
+        <div class="table-row"><span>9 Players</span></div>
+        <span class="wsop-pass-tag">WSOP+</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MultiView 1:2 -->
+  <div class="multiview-container">
+    <!-- Main Table (Large) -->
+    <div class="main-table">
+      <div class="table-header">
+        <div class="table-title">[♠] MAIN EVENT - FINAL TABLE</div>
+        <div class="table-subtitle">5 Players • Main Table Cam</div>
+      </div>
+      <div class="table-area">
+        <div class="table-placeholder">[POKER TABLE - MAIN VIEW]</div>
+        <div class="pot-display">POT: $4,250,000</div>
+        <div class="blinds-display">200K/400K</div>
+        <button class="catchup-btn">🃏 Catch up with Featured Hands</button>
+      </div>
+    </div>
+
+    <!-- Side Tables -->
+    <div class="side-tables">
+      <div class="side-table">
+        <div class="table-header">
+          <div class="table-title">[♥] $10K PLO CHAMPIONSHIP</div>
+          <div class="table-subtitle">8 Players • Feature Table</div>
+        </div>
+        <div class="table-area">
+          <div class="table-placeholder">[POKER TABLE]</div>
+          <div class="mini-pot">POT: $85K</div>
+          <div class="mini-blinds">2K/4K</div>
+        </div>
+      </div>
+
+      <div class="empty-slot">
+        + Add a Table from Tournament Ticker
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="bottom-bar">
+    <button class="stream-tab">📡 Tables <span style="background:#555;padding:1px 5px;border-radius:8px;font-size:9px">45</span></button>
+    <div class="timeline-section">
+      <div class="timeline-time">Level 38 • 02:45:30</div>
+      <div class="timeline-bar">
+        <div class="timeline-progress"></div>
+        <span class="timeline-live">LIVE</span>
+      </div>
+    </div>
+    <div class="layout-selector">
+      <button class="layout-btn">[1]</button>
+      <button class="layout-btn active">[1:2]</button>
+      <button class="layout-btn">[2x2]</button>
+      <button class="layout-btn">[3x3]</button>
+    </div>
+  </div>
+</body>
+</html>

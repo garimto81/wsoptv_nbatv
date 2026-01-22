@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Player Controls - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px;
+      gap: 40px;
+    }
+    :root {
+      --border: 2px solid #fff;
+      --border-thin: 1px solid #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    .control-section {
+      background: #000;
+      padding: 20px;
+      border: var(--border-thin);
+    }
+    .section-title {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Stream Selector */
+    .stream-selector {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .stream-btn {
+      padding: 10px 20px;
+      border: var(--border-thin);
+      background: #333;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stream-btn:hover { background: #444; }
+    .stream-count {
+      background: #555;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
+
+    /* Tooltip Style Controls */
+    .tooltip-controls {
+      display: flex;
+      gap: 30px;
+    }
+    .tooltip-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .tooltip-label {
+      font-size: 10px;
+      color: #888;
+      padding: 5px 10px;
+      background: #333;
+      border-radius: 5px;
+    }
+    .control-btn {
+      width: 40px;
+      height: 40px;
+      border: var(--border-thin);
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .control-btn:hover { background: #333; }
+    .control-btn.active {
+      background: #fff;
+      color: #000;
+    }
+
+    /* Bottom Control Bar */
+    .bottom-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #000;
+      padding: 15px 20px;
+    }
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .control-icon {
+      width: 36px;
+      height: 36px;
+      border: var(--border-thin);
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .control-icon:hover { background: #333; }
+
+    /* Volume Control */
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      background: #333;
+    }
+    .volume-level {
+      width: 60%;
+      height: 100%;
+      background: #fff;
+    }
+
+    /* Layout Selector */
+    .layout-controls {
+      display: flex;
+      gap: 5px;
+    }
+    .layout-btn {
+      width: 32px;
+      height: 32px;
+      border: var(--border-thin);
+      background: #333;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .layout-btn.active {
+      background: #fff;
+      color: #000;
+    }
+
+    /* Timeline */
+    .timeline-bar {
+      flex: 1;
+      margin: 0 20px;
+    }
+    .time-display {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+    .progress-bar {
+      height: 4px;
+      background: #333;
+      position: relative;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #c00;
+      width: 88%;
+    }
+    .live-indicator {
+      position: absolute;
+      right: 0;
+      top: -8px;
+      font-size: 10px;
+      color: #c00;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - PLAYER CONTROLS</div>
+
+  <!-- Stream Selector Section -->
+  <div class="control-section">
+    <div class="section-title">Stream Selector</div>
+    <div class="stream-selector">
+      <button class="stream-btn">
+        📡 Streams <span class="stream-count">9</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Tooltip Controls -->
+  <div class="control-section">
+    <div class="section-title">Control Tooltips</div>
+    <div class="tooltip-controls">
+      <div class="tooltip-item">
+        <span class="tooltip-label">multiview (Shift+m)</span>
+        <button class="control-btn">[⊞]</button>
+      </div>
+      <div class="tooltip-item">
+        <span class="tooltip-label">Subtitles/closed captions (c)</span>
+        <button class="control-btn">[CC]</button>
+        <span style="font-size:10px;color:#666">Enabled closed caption (c)</span>
+      </div>
+      <div class="tooltip-item">
+        <span class="tooltip-label">Settings</span>
+        <button class="control-btn">[⚙]</button>
+      </div>
+      <div class="tooltip-item">
+        <span class="tooltip-label">Picture in Picture (p)</span>
+        <button class="control-btn">[🖼]</button>
+      </div>
+      <div class="tooltip-item">
+        <span class="tooltip-label">Live (SHIFT+→)</span>
+        <button class="control-btn">[→|]</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Bottom Control Bar -->
+  <div class="control-section">
+    <div class="section-title">Full Control Bar</div>
+    <div class="bottom-controls">
+      <div class="controls-left">
+        <button class="control-icon">[⏸]</button>
+        <button class="control-icon">[⏪]</button>
+        <button class="control-icon">[10↺]</button>
+        <button class="control-icon">[⏰]</button>
+        <button class="control-icon">[⏩]</button>
+        <div class="volume-control">
+          <button class="control-icon">[🔊]</button>
+          <div class="volume-slider">
+            <div class="volume-level"></div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-bar">
+        <div class="time-display">01:41:35</div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+          <span class="live-indicator">LIVE</span>
+        </div>
+      </div>
+      <div class="controls-right">
+        <button class="control-icon">[CC]</button>
+        <button class="control-icon">[⚙]</button>
+        <div class="layout-controls">
+          <button class="layout-btn">[1]</button>
+          <button class="layout-btn active">[1:2]</button>
+          <button class="layout-btn">[2x2]</button>
+        </div>
+        <button class="control-icon">[🖼]</button>
+        <button class="control-icon">[⛶]</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stream Tabs -->
+  <div class="control-section">
+    <div class="section-title">Stream Tabs</div>
+    <div style="display:flex;gap:10px;">
+      <button class="stream-btn" style="background:#fff;color:#000;">📡 Streams <span class="stream-count" style="background:#ddd">9</span></button>
+      <button class="stream-btn">⊞ MultiView</button>
+      <button class="stream-btn">🔥 Key Plays</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Main Streaming - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --bg-dark: #333;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* ========== 1. TOURNAMENT TICKER (= Scoreboard Ticker) ========== */
+    .tournament-ticker {
+      display: flex;
+      border-bottom: var(--border);
+      background: #fff;
+      height: 110px;
+    }
+    .ticker-date {
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: var(--border-thin);
+      font-size: 11px;
+    }
+    .ticker-date .day { font-weight: bold; }
+    .ticker-tables {
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .ticker-table {
+      min-width: 180px;
+      padding: 10px 15px;
+      border-right: var(--border-thin);
+    }
+    .table-status {
+      font-size: 10px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-live { color: #000; font-weight: bold; }
+    .status-live::before {
+      content: "●";
+      color: #c00;
+    }
+    .table-info {
+      font-size: 13px;
+    }
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 0;
+    }
+    .table-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .table-icon {
+      width: 20px;
+      height: 20px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: var(--bg-light);
+    }
+    .table-tag {
+      margin-top: 5px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .wsop-pass-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border: var(--border-thin);
+      font-size: 9px;
+    }
+
+    /* ========== 2. AD BANNER ========== */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      height: 100px;
+      border-bottom: var(--border);
+      background: var(--bg-light);
+    }
+    .ad-image {
+      width: 180px;
+      height: 80px;
+      margin: 0 20px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: #fff;
+      text-align: center;
+    }
+    .ad-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .ad-logo {
+      width: 50px;
+      height: 50px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: #fff;
+    }
+    .ad-text {
+      font-size: 14px;
+    }
+    .ad-cta {
+      padding: 12px 30px;
+      border: var(--border);
+      background: #c00;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .ad-promo {
+      width: 200px;
+      height: 80px;
+      margin-right: 20px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: #fff;
+      text-align: center;
+    }
+
+    /* ========== 3. TOURNAMENT HEADER (= Game Header) ========== */
+    .tournament-header {
+      padding: 15px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+    }
+    .tournament-title {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .broadcast-info {
+      font-size: 12px;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .broadcast-info .icon {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    /* ========== 4. VIDEO PLAYER (Poker Table View) ========== */
+    .video-player {
+      aspect-ratio: 16/9;
+      background: #111;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-placeholder {
+      color: #444;
+      font-size: 24px;
+      letter-spacing: 5px;
+    }
+    /* Poker Table Overlay */
+    .poker-overlay {
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .pot-display {
+      padding: 8px 20px;
+      background: rgba(0,0,0,0.8);
+      border: 1px solid #fff;
+      font-size: 14px;
+      color: #fff;
+    }
+    .board-display {
+      display: flex;
+      gap: 5px;
+    }
+    .board-card {
+      width: 35px;
+      height: 50px;
+      border: 2px solid #fff;
+      background: #fff;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .board-card.hidden {
+      background: #333;
+      color: #333;
+    }
+    /* Player Seats */
+    .player-seat {
+      position: absolute;
+      width: 80px;
+      padding: 5px;
+      background: rgba(0,0,0,0.8);
+      border: 1px solid #fff;
+      color: #fff;
+      font-size: 10px;
+      text-align: center;
+    }
+    .seat-name { font-weight: bold; }
+    .seat-stack { color: #0f0; }
+    .seat-cards {
+      display: flex;
+      justify-content: center;
+      gap: 2px;
+      margin-top: 3px;
+    }
+    .hole-card {
+      width: 18px;
+      height: 26px;
+      border: 1px solid #fff;
+      background: #fff;
+      color: #000;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ========== 5. STREAM TABS (= Tables/MultiView/Featured Hands) ========== */
+    .stream-tabs {
+      display: flex;
+      gap: 10px;
+      padding: 15px 20px;
+      background: var(--bg-dark);
+    }
+    .stream-tab {
+      padding: 10px 20px;
+      border: var(--border);
+      background: #444;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 20px;
+    }
+    .stream-tab.active {
+      background: #fff;
+      color: #000;
+    }
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+      border: 1px solid currentColor;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      border-radius: 50%;
+    }
+    .tab-count {
+      background: var(--bg-medium);
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
+
+    /* ========== 6. TIMELINE (Level + Time) ========== */
+    .timeline {
+      padding: 10px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+    }
+    .timeline-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .level-info {
+      display: flex;
+      gap: 15px;
+    }
+    .timeline-bar {
+      height: 4px;
+      background: #444;
+      position: relative;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #c00;
+      width: 65%;
+    }
+    .level-markers {
+      position: absolute;
+      top: -8px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .level-marker {
+      font-size: 8px;
+      color: #666;
+    }
+    .timeline-live {
+      position: absolute;
+      right: 0;
+      top: -8px;
+      font-size: 10px;
+      color: #c00;
+      font-weight: bold;
+    }
+
+    /* ========== 7. PLAYER CONTROLS (+ Poker-specific) ========== */
+    .player-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+      border-top: 1px solid #444;
+    }
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .control-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .control-btn:hover { background: #444; }
+    .control-btn.large {
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+    }
+    .control-btn.poker-btn {
+      background: #222;
+      border-color: #0a0;
+      color: #0a0;
+    }
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      background: #444;
+      position: relative;
+    }
+    .volume-level {
+      width: 60%;
+      height: 100%;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - WSOP TV MAIN STREAMING</div>
+
+  <!-- 1. TOURNAMENT TICKER -->
+  <div class="tournament-ticker">
+    <div class="ticker-date">
+      <span class="day">DAY</span>
+      <span>7</span>
+      <span>FT</span>
+    </div>
+    <div class="ticker-tables">
+      <div class="ticker-table">
+        <div class="table-status"><span class="status-live">L38 • LIVE</span></div>
+        <div class="table-info">
+          <div class="table-row">
+            <span class="table-name"><span class="table-icon">[♠]</span> Main Event</span>
+          </div>
+          <div class="table-row">
+            <span>Final Table • 5 Players</span>
+          </div>
+        </div>
+        <div class="table-tag"><span class="wsop-pass-tag">WSOP+</span></div>
+      </div>
+      <div class="ticker-table">
+        <div class="table-status"><span class="status-live">L24 • LIVE</span></div>
+        <div class="table-info">
+          <div class="table-row">
+            <span class="table-name"><span class="table-icon">[♥]</span> $10K PLO</span>
+          </div>
+          <div class="table-row">
+            <span>Feature Table • 8 Players</span>
+          </div>
+        </div>
+        <div class="table-tag"><span class="wsop-pass-tag">WSOP+</span></div>
+      </div>
+      <div class="ticker-table">
+        <div class="table-status"><span class="status-live">L18 • LIVE</span></div>
+        <div class="table-info">
+          <div class="table-row">
+            <span class="table-name"><span class="table-icon">[♦]</span> $5K NLH</span>
+          </div>
+          <div class="table-row">
+            <span>Table 42 • 9 Players</span>
+          </div>
+        </div>
+        <div class="table-tag"><span class="wsop-pass-tag">WSOP+</span></div>
+      </div>
+      <div class="ticker-table">
+        <div class="table-status">BREAK 15:00</div>
+        <div class="table-info">
+          <div class="table-row">
+            <span class="table-name"><span class="table-icon">[♣]</span> Seniors Event</span>
+          </div>
+          <div class="table-row">
+            <span>Day 2 • 124 Players</span>
+          </div>
+        </div>
+        <div class="table-tag"><span class="wsop-pass-tag">WSOP+</span></div>
+      </div>
+      <div class="ticker-table">
+        <div class="table-status">STARTING 2:00 PM</div>
+        <div class="table-info">
+          <div class="table-row">
+            <span class="table-name"><span class="table-icon">[♠]</span> $1500 HORSE</span>
+          </div>
+          <div class="table-row">
+            <span>Day 1 • Registration Open</span>
+          </div>
+        </div>
+        <div class="table-tag"><span class="wsop-pass-tag">WSOP+</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. AD BANNER -->
+  <div class="ad-banner">
+    <div class="ad-image">[GGPoker]<br>$10M GTD<br>WSOP Online</div>
+    <div class="ad-content">
+      <div class="ad-logo">[GG]</div>
+      <div class="ad-text">Play the WSOP Main Event Online at GGPoker - $10M Guaranteed!</div>
+      <button class="ad-cta">PLAY NOW</button>
+    </div>
+    <div class="ad-promo">WSOP<br>2026<br>LAS VEGAS<br><small>MAY 28 - JULY 17</small></div>
+  </div>
+
+  <!-- 3. TOURNAMENT HEADER -->
+  <div class="tournament-header">
+    <div class="tournament-title">[♠♥♦♣] WSOP MAIN EVENT 2026 - FINAL TABLE</div>
+    <div class="broadcast-info">
+      <span class="icon">[📹]</span>
+      <span>Main Table Cam</span>
+      <span>•</span>
+      <span>Norman Chad & Lon McEachern</span>
+      <span>⏱</span>
+    </div>
+  </div>
+
+  <!-- 4. VIDEO PLAYER -->
+  <div class="video-player">
+    <div class="video-placeholder">[LIVE POKER TABLE VIEW]</div>
+
+    <!-- Poker Overlays -->
+    <div class="poker-overlay">
+      <div class="pot-display">POT: $4,250,000</div>
+      <div class="board-display">
+        <div class="board-card">A♠</div>
+        <div class="board-card">K♥</div>
+        <div class="board-card">7♦</div>
+        <div class="board-card hidden">?</div>
+        <div class="board-card hidden">?</div>
+      </div>
+    </div>
+
+    <!-- Player Seats (sample positions) -->
+    <div class="player-seat" style="top:15%;left:10%">
+      <div class="seat-name">D. Negreanu</div>
+      <div class="seat-stack">$12.4M</div>
+      <div class="seat-cards">
+        <div class="hole-card">A♠</div>
+        <div class="hole-card">K♥</div>
+      </div>
+    </div>
+    <div class="player-seat" style="top:15%;right:10%">
+      <div class="seat-name">P. Ivey</div>
+      <div class="seat-stack">$9.8M</div>
+      <div class="seat-cards">
+        <div class="hole-card">Q♣</div>
+        <div class="hole-card">Q♦</div>
+      </div>
+    </div>
+    <div class="player-seat" style="bottom:25%;left:20%">
+      <div class="seat-name">T. Dwan</div>
+      <div class="seat-stack">$8.2M</div>
+    </div>
+    <div class="player-seat" style="bottom:25%;right:20%">
+      <div class="seat-name">J. Gold</div>
+      <div class="seat-stack">$5.1M</div>
+    </div>
+    <div class="player-seat" style="bottom:10%;left:50%;transform:translateX(-50%)">
+      <div class="seat-name">P. Hellmuth</div>
+      <div class="seat-stack">$2.4M</div>
+    </div>
+  </div>
+
+  <!-- 5. STREAM TABS -->
+  <div class="stream-tabs">
+    <button class="stream-tab active">
+      <span class="tab-icon">📡</span>
+      Tables
+      <span class="tab-count">45</span>
+    </button>
+    <button class="stream-tab">
+      <span class="tab-icon">⊞</span>
+      MultiView
+    </button>
+    <button class="stream-tab">
+      <span class="tab-icon">🃏</span>
+      Featured Hands
+    </button>
+  </div>
+
+  <!-- 6. TIMELINE -->
+  <div class="timeline">
+    <div class="timeline-info">
+      <div class="level-info">
+        <span>Level 38</span>
+        <span>Blinds: 200K/400K/400K</span>
+      </div>
+      <span>02:45:30</span>
+    </div>
+    <div class="timeline-bar">
+      <div class="timeline-progress"></div>
+      <span class="timeline-live">LIVE</span>
+    </div>
+  </div>
+
+  <!-- 7. PLAYER CONTROLS -->
+  <div class="player-controls">
+    <div class="controls-left">
+      <button class="control-btn large">[||]</button>
+      <button class="control-btn">[<<]</button>
+      <button class="control-btn">[H↺]</button>
+      <button class="control-btn">[>>]</button>
+      <button class="control-btn">[🔊]</button>
+      <div class="volume-slider">
+        <div class="volume-level"></div>
+      </div>
+    </div>
+    <div class="controls-right">
+      <button class="control-btn poker-btn" title="Toggle Hole Cards">[🂠]</button>
+      <button class="control-btn poker-btn" title="Stack Overlay">[💰]</button>
+      <button class="control-btn poker-btn" title="Camera Switch">[📹]</button>
+      <button class="control-btn">[CC]</button>
+      <button class="control-btn">[⚙]</button>
+      <button class="control-btn">[⊞]</button>
+      <button class="control-btn">[🖼]</button>
+      <button class="control-btn">[⛶]</button>
+    </div>
+  </div>
+</body>
+</html>

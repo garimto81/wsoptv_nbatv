@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Tournament Info - Summary Tab - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 30px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active {
+      font-weight: bold;
+      border-bottom-color: #000;
+    }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 25px;
+      border-bottom: var(--border);
+      background: var(--bg-light);
+    }
+    .ad-image {
+      width: 150px;
+      height: 60px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: #fff;
+      text-align: center;
+    }
+    .ad-text { flex: 1; font-size: 14px; }
+    .ad-cta {
+      padding: 10px 30px;
+      border: var(--border);
+      background: #c00;
+      color: #fff;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Content Layout */
+    .content-layout {
+      display: grid;
+      grid-template-columns: 7fr 3fr;
+      min-height: 80vh;
+    }
+
+    /* Article Section */
+    .article-section {
+      padding: 30px;
+      border-right: var(--border-thin);
+    }
+    .article-title {
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 1.3;
+      margin-bottom: 15px;
+    }
+    .article-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+    .article-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      background: var(--bg-light);
+      border: var(--border-thin);
+      font-size: 11px;
+      margin-bottom: 20px;
+    }
+    .article-content {
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .article-content p {
+      margin-bottom: 15px;
+    }
+    .article-quote {
+      font-style: italic;
+      padding: 15px 20px;
+      border-left: 4px solid #000;
+      background: var(--bg-light);
+      margin: 20px 0;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      padding: 25px;
+      background: var(--bg-light);
+    }
+    .sidebar-section {
+      margin-bottom: 30px;
+    }
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: var(--border-thin);
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-icon {
+      width: 24px;
+      height: 24px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: #fff;
+    }
+    .info-content {
+      flex: 1;
+    }
+    .info-label {
+      font-weight: bold;
+      font-size: 13px;
+    }
+    .info-value {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .info-link {
+      font-size: 12px;
+      color: #00f;
+      text-decoration: underline;
+    }
+
+    /* Chip Counts Table */
+    .chip-counts-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+    .chip-counts-table th,
+    .chip-counts-table td {
+      padding: 8px 10px;
+      text-align: center;
+      border-bottom: var(--border-thin);
+    }
+    .chip-counts-table th {
+      background: var(--bg-medium);
+      font-weight: bold;
+    }
+    .chip-counts-table th:first-child,
+    .chip-counts-table td:first-child {
+      text-align: left;
+    }
+    .highlight {
+      color: #c00;
+      font-weight: bold;
+    }
+    .chip-bar {
+      width: 60px;
+      height: 8px;
+      background: var(--bg-light);
+      border: 1px solid #ddd;
+      display: inline-block;
+    }
+    .chip-fill {
+      height: 100%;
+      background: #000;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 10px;
+      background: #fff;
+      border: var(--border-thin);
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - WSOP TOURNAMENT SUMMARY</div>
+
+  <!-- Info Tabs -->
+  <div class="info-tabs">
+    <div class="info-tab active">Summary</div>
+    <div class="info-tab">Player Stats</div>
+    <div class="info-tab">Hand Charts</div>
+    <div class="info-tab">Hand History</div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-image">[GGPoker]<br>WSOP Online</div>
+    <div class="ad-text">Play the WSOP Main Event Online at GGPoker</div>
+    <button class="ad-cta">PLAY NOW</button>
+  </div>
+
+  <!-- Content Layout -->
+  <div class="content-layout">
+    <!-- Article Section -->
+    <div class="article-section">
+      <h1 class="article-title">NEGREANU LEADS FINAL FIVE AS MAIN EVENT NEARS CONCLUSION</h1>
+      <div class="article-meta">Day 7 - Final Table • July 16th, 2026 6:00 PM</div>
+      <span class="article-tag">Tournament Update</span>
+
+      <div class="article-content">
+        <p>Daniel Negreanu holds a commanding chip lead as the 2026 WSOP Main Event Final Table resumes with five players remaining.</p>
+
+        <p>After an intense day of play that saw four eliminations, Negreanu sits with 12.4 million chips, nearly 3 million ahead of second-place Phil Ivey. The legendary duo is expected to clash in what many are calling the most anticipated heads-up battle in WSOP history.</p>
+
+        <p>Tom Dwan, known for his aggressive style, sits third with 8.2 million chips and has been patient, waiting for his spots. Jamie Gold, the 2006 champion, is in fourth with 5.1 million, while Phil Hellmuth - chasing his record 17th bracelet - is short-stacked with 2.4 million.</p>
+
+        <div class="article-quote">
+          "This is what we all dream about when we enter the Main Event. Five legends battling for poker's most prestigious prize. I'm ready for whatever comes," said Negreanu during the break.
+        </div>
+
+        <p>The blinds will resume at 200K/400K with a 400K big blind ante. First place pays $12.5 million while second place takes home $7.5 million.</p>
+
+        <p>Ivey, seeking his first Main Event bracelet, has been playing his signature patient style, picking spots carefully. His confrontation with Dwan in hand #198 - where he laid down queens to Dwan's river bluff - was the most discussed hand of the day.</p>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">TOURNAMENT INFO</div>
+        <div class="info-row">
+          <div class="info-icon">[📅]</div>
+          <div class="info-content">
+            <div class="info-label">Day 7 - Final Table</div>
+            <div class="info-value">July 16th, 2026</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">[📍]</div>
+          <div class="info-content">
+            <div class="info-label">Horseshoe Las Vegas</div>
+            <div class="info-value">Paris Ballroom</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">[👔]</div>
+          <div class="info-content">
+            <div class="info-label">Tournament Director</div>
+            <div class="info-value">Jack Effel</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">[📺]</div>
+          <div class="info-content">
+            <div class="info-label">Broadcast</div>
+            <div class="info-value">WSOP+, PokerGO</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">[💰]</div>
+          <div class="info-content">
+            <div class="info-label">Total Entries</div>
+            <div class="info-value">10,112 Players</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">[📄]</div>
+          <div class="info-content">
+            <div class="info-label">Structure Sheet</div>
+            <a class="info-link" href="#">Download PDF</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">CHIP COUNTS</div>
+        <table class="chip-counts-table">
+          <thead>
+            <tr>
+              <th>PLAYER</th>
+              <th>CHIPS</th>
+              <th>BB</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>D. Negreanu</td>
+              <td class="highlight">12.4M</td>
+              <td>31</td>
+              <td><div class="chip-bar"><div class="chip-fill" style="width:100%"></div></div></td>
+            </tr>
+            <tr>
+              <td>P. Ivey</td>
+              <td class="highlight">9.8M</td>
+              <td>25</td>
+              <td><div class="chip-bar"><div class="chip-fill" style="width:79%"></div></div></td>
+            </tr>
+            <tr>
+              <td>T. Dwan</td>
+              <td>8.2M</td>
+              <td>21</td>
+              <td><div class="chip-bar"><div class="chip-fill" style="width:66%"></div></div></td>
+            </tr>
+            <tr>
+              <td>J. Gold</td>
+              <td>5.1M</td>
+              <td>13</td>
+              <td><div class="chip-bar"><div class="chip-fill" style="width:41%"></div></div></td>
+            </tr>
+            <tr>
+              <td>P. Hellmuth</td>
+              <td>2.4M</td>
+              <td>6</td>
+              <td><div class="chip-bar"><div class="chip-fill" style="width:19%"></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">38M</div>
+            <div class="stat-label">Total Chips in Play</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">245</div>
+            <div class="stat-label">Hands Played</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Lead Changes</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">L38</div>
+            <div class="stat-label">Current Level</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Player Stats - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 25px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active { font-weight: bold; border-bottom-color: #000; }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 20px;
+      border-bottom: var(--border);
+    }
+    .ad-image {
+      width: 150px;
+      height: 60px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: var(--bg-light);
+    }
+    .ad-content { flex: 1; font-size: 14px; }
+    .ad-cta {
+      padding: 10px 30px;
+      border: var(--border);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Stats Container */
+    .stats-container {
+      padding: 30px;
+    }
+    .team-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: var(--border);
+    }
+
+    /* Stats Table (= Box Score) */
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 30px;
+    }
+    .stats-table th {
+      padding: 10px 6px;
+      text-align: left;
+      background: var(--bg-light);
+      border-bottom: var(--border);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .stats-table td {
+      padding: 10px 6px;
+      border-bottom: var(--border-thin);
+    }
+    .stats-table tr:hover { background: var(--bg-light); }
+    .stats-table .player-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 180px;
+    }
+    .player-avatar {
+      width: 32px;
+      height: 32px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: var(--bg-light);
+    }
+    .player-name { font-weight: bold; }
+    .player-pos { font-size: 10px; color: var(--text-muted); }
+    .highlight { font-weight: bold; }
+    .dnp { color: var(--text-muted); font-style: italic; }
+    .totals-row { background: var(--bg-medium); font-weight: bold; }
+
+    /* Chip Bar */
+    .chip-bar {
+      width: 80px;
+      height: 8px;
+      background: var(--bg-light);
+      border: var(--border-thin);
+    }
+    .chip-fill {
+      height: 100%;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v2.0 - PLAYER STATS</div>
+
+  <!-- Info Tabs -->
+  <div class="info-tabs">
+    <div class="info-tab">Summary</div>
+    <div class="info-tab active">Player Stats</div>
+    <div class="info-tab">Hand Charts</div>
+    <div class="info-tab">Hand History</div>
+  </div>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner">
+    <div class="ad-image">[GGPoker<br>Ad]</div>
+    <div class="ad-content">Play the WSOP Main Event Online at GGPoker</div>
+    <button class="ad-cta">PLAY NOW</button>
+  </div>
+
+  <!-- Stats Container -->
+  <div class="stats-container">
+    <div class="team-title">FINAL TABLE - PLAYER STATISTICS</div>
+
+    <!-- Player Stats Table (= Box Score) -->
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>PLAYER</th>
+          <th>CHIPS</th>
+          <th>BB</th>
+          <th>HANDS</th>
+          <th>VPIP</th>
+          <th>PFR</th>
+          <th>3BET</th>
+          <th>WTSD</th>
+          <th>W$SD</th>
+          <th>AGGF</th>
+          <th>CBET</th>
+          <th>FOLD</th>
+          <th>WON</th>
+          <th>+/-</th>
+          <th>STACK</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-avatar">[DN]</div>
+              <div>
+                <div class="player-name">Daniel Negreanu</div>
+                <div class="player-pos">BTN</div>
+              </div>
+            </div>
+          </td>
+          <td class="highlight">12,450,000</td>
+          <td>62</td>
+          <td>245</td>
+          <td>28%</td>
+          <td>22%</td>
+          <td>12%</td>
+          <td>35%</td>
+          <td class="highlight">55%</td>
+          <td>2.4</td>
+          <td>72%</td>
+          <td>68%</td>
+          <td>42</td>
+          <td class="highlight">+4.2M</td>
+          <td><div class="chip-bar"><div class="chip-fill" style="width:100%"></div></div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-avatar">[PI]</div>
+              <div>
+                <div class="player-name">Phil Ivey</div>
+                <div class="player-pos">CO</div>
+              </div>
+            </div>
+          </td>
+          <td class="highlight">9,800,000</td>
+          <td>49</td>
+          <td>245</td>
+          <td>24%</td>
+          <td>20%</td>
+          <td>15%</td>
+          <td>32%</td>
+          <td class="highlight">62%</td>
+          <td>2.8</td>
+          <td>68%</td>
+          <td>72%</td>
+          <td>38</td>
+          <td class="highlight">+2.1M</td>
+          <td><div class="chip-bar"><div class="chip-fill" style="width:79%"></div></div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-avatar">[TD]</div>
+              <div>
+                <div class="player-name">Tom Dwan</div>
+                <div class="player-pos">HJ</div>
+              </div>
+            </div>
+          </td>
+          <td class="highlight">8,200,000</td>
+          <td>41</td>
+          <td>245</td>
+          <td>32%</td>
+          <td>26%</td>
+          <td>18%</td>
+          <td>40%</td>
+          <td>48%</td>
+          <td>3.2</td>
+          <td>75%</td>
+          <td>62%</td>
+          <td>35</td>
+          <td>+0.8M</td>
+          <td><div class="chip-bar"><div class="chip-fill" style="width:66%"></div></div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-avatar">[JG]</div>
+              <div>
+                <div class="player-name">Jamie Gold</div>
+                <div class="player-pos">MP</div>
+              </div>
+            </div>
+          </td>
+          <td>5,100,000</td>
+          <td>25</td>
+          <td>245</td>
+          <td>18%</td>
+          <td>14%</td>
+          <td>8%</td>
+          <td>28%</td>
+          <td>58%</td>
+          <td>1.8</td>
+          <td>62%</td>
+          <td>78%</td>
+          <td>28</td>
+          <td>-1.5M</td>
+          <td><div class="chip-bar"><div class="chip-fill" style="width:41%"></div></div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="player-cell">
+              <div class="player-avatar">[VH]</div>
+              <div>
+                <div class="player-name">Phil Hellmuth</div>
+                <div class="player-pos">UTG</div>
+              </div>
+            </div>
+          </td>
+          <td>2,450,000</td>
+          <td>12</td>
+          <td>245</td>
+          <td>15%</td>
+          <td>12%</td>
+          <td>6%</td>
+          <td>25%</td>
+          <td>65%</td>
+          <td>1.5</td>
+          <td>58%</td>
+          <td>82%</td>
+          <td>22</td>
+          <td>-2.8M</td>
+          <td><div class="chip-bar"><div class="chip-fill" style="width:20%"></div></div></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="totals-row">
+          <td>TOTALS / AVERAGES</td>
+          <td>38,000,000</td>
+          <td>-</td>
+          <td>-</td>
+          <td>23%</td>
+          <td>19%</td>
+          <td>12%</td>
+          <td>32%</td>
+          <td>58%</td>
+          <td>2.3</td>
+          <td>67%</td>
+          <td>72%</td>
+          <td>165</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- Legend -->
+    <div style="font-size:11px;color:#666;margin-top:20px">
+      <strong>Legend:</strong>
+      VPIP = Voluntarily Put In Pot |
+      PFR = Pre-Flop Raise |
+      3BET = 3-Bet Frequency |
+      WTSD = Went To Showdown |
+      W$SD = Won $ at Showdown |
+      AGGF = Aggression Factor |
+      CBET = Continuation Bet |
+      FOLD = Fold to Bet
+    </div>
+  </div>
+</body>
+</html>

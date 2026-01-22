@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Key Plays Player View - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #fff;
+    }
+    :root {
+      --border: 2px solid #fff;
+      --border-thin: 1px solid #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Video Player */
+    .video-player {
+      aspect-ratio: 16/9;
+      background: #111;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-placeholder {
+      color: #333;
+      font-size: 20px;
+      letter-spacing: 3px;
+    }
+
+    /* Key Plays Label */
+    .keyplays-label {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      background: rgba(0,0,0,0.7);
+      border: 1px solid #fff;
+      font-size: 12px;
+    }
+
+    /* Score Overlay */
+    .score-overlay {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .score-team {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .team-logo {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+    .team-score {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .score-separator {
+      color: #666;
+    }
+    .quarter-info {
+      font-size: 11px;
+      color: #888;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      position: absolute;
+      top: 20px;
+      right: 200px;
+      display: flex;
+      gap: 10px;
+    }
+    .nav-btn {
+      padding: 8px 20px;
+      border: var(--border);
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .nav-btn:hover { background: #444; }
+    .nav-btn.primary {
+      background: #fff;
+      color: #000;
+    }
+
+    /* Bottom Controls */
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #000;
+    }
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .control-btn {
+      width: 36px;
+      height: 36px;
+      border: var(--border-thin);
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .control-btn:hover { background: #333; }
+    .control-btn.large {
+      width: 44px;
+      height: 44px;
+    }
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      background: #333;
+    }
+    .volume-level {
+      width: 60%;
+      height: 100%;
+      background: #fff;
+    }
+
+    /* Timeline */
+    .timeline-section {
+      flex: 1;
+      margin: 0 30px;
+    }
+    .timeline-time {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+    .timeline-bar {
+      height: 4px;
+      background: #333;
+      position: relative;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #c00;
+      width: 5%;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - KEY PLAYS PLAYER</div>
+
+  <!-- Video Player -->
+  <div class="video-player">
+    <div class="video-placeholder">[KEY PLAY VIDEO]</div>
+
+    <!-- Key Plays Label -->
+    <div class="keyplays-label">
+      <span>🔥</span>
+      <span>Key Plays</span>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button class="nav-btn">Next</button>
+      <button class="nav-btn primary">▶ Jump to Live</button>
+    </div>
+
+    <!-- Score Overlay -->
+    <div class="score-overlay">
+      <div class="score-team">
+        <div class="team-logo">[P]</div>
+        <span class="team-score">2</span>
+      </div>
+      <div class="quarter-info">
+        <span>FOULS</span>
+        <span>4</span>
+      </div>
+      <div class="score-team">
+        <span class="team-score">22</span>
+        <div class="team-logo">[B]</div>
+      </div>
+      <div class="quarter-info">
+        <span>1st</span>
+        <span>00:00:08</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Controls -->
+  <div class="bottom-bar">
+    <div class="controls-left">
+      <button class="control-btn large">[⏸]</button>
+      <button class="control-btn">[⏪]</button>
+      <button class="control-btn">[10↺]</button>
+      <button class="control-btn">[⏰]</button>
+      <button class="control-btn">[⏩]</button>
+      <div class="volume-control">
+        <button class="control-btn">[🔊]</button>
+        <div class="volume-slider">
+          <div class="volume-level"></div>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-section">
+      <div class="timeline-time">00:00:04</div>
+      <div class="timeline-bar">
+        <div class="timeline-progress"></div>
+      </div>
+    </div>
+    <div class="controls-right">
+      <button class="control-btn">[CC]</button>
+      <button class="control-btn">[⚙]</button>
+      <button class="control-btn">[🖼]</button>
+      <button class="control-btn">[⛶]</button>
+    </div>
+  </div>
+</body>
+</html>

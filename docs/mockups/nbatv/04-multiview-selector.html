@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV MultiView Selector - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    :root {
+      --border: 2px solid #fff;
+      --border-thin: 1px solid #fff;
+      --bg-dark: #333;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* MultiView Selector */
+    .multiview-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .selector-label {
+      font-size: 12px;
+      text-align: center;
+      padding: 5px 15px;
+      background: var(--bg-dark);
+      border-radius: 5px;
+    }
+    .layout-buttons {
+      display: flex;
+      gap: 5px;
+      padding: 10px 15px;
+      background: var(--bg-dark);
+      border-radius: 25px;
+    }
+    .layout-btn {
+      width: 40px;
+      height: 40px;
+      border: var(--border-thin);
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .layout-btn:hover { background: #555; }
+    .layout-btn.active {
+      background: #fff;
+      color: #000;
+    }
+    .layout-icon {
+      display: grid;
+      gap: 2px;
+    }
+    .layout-icon.single {
+      grid-template-columns: 1fr;
+    }
+    .layout-icon.split {
+      grid-template-columns: 1fr 1fr;
+    }
+    .layout-icon.quad {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+    .layout-cell {
+      width: 10px;
+      height: 8px;
+      border: 1px solid currentColor;
+    }
+    .layout-cell.main {
+      width: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - MULTIVIEW SELECTOR</div>
+
+  <div class="multiview-selector">
+    <div class="selector-label">MultiView</div>
+    <div class="layout-buttons">
+      <button class="layout-btn">
+        <div class="layout-icon single">
+          <div class="layout-cell" style="width:24px;height:16px"></div>
+        </div>
+      </button>
+      <button class="layout-btn active">
+        <div class="layout-icon split">
+          <div class="layout-cell main" style="height:16px"></div>
+          <div class="layout-cell" style="height:16px"></div>
+        </div>
+      </button>
+      <button class="layout-btn">
+        <div class="layout-icon quad">
+          <div class="layout-cell"></div>
+          <div class="layout-cell"></div>
+          <div class="layout-cell"></div>
+          <div class="layout-cell"></div>
+        </div>
+      </button>
+    </div>
+  </div>
+</body>
+</html>

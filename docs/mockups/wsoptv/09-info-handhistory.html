@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Tournament Info - Hand History Tab - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 30px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active {
+      font-weight: bold;
+      border-bottom-color: #000;
+    }
+
+    /* Level Tabs */
+    .level-tabs {
+      display: flex;
+      padding: 10px 20px;
+      gap: 5px;
+      background: var(--bg-light);
+      border-bottom: var(--border-thin);
+      overflow-x: auto;
+    }
+    .level-tab {
+      padding: 8px 16px;
+      border: var(--border-thin);
+      background: #fff;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .level-tab:hover { background: var(--bg-medium); }
+    .level-tab.active {
+      background: #000;
+      color: #fff;
+    }
+
+    /* Hand History Container */
+    .history-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 70vh;
+    }
+
+    /* Hand List Sidebar */
+    .hand-list {
+      border-right: var(--border-thin);
+      overflow-y: auto;
+    }
+    .hand-item {
+      padding: 15px;
+      border-bottom: var(--border-thin);
+      cursor: pointer;
+    }
+    .hand-item:hover { background: var(--bg-light); }
+    .hand-item.active {
+      background: var(--bg-medium);
+      border-left: 4px solid #000;
+    }
+    .hand-number {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+    .hand-summary {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .hand-pot {
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    .hand-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      background: #c00;
+      color: #fff;
+      font-size: 9px;
+      margin-top: 5px;
+    }
+
+    /* Hand Detail */
+    .hand-detail {
+      padding: 25px;
+    }
+    .hand-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: var(--border-thin);
+    }
+    .hand-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .hand-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .watch-hand-btn {
+      padding: 10px 20px;
+      border: var(--border);
+      background: #000;
+      color: #fff;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Action Timeline */
+    .action-timeline {
+      margin-top: 20px;
+    }
+    .street-section {
+      margin-bottom: 25px;
+    }
+    .street-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .street-name {
+      font-weight: bold;
+      font-size: 14px;
+      width: 80px;
+    }
+    .street-cards {
+      display: flex;
+      gap: 5px;
+    }
+    .street-card {
+      width: 35px;
+      height: 50px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+      background: #fff;
+    }
+    .street-pot {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* Action List */
+    .action-list {
+      margin-left: 95px;
+    }
+    .action-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .action-item:last-child { border-bottom: none; }
+    .action-player {
+      width: 100px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .action-type {
+      width: 80px;
+      font-size: 12px;
+    }
+    .action-type.fold { color: #999; }
+    .action-type.raise { color: #c00; font-weight: bold; }
+    .action-type.call { color: #090; }
+    .action-type.check { color: #666; }
+    .action-type.bet { color: #c00; }
+    .action-type.allin { color: #c00; font-weight: bold; }
+    .action-amount {
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .action-equity {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* Showdown */
+    .showdown-section {
+      margin-top: 25px;
+      padding: 20px;
+      background: var(--bg-light);
+      border: var(--border-thin);
+    }
+    .showdown-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+    .showdown-players {
+      display: flex;
+      gap: 30px;
+    }
+    .showdown-player {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .showdown-cards {
+      display: flex;
+      gap: 5px;
+    }
+    .showdown-result {
+      font-size: 12px;
+    }
+    .showdown-result.winner {
+      font-weight: bold;
+      color: #090;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - WSOP HAND HISTORY</div>
+
+  <!-- Info Tabs -->
+  <div class="info-tabs">
+    <div class="info-tab">Summary</div>
+    <div class="info-tab">Player Stats</div>
+    <div class="info-tab">Hand Charts</div>
+    <div class="info-tab active">Hand History</div>
+  </div>
+
+  <!-- Level Tabs -->
+  <div class="level-tabs">
+    <div class="level-tab">Level 34</div>
+    <div class="level-tab">Level 35</div>
+    <div class="level-tab">Level 36</div>
+    <div class="level-tab">Level 37</div>
+    <div class="level-tab active">Level 38</div>
+  </div>
+
+  <!-- Hand History Container -->
+  <div class="history-container">
+    <!-- Hand List Sidebar -->
+    <div class="hand-list">
+      <div class="hand-item active">
+        <div class="hand-number">Hand #245</div>
+        <div class="hand-summary">Negreanu vs Ivey - AA vs KK</div>
+        <div class="hand-pot">POT: $4.2M</div>
+        <span class="hand-tag">ALL-IN</span>
+      </div>
+      <div class="hand-item">
+        <div class="hand-number">Hand #244</div>
+        <div class="hand-summary">Dwan bluffs river with air</div>
+        <div class="hand-pot">POT: $1.8M</div>
+        <span class="hand-tag">BIG BLUFF</span>
+      </div>
+      <div class="hand-item">
+        <div class="hand-number">Hand #243</div>
+        <div class="hand-summary">Gold steals blinds</div>
+        <div class="hand-pot">POT: $600K</div>
+      </div>
+      <div class="hand-item">
+        <div class="hand-number">Hand #242</div>
+        <div class="hand-summary">Hellmuth folds to 3-bet</div>
+        <div class="hand-pot">POT: $1.2M</div>
+      </div>
+      <div class="hand-item">
+        <div class="hand-number">Hand #241</div>
+        <div class="hand-summary">Ivey value bets river</div>
+        <div class="hand-pot">POT: $2.4M</div>
+      </div>
+      <div class="hand-item">
+        <div class="hand-number">Hand #240</div>
+        <div class="hand-summary">Walk for Negreanu BB</div>
+        <div class="hand-pot">POT: $400K</div>
+      </div>
+    </div>
+
+    <!-- Hand Detail -->
+    <div class="hand-detail">
+      <div class="hand-header">
+        <div>
+          <div class="hand-title">HAND #245 - AA VS KK ALL-IN</div>
+          <div class="hand-meta">Level 38 • Blinds 200K/400K/400K • 5 Players</div>
+        </div>
+        <button class="watch-hand-btn">[▶] WATCH HAND</button>
+      </div>
+
+      <div class="action-timeline">
+        <!-- Preflop -->
+        <div class="street-section">
+          <div class="street-header">
+            <div class="street-name">PREFLOP</div>
+            <div class="street-pot">Pot: $1.0M</div>
+          </div>
+          <div class="action-list">
+            <div class="action-item">
+              <div class="action-player">Hellmuth (SB)</div>
+              <div class="action-type fold">FOLD</div>
+              <div class="action-amount"></div>
+            </div>
+            <div class="action-item">
+              <div class="action-player">Negreanu (BB)</div>
+              <div class="action-type raise">RAISE</div>
+              <div class="action-amount">$1.2M</div>
+              <div class="action-equity">Equity: 82%</div>
+            </div>
+            <div class="action-item">
+              <div class="action-player">Dwan (UTG)</div>
+              <div class="action-type fold">FOLD</div>
+              <div class="action-amount"></div>
+            </div>
+            <div class="action-item">
+              <div class="action-player">Gold (CO)</div>
+              <div class="action-type fold">FOLD</div>
+              <div class="action-amount"></div>
+            </div>
+            <div class="action-item">
+              <div class="action-player">Ivey (BTN)</div>
+              <div class="action-type allin">ALL-IN</div>
+              <div class="action-amount">$9.8M</div>
+              <div class="action-equity">Equity: 18%</div>
+            </div>
+            <div class="action-item">
+              <div class="action-player">Negreanu</div>
+              <div class="action-type call">CALL</div>
+              <div class="action-amount">$8.6M</div>
+              <div class="action-equity">Equity: 82%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flop -->
+        <div class="street-section">
+          <div class="street-header">
+            <div class="street-name">FLOP</div>
+            <div class="street-cards">
+              <div class="street-card">7♦</div>
+              <div class="street-card">2♠</div>
+              <div class="street-card">9♣</div>
+            </div>
+            <div class="street-pot">Pot: $19.8M</div>
+          </div>
+          <div class="action-list">
+            <div class="action-item">
+              <div class="action-player" style="color:var(--text-muted)">All-in - No action</div>
+              <div class="action-equity">Negreanu: 91% | Ivey: 9%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Turn -->
+        <div class="street-section">
+          <div class="street-header">
+            <div class="street-name">TURN</div>
+            <div class="street-cards">
+              <div class="street-card">7♦</div>
+              <div class="street-card">2♠</div>
+              <div class="street-card">9♣</div>
+              <div class="street-card">K♥</div>
+            </div>
+            <div class="street-pot">Pot: $19.8M</div>
+          </div>
+          <div class="action-list">
+            <div class="action-item">
+              <div class="action-player" style="color:var(--text-muted)">All-in - No action</div>
+              <div class="action-equity">Negreanu: 96% | Ivey: 4%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- River -->
+        <div class="street-section">
+          <div class="street-header">
+            <div class="street-name">RIVER</div>
+            <div class="street-cards">
+              <div class="street-card">7♦</div>
+              <div class="street-card">2♠</div>
+              <div class="street-card">9♣</div>
+              <div class="street-card">K♥</div>
+              <div class="street-card">3♦</div>
+            </div>
+            <div class="street-pot">Pot: $19.8M</div>
+          </div>
+        </div>
+
+        <!-- Showdown -->
+        <div class="showdown-section">
+          <div class="showdown-title">SHOWDOWN</div>
+          <div class="showdown-players">
+            <div class="showdown-player">
+              <div class="showdown-cards">
+                <div class="street-card">A♠</div>
+                <div class="street-card">A♥</div>
+              </div>
+              <div class="showdown-result winner">
+                D. Negreanu WINS $19.8M<br>
+                <small>Pair of Aces</small>
+              </div>
+            </div>
+            <div class="showdown-player">
+              <div class="showdown-cards">
+                <div class="street-card">K♠</div>
+                <div class="street-card">K♦</div>
+              </div>
+              <div class="showdown-result">
+                P. Ivey<br>
+                <small>Pair of Kings</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

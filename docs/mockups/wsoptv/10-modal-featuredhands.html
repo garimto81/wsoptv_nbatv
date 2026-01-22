@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Featured Hands Modal - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: rgba(0,0,0,0.7);
+      color: #000;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Modal */
+    .modal {
+      width: 550px;
+      max-height: 90vh;
+      background: #fff;
+      border: var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      border-bottom: var(--border-thin);
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .modal-close:hover { background: #000; color: #fff; }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      padding: 10px 20px;
+      gap: 8px;
+      background: var(--bg-light);
+      border-bottom: var(--border-thin);
+    }
+    .filter-tab {
+      padding: 6px 12px;
+      border: var(--border-thin);
+      background: #fff;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .filter-tab:hover { background: var(--bg-medium); }
+    .filter-tab.active {
+      background: #000;
+      color: #fff;
+    }
+
+    /* Hand List */
+    .hand-list {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 500px;
+    }
+    .hand-item {
+      display: flex;
+      gap: 15px;
+      padding: 15px 20px;
+      border-bottom: var(--border-thin);
+      cursor: pointer;
+    }
+    .hand-item:hover { background: var(--bg-light); }
+    .hand-thumbnail {
+      width: 100px;
+      height: 65px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: var(--bg-light);
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .hand-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .hand-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .hand-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .hand-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .hand-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      background: #c00;
+      color: #fff;
+      font-size: 9px;
+    }
+    .hand-tag.bluff { background: #00c; }
+    .hand-tag.elimination { background: #000; }
+
+    /* Jump to Live */
+    .jump-live-section {
+      padding: 15px 20px;
+      border-top: var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .current-info {
+      font-size: 12px;
+    }
+    .jump-live-btn {
+      padding: 10px 20px;
+      border: var(--border);
+      background: #c00;
+      color: #fff;
+      font-family: inherit;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - WSOP FEATURED HANDS</div>
+
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🃏 FEATURED HANDS</span>
+      <button class="modal-close">[X]</button>
+    </div>
+
+    <div class="filter-tabs">
+      <div class="filter-tab active">All Hands</div>
+      <div class="filter-tab">All-Ins</div>
+      <div class="filter-tab">Big Pots</div>
+      <div class="filter-tab">Bluffs</div>
+      <div class="filter-tab">Eliminations</div>
+    </div>
+
+    <div class="hand-list">
+      <div class="hand-item">
+        <div class="hand-thumbnail">[TABLE VIEW]<br>AA vs KK</div>
+        <div class="hand-info">
+          <div class="hand-title">Negreanu's Aces Hold vs Ivey's Kings</div>
+          <div class="hand-desc">$19.8M pot - Preflop all-in classic cooler</div>
+          <div class="hand-meta">
+            <span>Level 38 • Hand #245</span>
+            <span class="hand-tag">ALL-IN</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hand-item">
+        <div class="hand-thumbnail">[TABLE VIEW]<br>BLUFF</div>
+        <div class="hand-info">
+          <div class="hand-title">Dwan's Monster River Bluff</div>
+          <div class="hand-desc">Fires third barrel with complete air, forces fold from top pair</div>
+          <div class="hand-meta">
+            <span>Level 38 • Hand #244</span>
+            <span class="hand-tag bluff">BIG BLUFF</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hand-item">
+        <div class="hand-thumbnail">[TABLE VIEW]<br>SET vs FLUSH</div>
+        <div class="hand-info">
+          <div class="hand-title">Gold Eliminated by Negreanu</div>
+          <div class="hand-desc">Set of Jacks no good against rivered flush</div>
+          <div class="hand-meta">
+            <span>Level 37 • Hand #198</span>
+            <span class="hand-tag elimination">ELIMINATION</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hand-item">
+        <div class="hand-thumbnail">[TABLE VIEW]<br>HERO CALL</div>
+        <div class="hand-info">
+          <div class="hand-title">Ivey's Soul Read on Hellmuth</div>
+          <div class="hand-desc">Calls river bet with Ace high, catches the bluff</div>
+          <div class="hand-meta">
+            <span>Level 37 • Hand #185</span>
+            <span class="hand-tag">HERO CALL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hand-item">
+        <div class="hand-thumbnail">[TABLE VIEW]<br>QUADS</div>
+        <div class="hand-info">
+          <div class="hand-title">Dwan Flops Quad Queens</div>
+          <div class="hand-desc">Slow plays quads to extract maximum value</div>
+          <div class="hand-meta">
+            <span>Level 36 • Hand #152</span>
+            <span class="hand-tag">MONSTER</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hand-item">
+        <div class="hand-thumbnail">[TABLE VIEW]<br>3-WAY POT</div>
+        <div class="hand-info">
+          <div class="hand-title">Three-Way All-In Chaos</div>
+          <div class="hand-desc">AK vs QQ vs JJ - Ace on the river decides $15M pot</div>
+          <div class="hand-meta">
+            <span>Level 35 • Hand #122</span>
+            <span class="hand-tag">ALL-IN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="jump-live-section">
+      <div class="current-info">
+        <strong>Currently:</strong> Level 38 • Hand #248
+      </div>
+      <button class="jump-live-btn">[▶] JUMP TO LIVE</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV Tournament Info - Hand Charts Tab - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 30px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active {
+      font-weight: bold;
+      border-bottom-color: #000;
+    }
+
+    /* Charts Container */
+    .charts-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* Chart Card */
+    .chart-card {
+      border: var(--border);
+      background: #fff;
+    }
+    .chart-header {
+      padding: 15px;
+      background: var(--bg-light);
+      border-bottom: var(--border-thin);
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .chart-body {
+      padding: 20px;
+    }
+
+    /* Stack Tracker Chart */
+    .stack-chart {
+      height: 200px;
+      position: relative;
+      border-left: var(--border-thin);
+      border-bottom: var(--border-thin);
+      margin: 20px 10px 30px 40px;
+    }
+    .stack-y-axis {
+      position: absolute;
+      left: -40px;
+      top: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .stack-x-axis {
+      position: absolute;
+      bottom: -25px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .stack-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+    }
+    .stack-path {
+      fill: none;
+      stroke-width: 2;
+    }
+    .legend-inline {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 10px;
+      font-size: 10px;
+    }
+    .legend-item-inline {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .legend-color {
+      width: 20px;
+      height: 3px;
+    }
+
+    /* Poker Table Diagram */
+    .table-diagram {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      margin: 20px 0;
+    }
+    .poker-table-oval {
+      width: 80%;
+      height: 120px;
+      border: var(--border);
+      border-radius: 50%;
+      margin: 40px auto;
+      background: var(--bg-light);
+      position: relative;
+    }
+    .position-marker {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border: var(--border-thin);
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      transform: translate(-50%, -50%);
+    }
+    .position-marker.active {
+      background: #000;
+      color: #fff;
+    }
+    .position-name {
+      font-weight: bold;
+    }
+    .position-winrate {
+      font-size: 8px;
+    }
+
+    /* Equity Graph */
+    .equity-bars {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      height: 150px;
+      padding: 0 20px;
+      margin-top: 20px;
+    }
+    .equity-bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .equity-bar {
+      width: 30px;
+      background: #000;
+      border: var(--border-thin);
+    }
+    .equity-label {
+      margin-top: 5px;
+      font-size: 10px;
+      text-align: center;
+    }
+    .equity-value {
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    /* Player Comparison */
+    .comparison-row {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .comparison-row:last-child { border-bottom: none; }
+    .comparison-label {
+      width: 80px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .comparison-bar {
+      flex: 1;
+      height: 20px;
+      display: flex;
+    }
+    .comparison-left {
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 5px;
+      color: #fff;
+      font-size: 10px;
+    }
+    .comparison-right {
+      background: var(--bg-medium);
+      display: flex;
+      align-items: center;
+      padding-left: 5px;
+      font-size: 10px;
+    }
+    .comparison-names {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - WSOP HAND CHARTS</div>
+
+  <!-- Info Tabs -->
+  <div class="info-tabs">
+    <div class="info-tab">Summary</div>
+    <div class="info-tab">Player Stats</div>
+    <div class="info-tab active">Hand Charts</div>
+    <div class="info-tab">Hand History</div>
+  </div>
+
+  <!-- Charts Container -->
+  <div class="charts-container">
+    <!-- Stack Tracker -->
+    <div class="chart-card">
+      <div class="chart-header">[📈] STACK TRACKER</div>
+      <div class="chart-body">
+        <div class="stack-chart">
+          <div class="stack-y-axis">
+            <span>15M</span>
+            <span>10M</span>
+            <span>5M</span>
+            <span>0</span>
+          </div>
+          <svg class="stack-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polyline class="stack-path" style="stroke:#000" points="0,60 20,50 40,45 60,35 80,25 100,18"/>
+            <polyline class="stack-path" style="stroke:#666" points="0,55 20,52 40,48 60,40 80,35 100,35"/>
+            <polyline class="stack-path" style="stroke:#999" points="0,50 20,55 40,52 60,48 80,42 100,45"/>
+          </svg>
+          <div class="stack-x-axis">
+            <span>L34</span>
+            <span>L35</span>
+            <span>L36</span>
+            <span>L37</span>
+            <span>L38</span>
+          </div>
+        </div>
+        <div class="legend-inline">
+          <div class="legend-item-inline">
+            <div class="legend-color" style="background:#000"></div>
+            <span>Negreanu</span>
+          </div>
+          <div class="legend-item-inline">
+            <div class="legend-color" style="background:#666"></div>
+            <span>Ivey</span>
+          </div>
+          <div class="legend-item-inline">
+            <div class="legend-color" style="background:#999"></div>
+            <span>Dwan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Position Win Rate -->
+    <div class="chart-card">
+      <div class="chart-header">[🎯] POSITION WIN RATE MAP</div>
+      <div class="chart-body">
+        <div class="table-diagram">
+          <div class="poker-table-oval">
+            <!-- BTN -->
+            <div class="position-marker active" style="top:-10px;left:50%">
+              <div class="position-name">BTN</div>
+              <div class="position-winrate">42%</div>
+            </div>
+            <!-- SB -->
+            <div class="position-marker" style="top:20%;left:15%">
+              <div class="position-name">SB</div>
+              <div class="position-winrate">28%</div>
+            </div>
+            <!-- BB -->
+            <div class="position-marker" style="top:20%;left:85%">
+              <div class="position-name">BB</div>
+              <div class="position-winrate">32%</div>
+            </div>
+            <!-- UTG -->
+            <div class="position-marker" style="top:80%;left:15%">
+              <div class="position-name">UTG</div>
+              <div class="position-winrate">18%</div>
+            </div>
+            <!-- CO -->
+            <div class="position-marker" style="top:80%;left:85%">
+              <div class="position-name">CO</div>
+              <div class="position-winrate">38%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Equity Graph -->
+    <div class="chart-card">
+      <div class="chart-header">[📊] SHOWDOWN EQUITY BY PLAYER</div>
+      <div class="chart-body">
+        <div class="equity-bars">
+          <div class="equity-bar-group">
+            <div class="equity-bar" style="height:85%"></div>
+            <div class="equity-label">Negreanu</div>
+            <div class="equity-value">58%</div>
+          </div>
+          <div class="equity-bar-group">
+            <div class="equity-bar" style="height:78%"></div>
+            <div class="equity-label">Ivey</div>
+            <div class="equity-value">62%</div>
+          </div>
+          <div class="equity-bar-group">
+            <div class="equity-bar" style="height:70%"></div>
+            <div class="equity-label">Dwan</div>
+            <div class="equity-value">54%</div>
+          </div>
+          <div class="equity-bar-group">
+            <div class="equity-bar" style="height:55%"></div>
+            <div class="equity-label">Gold</div>
+            <div class="equity-value">42%</div>
+          </div>
+          <div class="equity-bar-group">
+            <div class="equity-bar" style="height:68%"></div>
+            <div class="equity-label">Hellmuth</div>
+            <div class="equity-value">55%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Comparison -->
+    <div class="chart-card">
+      <div class="chart-header">[⚔️] PLAYER COMPARISON</div>
+      <div class="chart-body">
+        <div class="comparison-names">
+          <span>D. Negreanu</span>
+          <span>P. Ivey</span>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-label">VPIP</div>
+          <div class="comparison-bar">
+            <div class="comparison-left" style="width:56%">28%</div>
+            <div class="comparison-right" style="width:44%">22%</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-label">PFR</div>
+          <div class="comparison-bar">
+            <div class="comparison-left" style="width:55%">22%</div>
+            <div class="comparison-right" style="width:45%">18%</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-label">3BET</div>
+          <div class="comparison-bar">
+            <div class="comparison-left" style="width:57%">12%</div>
+            <div class="comparison-right" style="width:43%">9%</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-label">W$SD</div>
+          <div class="comparison-bar">
+            <div class="comparison-left" style="width:48%">58%</div>
+            <div class="comparison-right" style="width:52%">62%</div>
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-label">AF</div>
+          <div class="comparison-bar">
+            <div class="comparison-left" style="width:47%">2.8</div>
+            <div class="comparison-right" style="width:53%">3.2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

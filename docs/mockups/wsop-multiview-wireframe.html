@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP MultiView Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+      padding: 20px;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #f5f5f5;
+      --bg-dark: #e0e0e0;
+      --text-muted: #666;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+    h2 {
+      margin: 20px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: var(--border);
+    }
+    .layout-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: var(--bg-dark);
+      border: var(--border);
+    }
+    .layout-btn {
+      width: 40px;
+      height: 30px;
+      border: var(--border);
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+    .layout-btn.active { background: #000; color: #fff; }
+    .layout-btn:hover { background: var(--bg-light); }
+    .layout-btn.active:hover { background: #000; }
+
+    .multiview-container {
+      border: var(--border);
+      background: var(--bg-light);
+      padding: 10px;
+      margin-bottom: 30px;
+    }
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+      aspect-ratio: 16/9;
+      max-height: 500px;
+    }
+    .table-view {
+      border: var(--border);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .table-header {
+      background: var(--bg-dark);
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      border-bottom: var(--border-thin);
+      display: flex;
+      justify-content: space-between;
+    }
+    .table-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 15px,
+        #eee 15px,
+        #eee 16px
+      );
+      position: relative;
+    }
+    .table-placeholder {
+      background: #fff;
+      padding: 15px 25px;
+      border: 2px dashed #999;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .add-table {
+      background: var(--bg-light);
+      border: 2px dashed #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .add-table:hover { background: var(--bg-dark); }
+    .add-table-text {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: var(--bg-dark);
+      border: var(--border);
+      border-top: none;
+    }
+    .catch-up-btn {
+      border: var(--border);
+      background: #fff;
+      padding: 8px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .catch-up-btn:hover { background: #000; color: #fff; }
+
+    .stream-count {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .stream-badge {
+      border: var(--border-thin);
+      padding: 4px 8px;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME v1.0 - MULTIVIEW</div>
+
+  <h2>MultiView - 다중 테이블 시청</h2>
+
+  <div class="layout-selector">
+    <div class="layout-btn">[1]</div>
+    <div class="layout-btn">[1:2]</div>
+    <div class="layout-btn active">[2x2]</div>
+    <div class="layout-btn">[3x3]</div>
+    <span style="margin-left: 20px; font-size: 12px; align-self: center;">MultiView Layout</span>
+  </div>
+
+  <div class="multiview-container">
+    <div class="grid-2x2">
+      <div class="table-view">
+        <div class="table-header">
+          <span>[♠] Table 1 - Final Table</span>
+          <span>[LIVE]</span>
+        </div>
+        <div class="table-content">
+          <div class="table-placeholder">
+            [ POKER TABLE VIEW ]<br><br>
+            9 Players<br>
+            Level 38 | 100K/200K
+          </div>
+        </div>
+      </div>
+
+      <div class="table-view">
+        <div class="table-header">
+          <span>[♥] Table 42 - Featured</span>
+          <span>[LIVE]</span>
+        </div>
+        <div class="table-content">
+          <div class="table-placeholder">
+            [ POKER TABLE VIEW ]<br><br>
+            8 Players<br>
+            Level 15 | 1K/2K
+          </div>
+        </div>
+      </div>
+
+      <div class="table-view">
+        <div class="table-header">
+          <span>[♦] Table 78 - Bubble</span>
+          <span>[LIVE]</span>
+        </div>
+        <div class="table-content">
+          <div class="table-placeholder">
+            [ POKER TABLE VIEW ]<br><br>
+            7 Players<br>
+            Level 14 | 800/1.6K
+          </div>
+        </div>
+      </div>
+
+      <div class="table-view add-table">
+        <div class="add-table-text">
+          [ + ]<br><br>
+          Add a Table<br>
+          from Tournament Ticker
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls-bar">
+    <div class="stream-count">
+      <span class="stream-badge">Streams</span>
+      <span>45</span>
+    </div>
+    <button class="catch-up-btn">[🔥] Catch up with Featured Hands</button>
+  </div>
+</body>
+</html>
