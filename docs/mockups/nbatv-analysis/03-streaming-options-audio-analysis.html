@@ -121,30 +121,33 @@
     .modal-wrapper {
       position: relative;
     }
+    .modal {
+      position: relative;
+    }
     .section-overlay {
       position: absolute;
-      left: 0;
-      right: 0;
+      left: -4px;
+      right: -4px;
       pointer-events: none;
       z-index: 100;
     }
     .section-overlay.header {
-      top: 0;
-      height: 75px;
+      top: -4px;
+      height: 83px;
       border: 4px solid #00f;
-      background: rgba(0, 0, 255, 0.05);
+      background: rgba(0, 0, 255, 0.1);
     }
     .section-overlay.tabs {
       top: 75px;
-      height: 50px;
+      height: 54px;
       border: 4px solid #c90;
-      background: rgba(204, 153, 0, 0.05);
+      background: rgba(204, 153, 0, 0.15);
     }
     .section-overlay.radio {
       top: 125px;
-      bottom: 0;
+      bottom: -4px;
       border: 4px solid #f0f;
-      background: rgba(255, 0, 255, 0.05);
+      background: rgba(255, 0, 255, 0.1);
     }
 
     /* ========== ORIGINAL WIREFRAME STYLES ========== */
@@ -235,11 +238,6 @@
   <div class="analysis-label">ANALYSIS OVERLAY - STREAMING OPTIONS (AUDIO)</div>
 
   <div class="modal-wrapper">
-    <!-- ========== HIGHLIGHT OVERLAYS ========== -->
-    <div class="section-overlay header"></div>
-    <div class="section-overlay tabs"></div>
-    <div class="section-overlay radio"></div>
-
     <!-- ========== ANNOTATIONS ========== -->
     <div class="annotation arrow-left" style="top: 25px; right: -270px;">
       <span class="num-badge">1</span>
@@ -259,10 +257,14 @@
       <span class="num-badge">3</span>
       <strong>RADIO OPTIONS</strong><br>
       Icon + Team Radio + Language<br>
-      <em style="color:#666">WSOP: EN/KO/ES Commentary 선택</em>
+      <em style="color:#666">WSOP: EN/KO/ES Commentary Select</em>
     </div>
 
     <div class="modal">
+      <!-- ========== HIGHLIGHT OVERLAYS (inside modal) ========== -->
+      <div class="section-overlay header"></div>
+      <div class="section-overlay tabs"></div>
+      <div class="section-overlay radio"></div>
       <div class="modal-header">
         <span class="modal-title">STREAMING OPTIONS</span>
         <button class="modal-close">[X]</button>

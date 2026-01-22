@@ -124,43 +124,36 @@
     .page-wrapper {
       position: relative;
     }
-    .section-overlay {
+    /* Inline highlight - inside each section */
+    .section-highlight {
       position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
       pointer-events: none;
       z-index: 100;
     }
-    .section-overlay.tabs {
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 53px;
+    .section-highlight.tabs-hl {
       border: 4px solid #00f;
-      background: rgba(0, 0, 255, 0.05);
+      background: rgba(0, 0, 255, 0.1);
     }
-    .section-overlay.ad {
-      top: 53px;
-      left: 0;
-      right: 0;
-      height: 95px;
+    .section-highlight.ad-hl {
       border: 4px solid #f80;
-      background: rgba(255, 136, 0, 0.05);
+      background: rgba(255, 136, 0, 0.1);
     }
-    .section-overlay.article {
-      top: 148px;
-      left: 0;
-      width: 70%;
-      bottom: 0;
+    .section-highlight.article-hl {
       border: 4px solid #0c0;
-      background: rgba(0, 204, 0, 0.05);
+      background: rgba(0, 204, 0, 0.1);
     }
-    .section-overlay.sidebar {
-      top: 148px;
-      right: 0;
-      width: 30%;
-      bottom: 0;
+    .section-highlight.sidebar-hl {
       border: 4px solid #f0f;
-      background: rgba(255, 0, 255, 0.05);
+      background: rgba(255, 0, 255, 0.1);
     }
+    .info-tabs { position: relative; }
+    .ad-banner { position: relative; }
+    .article-section { position: relative; }
+    .sidebar { position: relative; }
 
     /* ========== ORIGINAL WIREFRAME STYLES ========== */
     /* Info Tabs */
@@ -357,12 +350,6 @@
   <div class="analysis-label">ANALYSIS OVERLAY - INFO SUMMARY</div>
 
   <div class="page-wrapper">
-    <!-- ========== HIGHLIGHT OVERLAYS ========== -->
-    <div class="section-overlay tabs"></div>
-    <div class="section-overlay ad"></div>
-    <div class="section-overlay article"></div>
-    <div class="section-overlay sidebar"></div>
-
     <!-- ========== ANNOTATIONS ========== -->
     <div class="annotation arrow-down" style="top: -60px; left: 200px;">
       <span class="num-badge">1</span>
@@ -375,7 +362,7 @@
       <span class="num-badge">2</span>
       <strong>AD BANNER</strong><br>
       Image + Text + CTA<br>
-      <em style="color:#666">WSOP: 동일 배너</em>
+      <em style="color:#666">WSOP: Same Banner</em>
     </div>
 
     <div class="annotation arrow-right" style="top: 350px; left: 20px;">
@@ -394,6 +381,7 @@
 
     <!-- Info Tabs -->
     <div class="info-tabs">
+      <div class="section-highlight tabs-hl"></div>
       <div class="info-tab active">Summary</div>
       <div class="info-tab">Box Score</div>
       <div class="info-tab">Game Charts</div>
@@ -402,15 +390,17 @@
 
     <!-- Ad Banner -->
     <div class="ad-banner">
+      <div class="section-highlight ad-hl"></div>
       <div class="ad-image">[Product]<br>H60 Pro</div>
-      <div class="ad-text">최대 90도 구부러지는 로보락 신제품 H60 Pro 청소기</div>
-      <button class="ad-cta">열기</button>
+      <div class="ad-text">[AD TEXT: Product Description Here]</div>
+      <button class="ad-cta">OPEN</button>
     </div>
 
     <!-- Content Layout -->
     <div class="content-layout">
       <!-- Article Section -->
       <div class="article-section">
+        <div class="section-highlight article-hl"></div>
         <h1 class="article-title">BULLS ENDEAVOR TO REVERSE SERIES TREND AGAINST CHARGING CLIPPERS</h1>
         <div class="article-meta">Tuesday, January 20th, 2026 11:20 AM</div>
         <span class="article-tag">Game Preview</span>
@@ -436,6 +426,7 @@
 
       <!-- Sidebar -->
       <div class="sidebar">
+        <div class="section-highlight sidebar-hl"></div>
         <div class="sidebar-section">
           <div class="sidebar-title">GAME INFO</div>
           <div class="info-row">

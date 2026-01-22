@@ -129,48 +129,39 @@
     .wireframe-container {
       position: relative;
     }
-    .section-overlay {
+    /* Inline overlay - position inside each section */
+    .section-highlight {
       position: absolute;
-      left: 0;
-      right: 0;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
       pointer-events: none;
-      z-index: 100;
+      z-index: 50;
     }
-    .section-overlay.ticker {
-      top: 0;
-      height: 110px;
+    .section-highlight.ticker-hl {
       border: 4px solid #00f;
-      background: rgba(0, 0, 255, 0.05);
+      background: rgba(0, 0, 255, 0.1);
     }
-    .section-overlay.ad {
-      top: 110px;
-      height: 100px;
+    .section-highlight.ad-hl {
       border: 4px solid #f80;
-      background: rgba(255, 136, 0, 0.05);
+      background: rgba(255, 136, 0, 0.1);
     }
-    .section-overlay.header {
-      top: 210px;
-      height: 60px;
+    .section-highlight.header-hl {
       border: 4px solid #0c0;
-      background: rgba(0, 204, 0, 0.05);
+      background: rgba(0, 204, 0, 0.1);
     }
-    .section-overlay.tabs {
-      bottom: 130px;
-      height: 55px;
+    .section-highlight.tabs-hl {
       border: 4px solid #f0f;
-      background: rgba(255, 0, 255, 0.05);
+      background: rgba(255, 0, 255, 0.1);
     }
-    .section-overlay.timeline {
-      bottom: 75px;
-      height: 55px;
+    .section-highlight.timeline-hl {
       border: 4px solid #0ff;
-      background: rgba(0, 255, 255, 0.05);
+      background: rgba(0, 255, 255, 0.1);
     }
-    .section-overlay.controls {
-      bottom: 0;
-      height: 75px;
+    .section-highlight.controls-hl {
       border: 4px solid #ff0;
-      background: rgba(255, 255, 0, 0.05);
+      background: rgba(255, 255, 0, 0.1);
     }
 
     /* ========== ORIGINAL WIREFRAME STYLES ========== */
@@ -473,14 +464,6 @@
   <div class="analysis-label">ANALYSIS OVERLAY - MAIN STREAMING</div>
 
   <div class="wireframe-container">
-    <!-- ========== HIGHLIGHT OVERLAYS ========== -->
-    <div class="section-overlay ticker"></div>
-    <div class="section-overlay ad"></div>
-    <div class="section-overlay header"></div>
-    <div class="section-overlay tabs"></div>
-    <div class="section-overlay timeline"></div>
-    <div class="section-overlay controls"></div>
-
     <!-- ========== ANNOTATIONS ========== -->
     <!-- Ticker Annotation -->
     <div class="annotation arrow-left" style="top: 40px; right: 20px;">
@@ -495,7 +478,7 @@
       <span class="num-badge">2</span>
       <strong>AD BANNER</strong><br>
       Image + Logo + CTA<br>
-      <em style="color:#666">WSOP: 동일 구조</em>
+      <em style="color:#666">WSOP: Same Structure</em>
     </div>
 
     <!-- Game Header Annotation -->
@@ -503,15 +486,15 @@
       <span class="num-badge">3</span>
       <strong>GAME HEADER</strong><br>
       "TEAM @ TEAM" + Source<br>
-      <em style="color:#666">WSOP: [♠] EVENT NAME</em>
+      <em style="color:#666">WSOP: [S] EVENT NAME</em>
     </div>
 
     <!-- Video Player Annotation (center) -->
     <div class="annotation" style="top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
       <span class="num-badge">4</span>
       <strong>VIDEO PLAYER</strong><br>
-      16:9 비율 • 라이브 스트림 전용<br>
-      <em style="color:#666">WSOP: 내부 오버레이 없음</em>
+      16:9 Ratio - Live Stream Only<br>
+      <em style="color:#666">WSOP: No Internal Overlay</em>
     </div>
 
     <!-- Stream Tabs Annotation -->
@@ -527,20 +510,21 @@
       <span class="num-badge">6</span>
       <strong>TIMELINE</strong><br>
       Elapsed Time + Progress + LIVE<br>
-      <em style="color:#666">WSOP: Level 표시로 변경</em>
+      <em style="color:#666">WSOP: Level Display</em>
     </div>
 
     <!-- Controls Annotation -->
     <div class="annotation arrow-up" style="bottom: 5px; left: 50%; transform: translateX(-50%); text-align: center;">
       <span class="num-badge">7</span>
       <strong>PLAYER CONTROLS</strong><br>
-      좌: Playback | 우: Utility (CC, PiP, FS)<br>
-      <em style="color:#666">WSOP: 포커 전용 버튼 Extension</em>
+      Left: Playback | Right: Utility (CC, PiP, FS)<br>
+      <em style="color:#666">WSOP: Poker Extension Buttons</em>
     </div>
 
     <!-- ========== ORIGINAL WIREFRAME CONTENT ========== -->
     <!-- 1. SCOREBOARD TICKER -->
     <div class="scoreboard-ticker">
+      <div class="section-highlight ticker-hl"></div>
       <div class="ticker-date">
         <span class="day">TUE</span>
         <span>JAN</span>
@@ -594,17 +578,19 @@
 
     <!-- 2. AD BANNER -->
     <div class="ad-banner">
+      <div class="section-highlight ad-hl"></div>
       <div class="ad-image">[Product Image]<br>H60 Pro</div>
       <div class="ad-content">
         <div class="ad-logo">[Logo]</div>
-        <div class="ad-text">최대 90도 구부러지는 로보락 신제품 H60 Pro 청소기</div>
-        <button class="ad-cta">열기</button>
+        <div class="ad-text">[AD TEXT: Product Description Here]</div>
+        <button class="ad-cta">OPEN</button>
       </div>
       <div class="ad-promo">AWS<br>NBA<br>RIVALS WEEK<br><small>SEE SCHEDULE</small></div>
     </div>
 
     <!-- 3. GAME HEADER -->
     <div class="game-header">
+      <div class="section-highlight header-hl"></div>
       <div class="game-title">CLIPPERS @ BULLS</div>
       <div class="broadcast-info">
         <span class="icon">[B]</span>
@@ -620,6 +606,7 @@
 
     <!-- 5. STREAM TABS -->
     <div class="stream-tabs">
+      <div class="section-highlight tabs-hl"></div>
       <button class="stream-tab active">
         <span class="tab-icon">📡</span>
         Streams
@@ -637,6 +624,7 @@
 
     <!-- 6. TIMELINE -->
     <div class="timeline">
+      <div class="section-highlight timeline-hl"></div>
       <div class="timeline-time">01:35:55</div>
       <div class="timeline-bar">
         <div class="timeline-progress"></div>
@@ -646,6 +634,7 @@
 
     <!-- 7. PLAYER CONTROLS -->
     <div class="player-controls">
+      <div class="section-highlight controls-hl"></div>
       <div class="controls-left">
         <button class="control-btn large">[||]</button>
         <button class="control-btn">[<<]</button>
