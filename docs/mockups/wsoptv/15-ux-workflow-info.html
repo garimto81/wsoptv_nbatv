@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSOP TV UX Workflow - Info Tabs Journey - B&W Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    :root {
+      --border: 2px solid #fff;
+      --border-thin: 1px solid #444;
+      --bg-dark: #222;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+    .page-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: var(--border);
+      letter-spacing: 2px;
+    }
+    .workflow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Flow Section */
+    .flow-section {
+      background: var(--bg-dark);
+      padding: 25px;
+      border: var(--border-thin);
+    }
+    .flow-title {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #888;
+      letter-spacing: 1px;
+    }
+
+    /* Tab Navigation */
+    .tab-nav {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: var(--border-thin);
+    }
+    .tab-item {
+      padding: 10px 20px;
+      border: 1px solid #555;
+      background: #333;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .tab-item.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    /* Flow Diagram */
+    .flow-diagram {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .flow-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .step-box {
+      width: 140px;
+      min-height: 60px;
+      border: var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+      background: #333;
+    }
+    .step-box.tab-header {
+      background: #0a5;
+      border-color: #0a5;
+      font-weight: bold;
+    }
+    .step-box.content {
+      background: #444;
+      min-height: 80px;
+    }
+    .step-box.interaction {
+      background: #555;
+      border-style: dashed;
+    }
+    .step-box.result {
+      background: #c00;
+      border-color: #c00;
+    }
+    .step-icon {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    .step-label {
+      font-size: 9px;
+      line-height: 1.3;
+    }
+    .flow-arrow {
+      font-size: 20px;
+      color: #666;
+      padding: 20px 0;
+    }
+    .flow-arrow.horizontal {
+      padding: 0 10px;
+    }
+
+    /* Info Flow Grid */
+    .info-flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .info-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* State Diagram */
+    .state-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      padding: 20px;
+      background: #1a1a1a;
+      margin-top: 20px;
+    }
+    .state-box {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      text-align: center;
+    }
+    .state-box.active {
+      background: #c00;
+      border-color: #c00;
+    }
+    .state-arrow {
+      font-size: 24px;
+      color: #555;
+    }
+    .state-label {
+      font-size: 8px;
+      color: #888;
+      margin-top: 5px;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: var(--border-thin);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+    }
+    .legend-box {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #fff;
+    }
+    .legend-box.tab-header { background: #0a5; border-color: #0a5; }
+    .legend-box.content { background: #444; }
+    .legend-box.interaction { background: #555; border-style: dashed; }
+    .legend-box.result { background: #c00; border-color: #c00; }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME - WSOP TV UX WORKFLOW (INFO TABS)</div>
+
+  <div class="page-title">WSOP TV - INFO TABS USER JOURNEY</div>
+
+  <div class="workflow-container">
+    <!-- Tab Navigation Preview -->
+    <div class="flow-section">
+      <div class="flow-title">INFO TAB NAVIGATION</div>
+      <div class="tab-nav">
+        <div class="tab-item active">SUMMARY</div>
+        <div class="tab-item">PLAYER STATS</div>
+        <div class="tab-item">HAND CHARTS</div>
+        <div class="tab-item">HAND HISTORY</div>
+      </div>
+
+      <!-- Info Flow Grid -->
+      <div class="info-flow-grid">
+        <!-- Summary Column -->
+        <div class="info-column">
+          <div class="step-box tab-header">
+            <div class="step-icon">[📋]</div>
+            <div class="step-label">SUMMARY</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="step-box content">
+            <div class="step-icon">[📰]</div>
+            <div class="step-label">토너먼트 기사<br>(70%)</div>
+          </div>
+          <div class="step-box content">
+            <div class="step-icon">[📊]</div>
+            <div class="step-label">Tournament Info<br>+ Chip Counts<br>(30%)</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="step-box result">
+            <div class="step-label">토너먼트<br>현황 파악</div>
+          </div>
+        </div>
+
+        <!-- Player Stats Column -->
+        <div class="info-column">
+          <div class="step-box tab-header">
+            <div class="step-icon">[📊]</div>
+            <div class="step-label">PLAYER STATS</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="step-box interaction">
+            <div class="step-icon">[🔍]</div>
+            <div class="step-label">플레이어 선택<br>필터</div>
+          </div>
+          <div class="step-box content">
+            <div class="step-icon">[📈]</div>
+            <div class="step-label">VPIP, PFR, 3BET<br>AF, WTSD, W$SD</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="step-box result">
+            <div class="step-label">플레이 스타일<br>분석</div>
+          </div>
+        </div>
+
+        <!-- Hand Charts Column -->
+        <div class="info-column">
+          <div class="step-box tab-header">
+            <div class="step-icon">[📉]</div>
+            <div class="step-label">HAND CHARTS</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="step-box content">
+            <div class="step-icon">[📍]</div>
+            <div class="step-label">Position<br>Win Rate Map</div>
+          </div>
+          <div class="step-box content">
+            <div class="step-icon">[📈]</div>
+            <div class="step-label">Stack Tracker<br>칩 변동 그래프</div>
+          </div>
+          <div class="step-box content">
+            <div class="step-icon">[👥]</div>
+            <div class="step-label">Player<br>Comparison</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="step-box result">
+            <div class="step-label">시각적<br>데이터 분석</div>
+          </div>
+        </div>
+
+        <!-- Hand History Column -->
+        <div class="info-column">
+          <div class="step-box tab-header">
+            <div class="step-icon">[📜]</div>
+            <div class="step-label">HAND HISTORY</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="step-box interaction">
+            <div class="step-icon">[L]</div>
+            <div class="step-label">Level 필터<br>L1~ALL</div>
+          </div>
+          <div class="step-box content">
+            <div class="step-icon">[⏱]</div>
+            <div class="step-label">액션 타임라인<br>RAISE/CALL/FOLD</div>
+          </div>
+          <div class="step-box interaction">
+            <div class="step-icon">[▶]</div>
+            <div class="step-label">핸드 선택<br>→ 재생</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="step-box result">
+            <div class="step-label">핸드별<br>상세 분석</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- State Transition -->
+    <div class="flow-section">
+      <div class="flow-title">TAB STATE TRANSITION (탭 전환 상태)</div>
+      <div class="state-diagram">
+        <div class="state-box">
+          <div class="step-icon">[▶]</div>
+          <div class="step-label">LIVE<br>STREAMING</div>
+        </div>
+        <div class="state-arrow">⇄</div>
+        <div class="state-box active">
+          <div class="step-icon">[ℹ]</div>
+          <div class="step-label">INFO<br>TABS</div>
+        </div>
+        <div class="state-arrow">⇄</div>
+        <div class="state-box">
+          <div class="step-icon">[🃏]</div>
+          <div class="step-label">FEATURED<br>HANDS</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:15px;font-size:10px;color:#888">
+        ↑ 각 상태에서 다른 상태로 자유롭게 전환 가능 (비파괴적 네비게이션)
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-box tab-header"></div>
+        <span>Tab Header (탭 진입점)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box content"></div>
+        <span>Content (콘텐츠 영역)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box interaction"></div>
+        <span>Interaction (인터랙션 요소)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box result"></div>
+        <span>Result (결과/목표)</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # WSOP TV OTT Solution PRD
 
-**Version**: 4.0.0
+**Version**: 5.0.0
 **Date**: 2026-01-22
 **Reference**: NBA TV League Pass
 **Design Principle**: NBA TV 1:1 복제 (용어만 변경)
@@ -453,17 +453,90 @@
 
 ---
 
-## 14. 확장 기능 (Extension)
+## 14. UX 워크플로우 `[Core]`
+
+> 사용자 여정(User Journey)과 화면 전환 흐름을 시각화한 B&W 와이어프레임
+
+### 14.1 메인 사용자 여정
+
+![UX Workflow - Main](../images/mockups/wsoptv/14-ux-workflow-main.png)
+
+> **목업 파일**: [`wsoptv/14-ux-workflow-main.html`](../mockups/wsoptv/14-ux-workflow-main.html)
+
+**3가지 핵심 플로우:**
+
+| 플로우 | 설명 | 단계 |
+|--------|------|------|
+| **Entry Flow** | 랜딩 → 시청 | Landing → 구독 확인 → Ticker → 테이블 선택 → LIVE |
+| **Viewing Flow** | 시청 중 인터랙션 | LIVE → Stream Tabs → (Active Tables / MultiView / Featured Hands) |
+| **Settings Flow** | 설정 변경 | LIVE → Streams 버튼 → Camera/Commentary 선택 |
+
+### 14.2 Info Tabs 사용자 여정
+
+![UX Workflow - Info](../images/mockups/wsoptv/15-ux-workflow-info.png)
+
+> **목업 파일**: [`wsoptv/15-ux-workflow-info.html`](../mockups/wsoptv/15-ux-workflow-info.html)
+
+**4개 탭 플로우:**
+
+| 탭 | 콘텐츠 | 결과 |
+|----|--------|------|
+| **Summary** | 기사(70%) + Info(30%) | 토너먼트 현황 파악 |
+| **Player Stats** | VPIP, PFR, 3BET, AF | 플레이 스타일 분석 |
+| **Hand Charts** | Position Map, Stack Tracker | 시각적 데이터 분석 |
+| **Hand History** | Level 필터 + 액션 타임라인 | 핸드별 상세 분석 |
+
+**상태 전환:**
+```
+LIVE STREAMING ⇄ INFO TABS ⇄ FEATURED HANDS
+```
+각 상태에서 다른 상태로 자유롭게 전환 가능 (비파괴적 네비게이션)
+
+### 14.3 Featured Hands 사용자 여정
+
+![UX Workflow - Featured Hands](../images/mockups/wsoptv/16-ux-workflow-featured-hands.png)
+
+> **목업 파일**: [`wsoptv/16-ux-workflow-featured-hands.html`](../mockups/wsoptv/16-ux-workflow-featured-hands.html)
+
+**핸드 탐색 플로우:**
+```
+Featured Hands 탭 → 핸드 목록 모달 → 필터 선택 → 핸드 카드 클릭 → PLAYER
+```
+
+**필터 옵션:**
+| 필터 | 설명 |
+|------|------|
+| ALL HANDS | 전체 핸드 |
+| ALL-IN | 올인 핸드 |
+| BIG POTS | 큰 팟 |
+| BLUFFS | 블러프 |
+| ELIMINATIONS | 탈락 핸드 |
+| HERO CALLS | 히어로 콜 |
+| SET OVER SET | 셋 오버 셋 |
+| BAD BEATS | 배드 비트 |
+
+**Street 타임라인:**
+```
+PREFLOP → FLOP → TURN → RIVER → SHOWDOWN
+```
+
+**복귀 경로:**
+- `HAND LIST` 버튼 → 핸드 목록 모달
+- `JUMP TO LIVE` 버튼 → LIVE STREAMING
+
+---
+
+## 15. 확장 기능 (Extension)
 
 > **주의**: 이 섹션의 기능들은 NBA TV에 없는 **포커 도메인 특화 기능**입니다.
 > Core 기능 구현 완료 후 Phase 2 이상에서 추가합니다.
 
-### 14.1 Hole Cards Display `[Extension]`
+### 15.1 Hole Cards Display `[Extension]`
 - **30분 딜레이**: 보안을 위해 홀카드는 30분 지연 표시
 - **토글**: [CARDS] 버튼으로 ON/OFF
 - **RFID 연동**: 테이블 RFID 리더 데이터 실시간 수신
 
-### 14.2 POT/BOARD 오버레이 `[Extension]`
+### 15.2 POT/BOARD 오버레이 `[Extension]`
 | 요소 | 표시 형식 |
 |------|----------|
 | POT | `[POT: $2,450,000]` |
@@ -471,26 +544,26 @@
 | BOARD | `[BOARD: A♠ K♥ 7♦ __ __]` |
 | Action | `[RAISE $150,000]` |
 
-### 14.3 Equity Calculator `[Extension]`
+### 15.3 Equity Calculator `[Extension]`
 | 요소 | 표시 형식 |
 |------|----------|
 | Player 1 | `Daniel Negreanu [A♠K♥]: 78.5%` |
 | Player 2 | `Phil Ivey [Q♣Q♦]: 21.5%` |
 | OUTS | `Q (2장) = 4.5%` |
 
-### 14.4 Hand Range Display `[Extension]`
+### 15.4 Hand Range Display `[Extension]`
 - 플레이어의 예상 핸드 범위 시각화
 - 프리플랍/포스트플랍 레인지 표시
 
-### 14.5 3x3 MultiView `[Extension]`
+### 15.5 3x3 MultiView `[Extension]`
 - 9개 테이블 동시 시청 (파이널 데이용)
 - NBA TV의 2x2 확장
 
 ---
 
-## 15. 기술 요구사항
+## 16. 기술 요구사항
 
-### 15.1 스트리밍 프로토콜
+### 16.1 스트리밍 프로토콜
 | 항목 | 스펙 |
 |------|------|
 | 프로토콜 | HLS, DASH |
@@ -498,7 +571,7 @@
 | 비트레이트 | 3-15 Mbps 어댑티브 |
 | 지연 | 30초 (라이브), 30분 (홀카드) |
 
-### 15.2 다국어 지원
+### 16.2 다국어 지원
 | 언어 | 해설 | UI |
 |------|------|-----|
 | English | ✅ | ✅ |
@@ -510,7 +583,7 @@
 
 ---
 
-## 16. 구현 우선순위
+## 17. 구현 우선순위
 
 ### Phase 1: Core MVP (NBA TV 1:1)
 | 기능 | NBA TV 대응 | 상태 |
@@ -568,7 +641,7 @@
 | 12 | Key Plays 목록 | [HTML](../mockups/nbatv/12-modal-keyplays.html) | [PNG](../images/mockups/nbatv/12-modal-keyplays.png) |
 | 13 | Key Plays 플레이어 | [HTML](../mockups/nbatv/13-keyplays-player.html) | [PNG](../images/mockups/nbatv/13-keyplays-player.png) |
 
-### A.2 WSOP TV B&W 목업 (13개)
+### A.2 WSOP TV B&W 목업 (16개)
 
 | # | 화면 | HTML | PNG | NBA TV 대응 |
 |---|------|------|-----|------------|
@@ -585,6 +658,9 @@
 | 11 | Featured Hands 플레이어 | [HTML](../mockups/wsoptv/11-featuredhands-player.html) | [PNG](../images/mockups/wsoptv/11-featuredhands-player.png) | Key Plays Player |
 | 12 | MultiView 1:2 | [HTML](../mockups/wsoptv/12-multiview-1x2.html) | [PNG](../images/mockups/wsoptv/12-multiview-1x2.png) | MultiView 1:2 |
 | 13 | 컨트롤 바 | [HTML](../mockups/wsoptv/13-player-controls.html) | [PNG](../images/mockups/wsoptv/13-player-controls.png) | Player Controls |
+| 14 | UX 워크플로우 (메인) | [HTML](../mockups/wsoptv/14-ux-workflow-main.html) | [PNG](../images/mockups/wsoptv/14-ux-workflow-main.png) | - |
+| 15 | UX 워크플로우 (Info) | [HTML](../mockups/wsoptv/15-ux-workflow-info.html) | [PNG](../images/mockups/wsoptv/15-ux-workflow-info.png) | - |
+| 16 | UX 워크플로우 (Featured) | [HTML](../mockups/wsoptv/16-ux-workflow-featured-hands.html) | [PNG](../images/mockups/wsoptv/16-ux-workflow-featured-hands.png) | - |
 
 ---
 
