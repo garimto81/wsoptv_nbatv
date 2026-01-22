@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Player Controls - UI Analysis</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 30px;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff0;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+    }
+    .page-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #fff;
+    }
+    /* Control Groups */
+    .controls-section {
+      margin-bottom: 25px;
+    }
+    .section-title {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    /* Button Grid */
+    .button-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .button-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-icon {
+      width: 45px;
+      height: 45px;
+      border: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .btn-icon.primary {
+      background: #fff;
+      color: #000;
+    }
+    .btn-label {
+      font-size: 8px;
+      color: #888;
+      text-align: center;
+    }
+    .btn-shortcut {
+      font-size: 7px;
+      color: #0af;
+    }
+    /* Full Control Bar */
+    .full-control-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #000;
+      border: 2px solid #444;
+      margin-top: 20px;
+    }
+    .control-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .ctrl-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .ctrl-btn.play {
+      width: 44px;
+      height: 44px;
+      background: #fff;
+      color: #000;
+    }
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      background: #444;
+    }
+    .volume-level {
+      width: 60%;
+      height: 100%;
+      background: #fff;
+    }
+    /* Analysis Table */
+    .analysis-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 25px;
+    }
+    .analysis-table th, .analysis-table td {
+      padding: 10px;
+      border: 1px solid #444;
+      font-size: 10px;
+      text-align: left;
+    }
+    .analysis-table th {
+      background: #333;
+      color: #ff0;
+    }
+    .analysis-table tr:nth-child(even) {
+      background: #222;
+    }
+    .shortcut {
+      color: #0af;
+      font-weight: bold;
+    }
+    .wsop-note {
+      color: #0c0;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">ANALYSIS - PLAYER CONTROLS</div>
+
+  <div class="page-title">NBA TV PLAYER CONTROLS - BUTTON ANALYSIS</div>
+
+  <!-- Playback Controls -->
+  <div class="controls-section">
+    <div class="section-title">PLAYBACK CONTROLS (LEFT GROUP)</div>
+    <div class="button-grid">
+      <div class="button-item">
+        <div class="btn-icon primary">[▶]</div>
+        <div class="btn-label">Play/Pause</div>
+        <div class="btn-shortcut">Space</div>
+      </div>
+      <div class="button-item">
+        <div class="btn-icon">[⏪]</div>
+        <div class="btn-label">Rewind</div>
+        <div class="btn-shortcut">←</div>
+      </div>
+      <div class="button-item">
+        <div class="btn-icon">[10↺]</div>
+        <div class="btn-label">Skip 10s</div>
+        <div class="btn-shortcut">J/L</div>
+      </div>
+      <div class="button-item">
+        <div class="btn-icon">[⏩]</div>
+        <div class="btn-label">Forward</div>
+        <div class="btn-shortcut">→</div>
+      </div>
+      <div class="button-item">
+        <div class="btn-icon">[🔊]</div>
+        <div class="btn-label">Volume</div>
+        <div class="btn-shortcut">M</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Utility Controls -->
+  <div class="controls-section">
+    <div class="section-title">UTILITY CONTROLS (RIGHT GROUP)</div>
+    <div class="button-grid">
+      <div class="button-item">
+        <div class="btn-icon">[CC]</div>
+        <div class="btn-label">Captions</div>
+        <div class="btn-shortcut">C</div>
+      </div>
+      <div class="button-item">
+        <div class="btn-icon">[⚙]</div>
+        <div class="btn-label">Settings</div>
+        <div class="btn-shortcut">-</div>
+      </div>
+      <div class="button-item">
+        <div class="btn-icon">[⊞]</div>
+        <div class="btn-label">MultiView</div>
+        <div class="btn-shortcut">Shift+M</div>
+      </div>
+      <div class="button-item">
+        <div class="btn-icon">[🖼]</div>
+        <div class="btn-label">PiP</div>
+        <div class="btn-shortcut">P</div>
+      </div>
+      <div class="button-item">
+        <div class="btn-icon">[⛶]</div>
+        <div class="btn-label">Fullscreen</div>
+        <div class="btn-shortcut">F</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Control Bar Example -->
+  <div class="controls-section">
+    <div class="section-title">FULL CONTROL BAR LAYOUT</div>
+    <div class="full-control-bar">
+      <div class="control-group">
+        <div class="ctrl-btn play">[▶]</div>
+        <div class="ctrl-btn">[⏪]</div>
+        <div class="ctrl-btn">[10]</div>
+        <div class="ctrl-btn">[⏩]</div>
+        <div class="ctrl-btn">[🔊]</div>
+        <div class="volume-slider"><div class="volume-level"></div></div>
+      </div>
+      <div style="flex:1;text-align:center;font-size:10px;color:#888">
+        [TIMELINE - 01:38:59 ═══════════════════ LIVE]
+      </div>
+      <div class="control-group">
+        <div class="ctrl-btn">[CC]</div>
+        <div class="ctrl-btn">[⚙]</div>
+        <div class="ctrl-btn">[⊞]</div>
+        <div class="ctrl-btn">[🖼]</div>
+        <div class="ctrl-btn">[⛶]</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analysis Table -->
+  <table class="analysis-table">
+    <tr>
+      <th>Button</th>
+      <th>NBA TV</th>
+      <th>WSOP TV</th>
+      <th>Shortcut</th>
+      <th>Note</th>
+    </tr>
+    <tr>
+      <td>[▶]</td>
+      <td>Play/Pause</td>
+      <td>Play/Pause</td>
+      <td class="shortcut">Space</td>
+      <td>동일</td>
+    </tr>
+    <tr>
+      <td>[⏪][⏩]</td>
+      <td>Rewind/Forward</td>
+      <td>Rewind/Forward</td>
+      <td class="shortcut">←/→</td>
+      <td>동일</td>
+    </tr>
+    <tr>
+      <td>[CC]</td>
+      <td>Closed Captions</td>
+      <td>Closed Captions</td>
+      <td class="shortcut">C</td>
+      <td>동일</td>
+    </tr>
+    <tr>
+      <td>[⊞]</td>
+      <td>MultiView</td>
+      <td>MultiView</td>
+      <td class="shortcut">Shift+M</td>
+      <td>동일</td>
+    </tr>
+    <tr>
+      <td>[🖼]</td>
+      <td>Picture-in-Picture</td>
+      <td>Picture-in-Picture</td>
+      <td class="shortcut">P</td>
+      <td>동일</td>
+    </tr>
+    <tr>
+      <td>[⛶]</td>
+      <td>Fullscreen</td>
+      <td>Fullscreen</td>
+      <td class="shortcut">F</td>
+      <td>동일</td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>-</td>
+      <td class="wsop-note">[🂠] Hole Cards</td>
+      <td class="shortcut">H</td>
+      <td class="wsop-note">Extension</td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>-</td>
+      <td class="wsop-note">[💰] Stack Display</td>
+      <td class="shortcut">S</td>
+      <td class="wsop-note">Extension</td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>-</td>
+      <td class="wsop-note">[📹] Camera Switch</td>
+      <td class="shortcut">V</td>
+      <td class="wsop-note">Extension</td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Info Play-By-Play - UI Analysis</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 30px;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff0;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+    }
+    .page-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #fff;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 25px;
+    }
+    .diagram-panel {
+      background: #222;
+      padding: 20px;
+      border: 2px solid #fff;
+    }
+    .panel-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #ff0;
+      margin-bottom: 15px;
+    }
+    /* Quarter Tabs */
+    .quarter-tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+    .quarter-tab {
+      padding: 6px 12px;
+      border: 1px solid #555;
+      background: #333;
+      font-size: 10px;
+    }
+    .quarter-tab.active {
+      background: #fff;
+      color: #000;
+    }
+    /* Options Row */
+    .options-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #333;
+      font-size: 9px;
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .option-checkbox {
+      width: 12px;
+      height: 12px;
+      border: 1px solid #fff;
+    }
+    .option-checkbox.checked {
+      background: #0af;
+    }
+    /* Timeline */
+    .timeline-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+    .event-left, .event-right {
+      padding: 8px;
+      font-size: 9px;
+      min-height: 40px;
+    }
+    .event-left {
+      background: rgba(0,170,255,0.1);
+      border-left: 3px solid #0af;
+      text-align: right;
+    }
+    .event-right {
+      background: rgba(255,136,0,0.1);
+      border-right: 3px solid #f80;
+    }
+    .event-time {
+      text-align: center;
+      font-size: 10px;
+      color: #888;
+      padding: 5px;
+      background: #333;
+    }
+    .event-type {
+      font-weight: bold;
+      color: #fff;
+    }
+    .event-detail {
+      color: #888;
+      margin-top: 2px;
+    }
+    /* Analysis Panel */
+    .analysis-panel {
+      background: #222;
+      padding: 20px;
+      border: 2px dashed #ff0;
+    }
+    .analysis-item {
+      margin-bottom: 12px;
+      padding: 10px;
+      background: #333;
+      border-left: 3px solid #0af;
+    }
+    .analysis-label {
+      font-size: 10px;
+      font-weight: bold;
+      color: #0af;
+      margin-bottom: 5px;
+    }
+    .analysis-content {
+      font-size: 9px;
+      color: #aaa;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">ANALYSIS - INFO PLAY-BY-PLAY</div>
+
+  <div class="page-title">NBA TV INFO TAB - PLAY-BY-PLAY ANALYSIS</div>
+
+  <div class="content-grid">
+    <div class="diagram-panel">
+      <div class="panel-title">PLAY-BY-PLAY STRUCTURE</div>
+
+      <div class="quarter-tabs">
+        <div class="quarter-tab active">Q1</div>
+        <div class="quarter-tab">Q2</div>
+        <div class="quarter-tab">Q3</div>
+        <div class="quarter-tab">Q4</div>
+        <div class="quarter-tab">ALL</div>
+      </div>
+
+      <div class="options-row">
+        <div class="option-item">
+          <div class="option-checkbox checked"></div>
+          <span>LIVE</span>
+        </div>
+        <div class="option-item">
+          <div class="option-checkbox checked"></div>
+          <span>Auto Switch</span>
+        </div>
+        <div class="option-item">
+          <div class="option-checkbox checked"></div>
+          <span>Latest First</span>
+        </div>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline-row">
+          <div class="event-left">
+            <div class="event-type">3PT MADE</div>
+            <div class="event-detail">Z. LaVine • 22 PTS</div>
+          </div>
+          <div class="event-time">4:32</div>
+          <div class="event-right"></div>
+        </div>
+        <div class="timeline-row">
+          <div class="event-left"></div>
+          <div class="event-time">4:15</div>
+          <div class="event-right">
+            <div class="event-type">TURNOVER</div>
+            <div class="event-detail">P. George • Bad Pass</div>
+          </div>
+        </div>
+        <div class="timeline-row">
+          <div class="event-left">
+            <div class="event-type">FOUL</div>
+            <div class="event-detail">P. Williams • Personal</div>
+          </div>
+          <div class="event-time">3:58</div>
+          <div class="event-right"></div>
+        </div>
+        <div class="timeline-row">
+          <div class="event-left"></div>
+          <div class="event-time">3:45</div>
+          <div class="event-right">
+            <div class="event-type">FT MADE</div>
+            <div class="event-detail">K. Leonard • 1/2 FT</div>
+          </div>
+        </div>
+        <div class="timeline-row">
+          <div class="event-left">
+            <div class="event-type">REBOUND</div>
+            <div class="event-detail">N. Vucevic • Defensive</div>
+          </div>
+          <div class="event-time">3:30</div>
+          <div class="event-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-panel">
+      <div class="panel-title">PATTERN ANALYSIS</div>
+
+      <div class="analysis-item">
+        <div class="analysis-label">Quarter Filter</div>
+        <div class="analysis-content">
+          • Q1~Q4 개별 선택<br>
+          • ALL: 전체 표시<br>
+          • 쿼터 전환 시 리스트 갱신
+        </div>
+      </div>
+
+      <div class="analysis-item">
+        <div class="analysis-label">Options</div>
+        <div class="analysis-content">
+          • LIVE: 실시간 업데이트<br>
+          • Auto Switch: 쿼터 자동 전환<br>
+          • Latest First: 최신순 정렬
+        </div>
+      </div>
+
+      <div class="analysis-item">
+        <div class="analysis-label">Timeline Layout</div>
+        <div class="analysis-content">
+          • 3열 그리드: 좌팀 | 시간 | 우팀<br>
+          • 이벤트는 해당 팀 열에 표시<br>
+          • 시간 중앙 정렬
+        </div>
+      </div>
+
+      <div class="analysis-item">
+        <div class="analysis-label">Event Types</div>
+        <div class="analysis-content">
+          3PT MADE, TURNOVER, FOUL,<br>
+          FT MADE, REBOUND, DUNK,<br>
+          BLOCK, STEAL, TIMEOUT
+        </div>
+      </div>
+
+      <div class="analysis-item" style="border-color:#0c0">
+        <div class="analysis-label" style="color:#0c0">WSOP TV 변환</div>
+        <div class="analysis-content">
+          • Q1~Q4 → L1~ALL (Level)<br>
+          • 3PT MADE → ALL-IN<br>
+          • TURNOVER → FOLD<br>
+          • FOUL → RAISE/CALL/BET<br>
+          • 양 팀 → 액션 플레이어들
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

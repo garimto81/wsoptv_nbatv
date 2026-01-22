@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Info Game Charts - UI Analysis</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 30px;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff0;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+    }
+    .page-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #fff;
+    }
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .chart-card {
+      background: #222;
+      padding: 15px;
+      border: 2px solid #555;
+    }
+    .chart-title {
+      font-size: 11px;
+      font-weight: bold;
+      color: #ff0;
+      margin-bottom: 10px;
+    }
+    .chart-placeholder {
+      height: 150px;
+      border: 1px dashed #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 10px;
+      margin-bottom: 10px;
+    }
+    .chart-desc {
+      font-size: 9px;
+      color: #888;
+      line-height: 1.4;
+    }
+    /* Shot Chart */
+    .shot-chart {
+      position: relative;
+      height: 150px;
+      background: #111;
+      border: 1px solid #444;
+    }
+    .court-outline {
+      position: absolute;
+      inset: 10px;
+      border: 1px solid #333;
+    }
+    .shot-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .shot-dot.made { background: #0c0; }
+    .shot-dot.missed { background: #c00; }
+    /* Lead Tracker */
+    .lead-tracker {
+      height: 100px;
+      background: #111;
+      border: 1px solid #444;
+      position: relative;
+    }
+    .tracker-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #444;
+    }
+    .tracker-area {
+      position: absolute;
+      bottom: 50%;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background: rgba(0,170,255,0.3);
+    }
+    /* Analysis Section */
+    .analysis-section {
+      margin-top: 25px;
+      padding: 20px;
+      background: #222;
+      border: 2px dashed #ff0;
+    }
+    .analysis-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #ff0;
+      margin-bottom: 15px;
+    }
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .analysis-item {
+      padding: 10px;
+      background: #333;
+      border-left: 3px solid #0af;
+    }
+    .analysis-label {
+      font-size: 10px;
+      font-weight: bold;
+      color: #0af;
+      margin-bottom: 5px;
+    }
+    .analysis-content {
+      font-size: 9px;
+      color: #aaa;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">ANALYSIS - INFO GAME CHARTS</div>
+
+  <div class="page-title">NBA TV INFO TAB - GAME CHARTS ANALYSIS</div>
+
+  <div class="charts-grid">
+    <!-- Shot Charts -->
+    <div class="chart-card">
+      <div class="chart-title">① SHOT CHARTS</div>
+      <div class="shot-chart">
+        <div class="court-outline"></div>
+        <div class="shot-dot made" style="top:30%;left:20%"></div>
+        <div class="shot-dot made" style="top:40%;left:45%"></div>
+        <div class="shot-dot missed" style="top:25%;left:70%"></div>
+        <div class="shot-dot made" style="top:60%;left:30%"></div>
+        <div class="shot-dot missed" style="top:50%;left:60%"></div>
+      </div>
+      <div class="chart-desc">
+        • 코트 다이어그램 위 슛 위치 표시<br>
+        • 녹색: 성공 / 빨간색: 실패<br>
+        • 플레이어 필터 드롭다운
+      </div>
+    </div>
+
+    <!-- Lead Tracker -->
+    <div class="chart-card">
+      <div class="chart-title">② LEAD TRACKER</div>
+      <div class="lead-tracker">
+        <div class="tracker-line"></div>
+        <div class="tracker-area"></div>
+      </div>
+      <div class="chart-desc">
+        • X축: 경기 시간 (Q1~Q4)<br>
+        • Y축: 점수 차이 (+/- 기준선)<br>
+        • 영역 색상: 리드 팀 표시
+      </div>
+    </div>
+
+    <!-- Leading Players -->
+    <div class="chart-card">
+      <div class="chart-title">③ LEADING PLAYERS</div>
+      <div class="chart-placeholder">
+        [RADAR CHART]<br>
+        PTS | REB | AST | STL
+      </div>
+      <div class="chart-desc">
+        • 4축 방사형 차트<br>
+        • PTS, REB, AST, STL 비교<br>
+        • 양 팀 리딩 플레이어 오버레이
+      </div>
+    </div>
+
+    <!-- Team Comparison -->
+    <div class="chart-card">
+      <div class="chart-title">④ TEAM COMPARISON</div>
+      <div class="chart-placeholder">
+        [BAR CHART]<br>
+        9개 통계 비교
+      </div>
+      <div class="chart-desc">
+        • 수평 바 차트<br>
+        • FG%, 3P%, FT%, REB, AST...<br>
+        • 양 팀 색상 구분
+      </div>
+    </div>
+  </div>
+
+  <!-- Analysis Section -->
+  <div class="analysis-section">
+    <div class="analysis-title">WSOP TV CONVERSION MAPPING</div>
+    <div class="analysis-grid">
+      <div class="analysis-item">
+        <div class="analysis-label">Shot Charts → Position Win Rate Map</div>
+        <div class="analysis-content">
+          • 코트 → 포커 테이블 포지션 맵<br>
+          • 슛 성공률 → 포지션별 승률<br>
+          • BTN, CO, MP, EP, SB, BB
+        </div>
+      </div>
+      <div class="analysis-item">
+        <div class="analysis-label">Lead Tracker → Stack Tracker</div>
+        <div class="analysis-content">
+          • 점수 차이 → 칩 변동 추이<br>
+          • Q1~Q4 → Level 구간<br>
+          • 플레이어별 칩 그래프
+        </div>
+      </div>
+      <div class="analysis-item">
+        <div class="analysis-label">Leading Players → Top Players</div>
+        <div class="analysis-content">
+          • PTS/REB/AST/STL → VPIP/PFR/AF/WTSD<br>
+          • 동일한 방사형 차트 구조<br>
+          • 플레이어 스타일 시각화
+        </div>
+      </div>
+      <div class="analysis-item">
+        <div class="analysis-label">Team Comparison → Player Comparison</div>
+        <div class="analysis-content">
+          • 팀 통계 → 개인 통계 비교<br>
+          • 선택된 2명 플레이어 비교<br>
+          • 동일한 바 차트 레이아웃
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

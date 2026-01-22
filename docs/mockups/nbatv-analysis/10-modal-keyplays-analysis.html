@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Key Plays Modal - UI Analysis</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 30px;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff0;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+    }
+    .page-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #fff;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+    .diagram-panel {
+      background: #222;
+      padding: 20px;
+      border: 2px solid #fff;
+    }
+    .panel-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #ff0;
+      margin-bottom: 15px;
+    }
+    /* Modal Header */
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background: #333;
+      margin-bottom: 15px;
+    }
+    .modal-title {
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .close-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    /* Key Play Cards */
+    .keyplay-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .keyplay-card {
+      display: flex;
+      gap: 12px;
+      padding: 10px;
+      border: 1px solid #555;
+      background: #333;
+    }
+    .keyplay-thumbnail {
+      width: 100px;
+      height: 60px;
+      background: #111;
+      border: 1px solid #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #666;
+    }
+    .keyplay-info {
+      flex: 1;
+    }
+    .keyplay-title {
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .keyplay-desc {
+      font-size: 9px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+    .keyplay-time {
+      font-size: 9px;
+      color: #0af;
+    }
+    /* Analysis Panel */
+    .analysis-panel {
+      background: #222;
+      padding: 20px;
+      border: 2px dashed #ff0;
+    }
+    .analysis-item {
+      margin-bottom: 12px;
+      padding: 10px;
+      background: #333;
+      border-left: 3px solid #0af;
+    }
+    .analysis-label {
+      font-size: 10px;
+      font-weight: bold;
+      color: #0af;
+      margin-bottom: 5px;
+    }
+    .analysis-content {
+      font-size: 9px;
+      color: #aaa;
+      line-height: 1.4;
+    }
+    /* Card Structure Diagram */
+    .card-structure {
+      margin-top: 15px;
+      padding: 15px;
+      background: #111;
+      border: 1px solid #444;
+    }
+    .structure-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .structure-label {
+      width: 80px;
+      font-size: 9px;
+      color: #888;
+    }
+    .structure-element {
+      flex: 1;
+      padding: 5px 10px;
+      background: #333;
+      font-size: 9px;
+      border-left: 2px solid #0af;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">ANALYSIS - KEY PLAYS MODAL</div>
+
+  <div class="page-title">NBA TV KEY PLAYS MODAL - STRUCTURE ANALYSIS</div>
+
+  <div class="content-grid">
+    <div class="diagram-panel">
+      <div class="panel-title">KEY PLAYS MODAL UI</div>
+
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🔥</span>
+          <span>Key Plays</span>
+        </div>
+        <div class="close-btn">[X]</div>
+      </div>
+
+      <div class="keyplay-list">
+        <div class="keyplay-card">
+          <div class="keyplay-thumbnail">[THUMBNAIL]</div>
+          <div class="keyplay-info">
+            <div class="keyplay-title">DeRozan Slam Dunk</div>
+            <div class="keyplay-desc">DeMar DeRozan drives to the rim for a powerful slam dunk</div>
+            <div class="keyplay-time">Q1 • 08:45.2</div>
+          </div>
+        </div>
+        <div class="keyplay-card">
+          <div class="keyplay-thumbnail">[THUMBNAIL]</div>
+          <div class="keyplay-info">
+            <div class="keyplay-title">LaVine 3-Pointer</div>
+            <div class="keyplay-desc">Zach LaVine hits a deep three from the corner</div>
+            <div class="keyplay-time">Q1 • 05:32.8</div>
+          </div>
+        </div>
+        <div class="keyplay-card">
+          <div class="keyplay-thumbnail">[THUMBNAIL]</div>
+          <div class="keyplay-info">
+            <div class="keyplay-title">Vucevic Block</div>
+            <div class="keyplay-desc">Nikola Vucevic with a huge block at the rim</div>
+            <div class="keyplay-time">Q1 • 00:49.5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-panel">
+      <div class="panel-title">STRUCTURE ANALYSIS</div>
+
+      <div class="analysis-item">
+        <div class="analysis-label">Modal Layout</div>
+        <div class="analysis-content">
+          • Header: 아이콘 + 제목 + 닫기 버튼<br>
+          • Body: 스크롤 가능한 카드 목록<br>
+          • 모달 외부 클릭 시 닫힘
+        </div>
+      </div>
+
+      <div class="card-structure">
+        <div style="font-size:10px;font-weight:bold;margin-bottom:10px;color:#ff0">CARD STRUCTURE</div>
+        <div class="structure-row">
+          <div class="structure-label">Thumbnail</div>
+          <div class="structure-element">100x60px • 비디오 프레임</div>
+        </div>
+        <div class="structure-row">
+          <div class="structure-label">Title</div>
+          <div class="structure-element">Bold • 플레이 요약</div>
+        </div>
+        <div class="structure-row">
+          <div class="structure-label">Description</div>
+          <div class="structure-element">Muted • 상세 설명</div>
+        </div>
+        <div class="structure-row">
+          <div class="structure-label">Time</div>
+          <div class="structure-element">Accent • "Q1 • MM:SS.s"</div>
+        </div>
+      </div>
+
+      <div class="analysis-item" style="margin-top:15px">
+        <div class="analysis-label">Interaction</div>
+        <div class="analysis-content">
+          • 카드 클릭 → 플레이어 뷰<br>
+          • 해당 시점부터 재생 시작<br>
+          • 시간 표시: Quarter + Timestamp
+        </div>
+      </div>
+
+      <div class="analysis-item" style="border-color:#0c0">
+        <div class="analysis-label" style="color:#0c0">WSOP TV 변환</div>
+        <div class="analysis-content">
+          • Key Plays → Featured Hands<br>
+          • "DeRozan Slam Dunk" → "AA vs KK All-In"<br>
+          • "Q1 • 08:45.2" → "L38 • Hand #245"<br>
+          • 🔥 → 🃏 아이콘
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

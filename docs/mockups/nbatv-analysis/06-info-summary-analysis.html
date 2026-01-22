@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Game Info - Summary Tab - Analysis Overlay</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+
+    /* ========== ANALYSIS OVERLAY STYLES ========== */
+    .analysis-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff0;
+      color: #000;
+      padding: 8px 15px;
+      font-size: 11px;
+      font-weight: bold;
+      z-index: 2000;
+      border: 2px solid #000;
+    }
+
+    .annotation {
+      position: absolute;
+      background: #ff0;
+      color: #000;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border: 2px solid #000;
+      z-index: 200;
+      max-width: 240px;
+      line-height: 1.4;
+    }
+    .annotation::before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+    }
+    .annotation.arrow-left::before {
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 12px solid #000;
+    }
+    .annotation.arrow-right::before {
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid #000;
+    }
+    .annotation.arrow-down::before {
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 12px solid #000;
+    }
+
+    .num-badge {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      background: #c00;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 22px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+
+    .legend-panel {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      padding: 15px 20px;
+      border: 2px solid #ff0;
+      z-index: 2000;
+      font-size: 11px;
+      max-width: 300px;
+    }
+    .legend-title {
+      color: #ff0;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border: 1px solid #fff;
+    }
+
+    /* ========== SECTION OVERLAYS ========== */
+    .page-wrapper {
+      position: relative;
+    }
+    .section-overlay {
+      position: absolute;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .section-overlay.tabs {
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 53px;
+      border: 4px solid #00f;
+      background: rgba(0, 0, 255, 0.05);
+    }
+    .section-overlay.ad {
+      top: 53px;
+      left: 0;
+      right: 0;
+      height: 95px;
+      border: 4px solid #f80;
+      background: rgba(255, 136, 0, 0.05);
+    }
+    .section-overlay.article {
+      top: 148px;
+      left: 0;
+      width: 70%;
+      bottom: 0;
+      border: 4px solid #0c0;
+      background: rgba(0, 204, 0, 0.05);
+    }
+    .section-overlay.sidebar {
+      top: 148px;
+      right: 0;
+      width: 30%;
+      bottom: 0;
+      border: 4px solid #f0f;
+      background: rgba(255, 0, 255, 0.05);
+    }
+
+    /* ========== ORIGINAL WIREFRAME STYLES ========== */
+    /* Info Tabs */
+    .info-tabs {
+      display: flex;
+      border-bottom: var(--border);
+    }
+    .info-tab {
+      padding: 15px 30px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .info-tab:hover { background: var(--bg-light); }
+    .info-tab.active {
+      font-weight: bold;
+      border-bottom-color: #000;
+    }
+
+    /* Ad Banner */
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 25px;
+      border-bottom: var(--border);
+      background: var(--bg-light);
+    }
+    .ad-image {
+      width: 150px;
+      height: 60px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: #fff;
+    }
+    .ad-text { flex: 1; font-size: 14px; }
+    .ad-cta {
+      padding: 10px 30px;
+      border: var(--border);
+      background: #c00;
+      color: #fff;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Content Layout */
+    .content-layout {
+      display: grid;
+      grid-template-columns: 7fr 3fr;
+      min-height: 80vh;
+    }
+
+    /* Article Section */
+    .article-section {
+      padding: 30px;
+      border-right: var(--border-thin);
+    }
+    .article-title {
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 1.3;
+      margin-bottom: 15px;
+    }
+    .article-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+    .article-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      background: var(--bg-light);
+      border: var(--border-thin);
+      font-size: 11px;
+      margin-bottom: 20px;
+    }
+    .article-content {
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .article-content p {
+      margin-bottom: 15px;
+    }
+    .article-quote {
+      font-style: italic;
+      padding: 15px 20px;
+      border-left: 4px solid #000;
+      background: var(--bg-light);
+      margin: 20px 0;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      padding: 25px;
+      background: var(--bg-light);
+    }
+    .sidebar-section {
+      margin-bottom: 30px;
+    }
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: var(--border-thin);
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-icon {
+      width: 24px;
+      height: 24px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: #fff;
+    }
+    .info-content {
+      flex: 1;
+    }
+    .info-label {
+      font-weight: bold;
+      font-size: 13px;
+    }
+    .info-value {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .info-link {
+      font-size: 12px;
+      color: #00f;
+      text-decoration: underline;
+    }
+
+    /* Line Scores Table */
+    .linescores-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+    .linescores-table th,
+    .linescores-table td {
+      padding: 8px 10px;
+      text-align: center;
+      border-bottom: var(--border-thin);
+    }
+    .linescores-table th {
+      background: var(--bg-medium);
+      font-weight: bold;
+    }
+    .linescores-table th:first-child,
+    .linescores-table td:first-child {
+      text-align: left;
+    }
+    .highlight {
+      color: #c00;
+      font-weight: bold;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 10px;
+      background: #fff;
+      border: var(--border-thin);
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="analysis-label">ANALYSIS OVERLAY - INFO SUMMARY</div>
+
+  <div class="page-wrapper">
+    <!-- ========== HIGHLIGHT OVERLAYS ========== -->
+    <div class="section-overlay tabs"></div>
+    <div class="section-overlay ad"></div>
+    <div class="section-overlay article"></div>
+    <div class="section-overlay sidebar"></div>
+
+    <!-- ========== ANNOTATIONS ========== -->
+    <div class="annotation arrow-down" style="top: -60px; left: 200px;">
+      <span class="num-badge">1</span>
+      <strong>INFO TABS</strong><br>
+      Summary | Box Score | Charts | PBP<br>
+      <em style="color:#666">WSOP: Tournament Summary</em>
+    </div>
+
+    <div class="annotation arrow-left" style="top: 90px; right: 20px;">
+      <span class="num-badge">2</span>
+      <strong>AD BANNER</strong><br>
+      Image + Text + CTA<br>
+      <em style="color:#666">WSOP: 동일 배너</em>
+    </div>
+
+    <div class="annotation arrow-right" style="top: 350px; left: 20px;">
+      <span class="num-badge">3</span>
+      <strong>ARTICLE (70%)</strong><br>
+      Title + Meta + Tag + Content<br>
+      <em style="color:#666">WSOP: Event Preview/Recap</em>
+    </div>
+
+    <div class="annotation arrow-left" style="top: 350px; right: 20px;">
+      <span class="num-badge">4</span>
+      <strong>SIDEBAR (30%)</strong><br>
+      Game Info + Linescores + Stats<br>
+      <em style="color:#666">WSOP: Prize Pool/Blind Structure</em>
+    </div>
+
+    <!-- Info Tabs -->
+    <div class="info-tabs">
+      <div class="info-tab active">Summary</div>
+      <div class="info-tab">Box Score</div>
+      <div class="info-tab">Game Charts</div>
+      <div class="info-tab">Play-By-Play</div>
+    </div>
+
+    <!-- Ad Banner -->
+    <div class="ad-banner">
+      <div class="ad-image">[Product]<br>H60 Pro</div>
+      <div class="ad-text">최대 90도 구부러지는 로보락 신제품 H60 Pro 청소기</div>
+      <button class="ad-cta">열기</button>
+    </div>
+
+    <!-- Content Layout -->
+    <div class="content-layout">
+      <!-- Article Section -->
+      <div class="article-section">
+        <h1 class="article-title">BULLS ENDEAVOR TO REVERSE SERIES TREND AGAINST CHARGING CLIPPERS</h1>
+        <div class="article-meta">Tuesday, January 20th, 2026 11:20 AM</div>
+        <span class="article-tag">Game Preview</span>
+
+        <div class="article-content">
+          <p>Bulls endeavor to reverse series trend against charging Clippers</p>
+
+          <p>An uneven Chicago Bulls campaign still is producing positive season superlatives.</p>
+
+          <p>On Tuesday night, the Bulls hope to continue tapping into them as they host the surging Los Angeles Clippers, with both teams sitting in play-in position in the NBA standings.</p>
+
+          <p>Chicago collected 41 assists, tying a season high, during a 124-102 home rout of Brooklyn on Sunday, with Tre Jones leading the way with 10 assists and Nikola Vucevic and Kevin Huerter following with six apiece.</p>
+
+          <div class="article-quote">
+            "I thought we shared the ball really well. I thought we generated good shots," Bulls coach Billy Donovan said. "I felt we were a little bit more active with our hands. That was all good."
+          </div>
+
+          <p>Another plus: Coby White. The guard, who slowly is working through calf injuries, made seven 3-pointers Sunday, his most this season. White scored 24 points to lead seven Bulls in double figures.</p>
+
+          <p>The Clippers have won six straight games, matching a season high, and 13 of 15 as they attempt to sweep a three-game road trip.</p>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">GAME INFO</div>
+          <div class="info-row">
+            <div class="info-icon">[📅]</div>
+            <div class="info-content">
+              <div class="info-label">Wednesday, 21 January, 2026</div>
+              <div class="info-value">10:00 AM</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">[📍]</div>
+            <div class="info-content">
+              <div class="info-label">United Center</div>
+              <div class="info-value">Chicago, IL</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">[👔]</div>
+            <div class="info-content">
+              <div class="info-label">Officials</div>
+              <div class="info-value">Marc Davis, Brent Barnaky, Robert Hussey</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">[📺]</div>
+            <div class="info-content">
+              <div class="info-label">Broadcast</div>
+              <div class="info-value">League Pass</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-title">LINESCORES</div>
+          <table class="linescores-table">
+            <thead>
+              <tr>
+                <th>TEAM</th>
+                <th>Q1</th>
+                <th>Q2</th>
+                <th>Q3</th>
+                <th>Q4</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>LAC</td>
+                <td>30</td>
+                <td class="highlight">19</td>
+                <td>30</td>
+                <td>0</td>
+                <td><strong>79</strong></td>
+              </tr>
+              <tr>
+                <td>CHI</td>
+                <td>25</td>
+                <td class="highlight">45</td>
+                <td>27</td>
+                <td>0</td>
+                <td><strong>97</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value">2</div>
+              <div class="stat-label">Lead Changes</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">2</div>
+              <div class="stat-label">Times Tied</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND PANEL -->
+  <div class="legend-panel">
+    <div class="legend-title">UI LAYOUT LEGEND</div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#00f"></div>
+      <span>① Info Tabs</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#f80"></div>
+      <span>② Ad Banner</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#0c0"></div>
+      <span>③ Article Section (70%)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#f0f"></div>
+      <span>④ Sidebar (30%)</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Info Box Score - UI Analysis</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 30px;
+    }
+    .wireframe-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff0;
+      color: #000;
+      padding: 5px 10px;
+      font-size: 10px;
+    }
+    .page-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #fff;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 25px;
+    }
+    .diagram-panel {
+      background: #222;
+      padding: 20px;
+      border: 2px solid #fff;
+    }
+    .panel-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #ff0;
+      margin-bottom: 15px;
+    }
+    /* Team Tabs */
+    .team-tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+    .team-tab {
+      padding: 8px 20px;
+      border: 1px solid #555;
+      background: #333;
+      font-size: 10px;
+    }
+    .team-tab.active {
+      background: #fff;
+      color: #000;
+    }
+    /* Stats Table */
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+    }
+    .stats-table th, .stats-table td {
+      padding: 6px 4px;
+      border: 1px solid #444;
+      text-align: center;
+    }
+    .stats-table th {
+      background: #333;
+      color: #ff0;
+      font-weight: bold;
+    }
+    .stats-table tr:nth-child(even) {
+      background: #2a2a2a;
+    }
+    .stats-table .player-name {
+      text-align: left;
+      padding-left: 8px;
+      font-weight: bold;
+    }
+    .stats-table .totals {
+      background: #333;
+      font-weight: bold;
+    }
+    /* Column Groups */
+    .col-player { background: rgba(0,170,255,0.1); }
+    .col-scoring { background: rgba(0,204,0,0.1); }
+    .col-other { background: rgba(255,136,0,0.1); }
+    /* Analysis Panel */
+    .analysis-panel {
+      background: #222;
+      padding: 20px;
+      border: 2px dashed #ff0;
+    }
+    .analysis-item {
+      margin-bottom: 12px;
+      padding: 10px;
+      background: #333;
+      border-left: 3px solid #0af;
+    }
+    .analysis-label {
+      font-size: 10px;
+      font-weight: bold;
+      color: #0af;
+      margin-bottom: 5px;
+    }
+    .analysis-content {
+      font-size: 9px;
+      color: #aaa;
+      line-height: 1.4;
+    }
+    .column-legend {
+      margin-top: 15px;
+      padding: 10px;
+      background: #333;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      font-size: 9px;
+    }
+    .legend-color {
+      width: 20px;
+      height: 12px;
+    }
+    .legend-color.player { background: rgba(0,170,255,0.3); }
+    .legend-color.scoring { background: rgba(0,204,0,0.3); }
+    .legend-color.other { background: rgba(255,136,0,0.3); }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">ANALYSIS - INFO BOX SCORE</div>
+
+  <div class="page-title">NBA TV INFO TAB - BOX SCORE TABLE ANALYSIS</div>
+
+  <div class="content-grid">
+    <div class="diagram-panel">
+      <div class="panel-title">BOX SCORE TABLE STRUCTURE</div>
+
+      <div class="team-tabs">
+        <div class="team-tab active">BULLS</div>
+        <div class="team-tab">CLIPPERS</div>
+      </div>
+
+      <table class="stats-table">
+        <tr>
+          <th class="col-player">PLAYER</th>
+          <th class="col-player">MIN</th>
+          <th class="col-scoring">FGM</th>
+          <th class="col-scoring">FGA</th>
+          <th class="col-scoring">FG%</th>
+          <th class="col-scoring">3PM</th>
+          <th class="col-scoring">3PA</th>
+          <th class="col-scoring">3P%</th>
+          <th class="col-scoring">FTM</th>
+          <th class="col-scoring">FTA</th>
+          <th class="col-other">REB</th>
+          <th class="col-other">AST</th>
+          <th class="col-other">STL</th>
+          <th class="col-other">BLK</th>
+          <th class="col-other">TO</th>
+          <th class="col-other">PF</th>
+          <th class="col-scoring">PTS</th>
+          <th class="col-other">+/-</th>
+        </tr>
+        <tr>
+          <td class="player-name">D. DeRozan</td>
+          <td>35</td>
+          <td>9</td><td>18</td><td>50.0</td>
+          <td>2</td><td>4</td><td>50.0</td>
+          <td>6</td><td>7</td>
+          <td>5</td><td>6</td><td>1</td><td>0</td><td>2</td><td>2</td>
+          <td>26</td><td>+12</td>
+        </tr>
+        <tr>
+          <td class="player-name">Z. LaVine</td>
+          <td>33</td>
+          <td>8</td><td>16</td><td>50.0</td>
+          <td>3</td><td>7</td><td>42.9</td>
+          <td>3</td><td>4</td>
+          <td>4</td><td>5</td><td>2</td><td>0</td><td>3</td><td>1</td>
+          <td>22</td><td>+8</td>
+        </tr>
+        <tr>
+          <td class="player-name">N. Vucevic</td>
+          <td>30</td>
+          <td>6</td><td>12</td><td>50.0</td>
+          <td>1</td><td>3</td><td>33.3</td>
+          <td>2</td><td>2</td>
+          <td>11</td><td>3</td><td>0</td><td>2</td><td>1</td><td>3</td>
+          <td>15</td><td>+5</td>
+        </tr>
+        <tr class="totals">
+          <td class="player-name">TOTALS</td>
+          <td>240</td>
+          <td>36</td><td>82</td><td>43.9</td>
+          <td>12</td><td>32</td><td>37.5</td>
+          <td>6</td><td>9</td>
+          <td>45</td><td>25</td><td>8</td><td>5</td><td>12</td><td>18</td>
+          <td>90</td><td>-</td>
+        </tr>
+      </table>
+
+      <div style="margin-top:15px;font-size:9px;color:#666">
+        * DNP (Did Not Play) 선수는 별도 섹션에 표시
+      </div>
+    </div>
+
+    <div class="analysis-panel">
+      <div class="panel-title">COLUMN ANALYSIS</div>
+
+      <div class="column-legend">
+        <div class="legend-item">
+          <div class="legend-color player"></div>
+          <span>Player Info (2 cols)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color scoring"></div>
+          <span>Scoring Stats (10 cols)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color other"></div>
+          <span>Other Stats (6 cols)</span>
+        </div>
+      </div>
+
+      <div class="analysis-item" style="margin-top:15px">
+        <div class="analysis-label">Total: 18 Columns</div>
+        <div class="analysis-content">
+          MIN, FGM, FGA, FG%, 3PM, 3PA, 3P%, FTM, FTA,
+          REB, AST, STL, BLK, TO, PF, PTS, +/-
+        </div>
+      </div>
+
+      <div class="analysis-item">
+        <div class="analysis-label">Team Tabs</div>
+        <div class="analysis-content">
+          • 팀별 탭 전환<br>
+          • 선택된 팀 선수 목록 표시<br>
+          • TOTALS 행: 팀 합계
+        </div>
+      </div>
+
+      <div class="analysis-item" style="border-color:#0c0">
+        <div class="analysis-label" style="color:#0c0">WSOP TV 변환</div>
+        <div class="analysis-content">
+          Player → PLAYER<br>
+          MIN → HANDS<br>
+          FGM → WINS<br>
+          FG% → WIN%<br>
+          3PM → VPIP<br>
+          REB → PFR<br>
+          PTS → CHIPS<br>
+          +/- → +/- (동일)
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

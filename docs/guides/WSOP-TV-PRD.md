@@ -1,6 +1,6 @@
 # WSOP TV OTT Solution PRD
 
-**Version**: 5.0.0
+**Version**: 5.1.0
 **Date**: 2026-01-22
 **Reference**: NBA TV League Pass
 **Design Principle**: NBA TV 1:1 복제 (용어만 변경)
@@ -20,14 +20,19 @@
 
 ### 0.2 문서 구조
 
-각 기능별로 다음 **3단계 변환 프로세스**를 시각적으로 제시합니다:
+각 기능별로 다음 **4단계 변환 프로세스**를 시각적으로 제시합니다:
 
 ```
-┌─────────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
-│ ① NBA TV 스크린샷  │ ──▶ │ ② NBA TV B&W 목업  │ ──▶ │ ③ WSOP TV B&W 목업 │
-│   (실제 UI 캡처)    │     │  (와이어프레임 변환) │     │  (용어/도메인 변환)  │
-└─────────────────────┘     └─────────────────────┘     └─────────────────────┘
+┌─────────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
+│ ① NBA TV 스크린샷  │ ──▶ │ ② NBA TV B&W 목업  │ ──▶ │ ③ 분석 다이어그램   │ ──▶ │ ④ WSOP TV B&W 목업 │
+│   (실제 UI 캡처)    │     │  (와이어프레임 변환) │     │ (패턴/구조 분석)    │     │  (용어/도메인 변환)  │
+└─────────────────────┘     └─────────────────────┘     └─────────────────────┘     └─────────────────────┘
 ```
+
+- **① NBA TV 스크린샷**: 실제 서비스 캡처
+- **② NBA TV B&W 목업**: 흑백 와이어프레임 변환
+- **③ 분석 다이어그램**: 레이어별 UI 패턴 분석 및 WSOP TV 변환 매핑
+- **④ WSOP TV B&W 목업**: 최종 WSOP TV 적용 목업
 
 ### 0.3 기능 분류
 
@@ -67,7 +72,14 @@
 
 > **목업 파일**: [`nbatv/01-main-streaming.html`](../mockups/nbatv/01-main-streaming.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV 메인 스트리밍 분석](../images/mockups/nbatv-analysis/01-main-streaming-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/01-main-streaming-analysis.html`](../mockups/nbatv-analysis/01-main-streaming-analysis.html)
+>
+> **분석 포인트**: 7단 레이어 구조 (Ticker/Ad/Header/Video/Tabs/Timeline/Controls)
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV 메인 스트리밍 목업](../images/mockups/wsoptv/01-main-streaming.png)
 
 > **목업 파일**: [`wsoptv/01-main-streaming.html`](../mockups/wsoptv/01-main-streaming.html)
@@ -110,7 +122,14 @@
 
 > **목업 파일**: [`nbatv/02-streaming-options-broadcasts.html`](../mockups/nbatv/02-streaming-options-broadcasts.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV Broadcasts 분석](../images/mockups/nbatv-analysis/02-streaming-options-broadcasts-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/02-streaming-options-broadcasts-analysis.html`](../mockups/nbatv-analysis/02-streaming-options-broadcasts-analysis.html)
+>
+> **분석 포인트**: 모달 구조, Radio Select 패턴, 5개 카메라 옵션
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Camera 목업](../images/mockups/wsoptv/02-streaming-options-camera.png)
 
 > **목업 파일**: [`wsoptv/02-streaming-options-camera.html`](../mockups/wsoptv/02-streaming-options-camera.html)
@@ -139,7 +158,14 @@
 
 > **목업 파일**: [`nbatv/03-streaming-options-audio.html`](../mockups/nbatv/03-streaming-options-audio.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV Audio 분석](../images/mockups/nbatv-analysis/03-streaming-options-audio-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/03-streaming-options-audio-analysis.html`](../mockups/nbatv-analysis/03-streaming-options-audio-analysis.html)
+>
+> **분석 포인트**: 언어 옵션 패턴, Radio Select 구조 동일
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Commentary 목업](../images/mockups/wsoptv/03-streaming-options-commentary.png)
 
 > **목업 파일**: [`wsoptv/03-streaming-options-commentary.html`](../mockups/wsoptv/03-streaming-options-commentary.html)
@@ -166,7 +192,14 @@
 
 > **목업 파일**: [`nbatv/04-multiview-selector.html`](../mockups/nbatv/04-multiview-selector.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV MultiView Selector 분석](../images/mockups/nbatv-analysis/04-multiview-selector-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/04-multiview-selector-analysis.html`](../mockups/nbatv-analysis/04-multiview-selector-analysis.html)
+>
+> **분석 포인트**: 3개 레이아웃 버튼 (1x1, 1:2, 2x2), 버튼 선택 상태 스타일
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV MultiView Selector 목업](../images/mockups/wsoptv/04-multiview-selector.png)
 
 > **목업 파일**: [`wsoptv/04-multiview-selector.html`](../mockups/wsoptv/04-multiview-selector.html)
@@ -194,7 +227,14 @@
 
 > **목업 파일**: [`nbatv/05-multiview-1x2.html`](../mockups/nbatv/05-multiview-1x2.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV MultiView 분석](../images/mockups/nbatv-analysis/05-multiview-layout-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/05-multiview-layout-analysis.html`](../mockups/nbatv-analysis/05-multiview-layout-analysis.html)
+>
+> **분석 포인트**: Cell 구조 (헤더, 콘텐츠, 하단바), 빈 슬롯 패턴
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV MultiView 1:2 목업](../images/mockups/wsoptv/12-multiview-1x2.png)
 
 > **목업 파일**: [`wsoptv/12-multiview-1x2.html`](../mockups/wsoptv/12-multiview-1x2.html)
@@ -221,7 +261,14 @@
 
 > **목업 파일**: [`nbatv/06-multiview-2x2.html`](../mockups/nbatv/06-multiview-2x2.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV MultiView 2x2 분석](../images/mockups/nbatv-analysis/05-multiview-layout-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/05-multiview-layout-analysis.html`](../mockups/nbatv-analysis/05-multiview-layout-analysis.html)
+>
+> **분석 포인트**: 4분할 그리드, "Add a Game" 빈 슬롯 패턴
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV MultiView 2x2 목업](../images/mockups/wsoptv/05-multiview-2x2.png)
 
 > **목업 파일**: [`wsoptv/05-multiview-2x2.html`](../mockups/wsoptv/05-multiview-2x2.html)
@@ -250,7 +297,14 @@
 
 > **목업 파일**: [`nbatv/07-player-controls.html`](../mockups/nbatv/07-player-controls.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV Player Controls 분석](../images/mockups/nbatv-analysis/12-player-controls-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/12-player-controls-analysis.html`](../mockups/nbatv-analysis/12-player-controls-analysis.html)
+>
+> **분석 포인트**: Playback Controls (좌), Utility Controls (우), 단축키 매핑
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Player Controls 목업](../images/mockups/wsoptv/13-player-controls.png)
 
 > **목업 파일**: [`wsoptv/13-player-controls.html`](../mockups/wsoptv/13-player-controls.html)
@@ -292,7 +346,14 @@
 
 > **목업 파일**: [`nbatv/08-info-summary.html`](../mockups/nbatv/08-info-summary.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV Info Summary 분석](../images/mockups/nbatv-analysis/06-info-summary-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/06-info-summary-analysis.html`](../mockups/nbatv-analysis/06-info-summary-analysis.html)
+>
+> **분석 포인트**: 7:3 레이아웃 비율 (기사:사이드바), 4개 탭 구조
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Info Summary 목업](../images/mockups/wsoptv/06-info-summary.png)
 
 > **목업 파일**: [`wsoptv/06-info-summary.html`](../mockups/wsoptv/06-info-summary.html)
@@ -318,7 +379,14 @@
 
 > **목업 파일**: [`nbatv/09-info-boxscore.html`](../mockups/nbatv/09-info-boxscore.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV Info Box Score 분석](../images/mockups/nbatv-analysis/07-info-boxscore-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/07-info-boxscore-analysis.html`](../mockups/nbatv-analysis/07-info-boxscore-analysis.html)
+>
+> **분석 포인트**: 18개 컬럼 통계 테이블, 팀 필터 드롭다운, 정렬 가능
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Info Player Stats 목업](../images/mockups/wsoptv/07-info-playerstats.png)
 
 > **목업 파일**: [`wsoptv/07-info-playerstats.html`](../mockups/wsoptv/07-info-playerstats.html)
@@ -356,7 +424,14 @@
 
 > **목업 파일**: [`nbatv/10-info-gamecharts.html`](../mockups/nbatv/10-info-gamecharts.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV Game Charts 분석](../images/mockups/nbatv-analysis/08-info-gamecharts-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/08-info-gamecharts-analysis.html`](../mockups/nbatv-analysis/08-info-gamecharts-analysis.html)
+>
+> **분석 포인트**: 4종 차트 (Shot Charts, Lead Tracker, Radar Chart, Bar Chart)
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Hand Charts 목업](../images/mockups/wsoptv/08-info-handcharts.png)
 
 > **목업 파일**: [`wsoptv/08-info-handcharts.html`](../mockups/wsoptv/08-info-handcharts.html)
@@ -384,7 +459,14 @@
 
 > **목업 파일**: [`nbatv/11-info-playbyplay.html`](../mockups/nbatv/11-info-playbyplay.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+![NBA TV Play-By-Play 분석](../images/mockups/nbatv-analysis/09-info-playbyplay-analysis.png)
+
+> **분석 파일**: [`nbatv-analysis/09-info-playbyplay-analysis.html`](../mockups/nbatv-analysis/09-info-playbyplay-analysis.html)
+>
+> **분석 포인트**: Quarter 필터, 3열 타임라인 레이아웃 (좌팀|시간|우팀)
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Hand History 목업](../images/mockups/wsoptv/09-info-handhistory.png)
 
 > **목업 파일**: [`wsoptv/09-info-handhistory.html`](../mockups/wsoptv/09-info-handhistory.html)
@@ -412,7 +494,14 @@
 
 > **목업 파일**: [`nbatv/12-modal-keyplays.html`](../mockups/nbatv/12-modal-keyplays.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+> **참고**: Key Plays 모달 분석은 `12-complete-mapping.html` 전체 매핑 문서에 포함
+>
+> **분석 파일**: [`nbatv-analysis/README.md`](../mockups/nbatv-analysis/README.md)
+>
+> **분석 포인트**: 카드 구조 (썸네일, 제목, 설명, 시간), 모달 레이아웃
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Featured Hands 목업](../images/mockups/wsoptv/10-modal-featuredhands.png)
 
 > **목업 파일**: [`wsoptv/10-modal-featuredhands.html`](../mockups/wsoptv/10-modal-featuredhands.html)
@@ -439,7 +528,14 @@
 
 > **목업 파일**: [`nbatv/13-keyplays-player.html`](../mockups/nbatv/13-keyplays-player.html)
 
-#### ③ WSOP TV B&W 목업
+#### ③ 분석 다이어그램
+> **참고**: Key Plays Player 분석은 Player Controls 분석에 포함
+>
+> **분석 파일**: [`nbatv-analysis/12-player-controls-analysis.html`](../mockups/nbatv-analysis/12-player-controls-analysis.html)
+>
+> **분석 포인트**: 오버레이 요소 (Label, Navigation, Score), 컨트롤 바
+
+#### ④ WSOP TV B&W 목업
 ![WSOP TV Featured Hands Player 목업](../images/mockups/wsoptv/11-featuredhands-player.png)
 
 > **목업 파일**: [`wsoptv/11-featuredhands-player.html`](../mockups/wsoptv/11-featuredhands-player.html)
@@ -664,6 +760,38 @@ PREFLOP → FLOP → TURN → RIVER → SHOWDOWN
 
 ---
 
-## 부록 B: 정밀 분석 문서
+## 부록 B: 분석 다이어그램 인덱스 (12개)
+
+### B.1 오버레이 분석 목업
+
+| # | 파일명 | 분석 대상 | 주요 포인트 |
+|---|--------|----------|------------|
+| 01 | [`01-main-streaming-analysis.html`](../mockups/nbatv-analysis/01-main-streaming-analysis.html) | 메인 스트리밍 화면 | 7단 레이어 구조 |
+| 02 | [`02-streaming-options-broadcasts-analysis.html`](../mockups/nbatv-analysis/02-streaming-options-broadcasts-analysis.html) | Streaming Options - Broadcasts | 3탭 모달, 5개 카메라 옵션 |
+| 03 | [`03-streaming-options-audio-analysis.html`](../mockups/nbatv-analysis/03-streaming-options-audio-analysis.html) | Streaming Options - Audio | 2개 라디오 옵션, 다국어 확장 |
+| 04 | [`04-multiview-selector-analysis.html`](../mockups/nbatv-analysis/04-multiview-selector-analysis.html) | MultiView 레이아웃 선택기 | 1x1, 1:2, 2x2 버튼 |
+| 05 | [`05-multiview-layout-analysis.html`](../mockups/nbatv-analysis/05-multiview-layout-analysis.html) | MultiView 레이아웃 | 메인(70%) + 사이드(30%) |
+| 06 | [`06-info-summary-analysis.html`](../mockups/nbatv-analysis/06-info-summary-analysis.html) | Info - Summary 탭 | 7:3 비율, Game Info 사이드바 |
+| 07 | [`07-info-boxscore-analysis.html`](../mockups/nbatv-analysis/07-info-boxscore-analysis.html) | Info - Box Score 탭 | 18+ 컬럼 통계 테이블 |
+| 08 | [`08-info-gamecharts-analysis.html`](../mockups/nbatv-analysis/08-info-gamecharts-analysis.html) | Info - Game Charts 탭 | Shot Charts, Lead Tracker |
+| 09 | [`09-info-playbyplay-analysis.html`](../mockups/nbatv-analysis/09-info-playbyplay-analysis.html) | Info - Play-By-Play 탭 | Quarter 탭, 양팀 타임라인 |
+| 10 | [`10-modal-keyplays-analysis.html`](../mockups/nbatv-analysis/10-modal-keyplays-analysis.html) | Key Plays Modal | 카드 리스트 구조 |
+| 11 | [`11-keyplays-player-analysis.html`](../mockups/nbatv-analysis/11-keyplays-player-analysis.html) | Key Plays Player | 플레이어 오버레이 |
+| 12 | [`12-player-controls-analysis.html`](../mockups/nbatv-analysis/12-player-controls-analysis.html) | Player Controls | Playback + Utility 그룹 |
+
+### B.2 분석 스타일 가이드
+
+| 요소 | 용도 | 색상 |
+|------|------|------|
+| Section Overlay | UI 레이어 구분 | 각 레이어별 고유 색상 |
+| Annotation Box | 분석 설명 | 노란색 (#ff0) |
+| Number Badge | 순서 표시 | 빨간색 (#c00) |
+| Legend Panel | 범례 | 검정 배경 + 노란 테두리 |
+| WSOP TV Hint | 변환 매핑 | 회색 이탤릭 |
+
+---
+
+## 부록 C: 정밀 분석 문서
 
 - **NBA TV 스크린샷 분석**: [`NBATV-SCREENSHOT-ANALYSIS.md`](./NBATV-SCREENSHOT-ANALYSIS.md) - 26개 스크린샷 상세 분석
+- **분석 목업 README**: [`nbatv-analysis/README.md`](../mockups/nbatv-analysis/README.md) - 13개 오버레이 분석 목업 인덱스

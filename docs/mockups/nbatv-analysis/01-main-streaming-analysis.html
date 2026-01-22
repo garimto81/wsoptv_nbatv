@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Main Streaming - Analysis Overlay</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      color: #000;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --bg-dark: #333;
+      --text-muted: #666;
+    }
+
+    /* ========== ANALYSIS OVERLAY STYLES ========== */
+    .analysis-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff0;
+      color: #000;
+      padding: 8px 15px;
+      font-size: 11px;
+      font-weight: bold;
+      z-index: 2000;
+      border: 2px solid #000;
+    }
+
+    /* Annotation Callout */
+    .annotation {
+      position: absolute;
+      background: #ff0;
+      color: #000;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border: 2px solid #000;
+      z-index: 200;
+      max-width: 220px;
+      line-height: 1.4;
+    }
+    .annotation::before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+    }
+    /* Arrow directions */
+    .annotation.arrow-left::before {
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 12px solid #000;
+    }
+    .annotation.arrow-right::before {
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid #000;
+    }
+    .annotation.arrow-up::before {
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 12px solid #000;
+    }
+
+    /* Number Badge */
+    .num-badge {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      background: #c00;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 22px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+
+    /* Legend Panel */
+    .legend-panel {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      padding: 15px 20px;
+      border: 2px solid #ff0;
+      z-index: 2000;
+      font-size: 11px;
+      max-width: 300px;
+    }
+    .legend-title {
+      color: #ff0;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border: 1px solid #fff;
+    }
+
+    /* ========== SECTION HIGHLIGHT OVERLAYS ========== */
+    .wireframe-container {
+      position: relative;
+    }
+    .section-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .section-overlay.ticker {
+      top: 0;
+      height: 110px;
+      border: 4px solid #00f;
+      background: rgba(0, 0, 255, 0.05);
+    }
+    .section-overlay.ad {
+      top: 110px;
+      height: 100px;
+      border: 4px solid #f80;
+      background: rgba(255, 136, 0, 0.05);
+    }
+    .section-overlay.header {
+      top: 210px;
+      height: 60px;
+      border: 4px solid #0c0;
+      background: rgba(0, 204, 0, 0.05);
+    }
+    .section-overlay.tabs {
+      bottom: 130px;
+      height: 55px;
+      border: 4px solid #f0f;
+      background: rgba(255, 0, 255, 0.05);
+    }
+    .section-overlay.timeline {
+      bottom: 75px;
+      height: 55px;
+      border: 4px solid #0ff;
+      background: rgba(0, 255, 255, 0.05);
+    }
+    .section-overlay.controls {
+      bottom: 0;
+      height: 75px;
+      border: 4px solid #ff0;
+      background: rgba(255, 255, 0, 0.05);
+    }
+
+    /* ========== ORIGINAL WIREFRAME STYLES ========== */
+    .scoreboard-ticker {
+      display: flex;
+      border-bottom: var(--border);
+      background: #fff;
+      height: 110px;
+      position: relative;
+    }
+    .ticker-date {
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-right: var(--border-thin);
+      font-size: 11px;
+    }
+    .ticker-date .day { font-weight: bold; }
+    .ticker-games {
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .ticker-game {
+      min-width: 180px;
+      padding: 10px 15px;
+      border-right: var(--border-thin);
+    }
+    .game-status {
+      font-size: 10px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-live { color: #000; font-weight: bold; }
+    .status-live::before {
+      content: "●";
+      color: #c00;
+    }
+    .game-teams {
+      font-size: 13px;
+    }
+    .team-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 0;
+    }
+    .team-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .team-logo {
+      width: 20px;
+      height: 20px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      background: var(--bg-light);
+    }
+    .team-score { font-weight: bold; }
+    .game-tag {
+      margin-top: 5px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .league-pass-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border: var(--border-thin);
+      font-size: 9px;
+    }
+
+    .ad-banner {
+      display: flex;
+      align-items: center;
+      height: 100px;
+      border-bottom: var(--border);
+      background: var(--bg-light);
+      position: relative;
+    }
+    .ad-image {
+      width: 180px;
+      height: 80px;
+      margin: 0 20px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: #fff;
+    }
+    .ad-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .ad-logo {
+      width: 50px;
+      height: 50px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: #fff;
+    }
+    .ad-text {
+      font-size: 14px;
+    }
+    .ad-cta {
+      padding: 12px 30px;
+      border: var(--border);
+      background: #c00;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .ad-promo {
+      width: 200px;
+      height: 80px;
+      margin-right: 20px;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .game-header {
+      padding: 15px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+      position: relative;
+    }
+    .game-title {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .broadcast-info {
+      font-size: 12px;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .broadcast-info .icon {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .video-player {
+      aspect-ratio: 16/9;
+      background: #111;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-placeholder {
+      color: #444;
+      font-size: 24px;
+      letter-spacing: 5px;
+    }
+
+    .stream-tabs {
+      display: flex;
+      gap: 10px;
+      padding: 15px 20px;
+      background: var(--bg-dark);
+      position: relative;
+    }
+    .stream-tab {
+      padding: 10px 20px;
+      border: var(--border);
+      background: #444;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 20px;
+    }
+    .stream-tab.active {
+      background: #fff;
+      color: #000;
+    }
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+      border: 1px solid currentColor;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      border-radius: 50%;
+    }
+    .tab-count {
+      background: var(--bg-medium);
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
+
+    .timeline {
+      padding: 10px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+      position: relative;
+    }
+    .timeline-time {
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    .timeline-bar {
+      height: 4px;
+      background: #444;
+      position: relative;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #c00;
+      width: 85%;
+    }
+    .timeline-live {
+      position: absolute;
+      right: 0;
+      top: -8px;
+      font-size: 10px;
+      color: #c00;
+      font-weight: bold;
+    }
+
+    .player-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--bg-dark);
+      color: #fff;
+      border-top: 1px solid #444;
+      position: relative;
+    }
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .control-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .control-btn:hover { background: #444; }
+    .control-btn.large {
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+    }
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      background: #444;
+      position: relative;
+    }
+    .volume-level {
+      width: 60%;
+      height: 100%;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="analysis-label">ANALYSIS OVERLAY - MAIN STREAMING</div>
+
+  <div class="wireframe-container">
+    <!-- ========== HIGHLIGHT OVERLAYS ========== -->
+    <div class="section-overlay ticker"></div>
+    <div class="section-overlay ad"></div>
+    <div class="section-overlay header"></div>
+    <div class="section-overlay tabs"></div>
+    <div class="section-overlay timeline"></div>
+    <div class="section-overlay controls"></div>
+
+    <!-- ========== ANNOTATIONS ========== -->
+    <!-- Ticker Annotation -->
+    <div class="annotation arrow-left" style="top: 40px; right: 20px;">
+      <span class="num-badge">1</span>
+      <strong>SCOREBOARD TICKER</strong><br>
+      Date + Games + Scores<br>
+      <em style="color:#666">WSOP: Tournament Ticker</em>
+    </div>
+
+    <!-- Ad Banner Annotation -->
+    <div class="annotation arrow-left" style="top: 140px; right: 20px;">
+      <span class="num-badge">2</span>
+      <strong>AD BANNER</strong><br>
+      Image + Logo + CTA<br>
+      <em style="color:#666">WSOP: 동일 구조</em>
+    </div>
+
+    <!-- Game Header Annotation -->
+    <div class="annotation arrow-left" style="top: 225px; right: 20px;">
+      <span class="num-badge">3</span>
+      <strong>GAME HEADER</strong><br>
+      "TEAM @ TEAM" + Source<br>
+      <em style="color:#666">WSOP: [♠] EVENT NAME</em>
+    </div>
+
+    <!-- Video Player Annotation (center) -->
+    <div class="annotation" style="top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+      <span class="num-badge">4</span>
+      <strong>VIDEO PLAYER</strong><br>
+      16:9 비율 • 라이브 스트림 전용<br>
+      <em style="color:#666">WSOP: 내부 오버레이 없음</em>
+    </div>
+
+    <!-- Stream Tabs Annotation -->
+    <div class="annotation arrow-right" style="bottom: 145px; left: 20px;">
+      <span class="num-badge">5</span>
+      <strong>STREAM TABS</strong><br>
+      Streams(9) | MultiView | Key Plays<br>
+      <em style="color:#666">WSOP: Active Tables | Featured Hands</em>
+    </div>
+
+    <!-- Timeline Annotation -->
+    <div class="annotation arrow-right" style="bottom: 90px; left: 20px;">
+      <span class="num-badge">6</span>
+      <strong>TIMELINE</strong><br>
+      Elapsed Time + Progress + LIVE<br>
+      <em style="color:#666">WSOP: Level 표시로 변경</em>
+    </div>
+
+    <!-- Controls Annotation -->
+    <div class="annotation arrow-up" style="bottom: 5px; left: 50%; transform: translateX(-50%); text-align: center;">
+      <span class="num-badge">7</span>
+      <strong>PLAYER CONTROLS</strong><br>
+      좌: Playback | 우: Utility (CC, PiP, FS)<br>
+      <em style="color:#666">WSOP: 포커 전용 버튼 Extension</em>
+    </div>
+
+    <!-- ========== ORIGINAL WIREFRAME CONTENT ========== -->
+    <!-- 1. SCOREBOARD TICKER -->
+    <div class="scoreboard-ticker">
+      <div class="ticker-date">
+        <span class="day">TUE</span>
+        <span>JAN</span>
+        <span>20</span>
+      </div>
+      <div class="ticker-games">
+        <div class="ticker-game">
+          <div class="game-status"><span class="status-live">Q3 4:49</span></div>
+          <div class="game-teams">
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[C]</span> Clippers</span>
+              <span class="team-score">74</span>
+            </div>
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[B]</span> Bulls</span>
+              <span class="team-score">84</span>
+            </div>
+          </div>
+          <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+        </div>
+        <div class="ticker-game">
+          <div class="game-status"><span class="status-live">Q2 :07.4</span> AWS NBA Rivals Week</div>
+          <div class="game-teams">
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[S]</span> Spurs</span>
+              <span class="team-score">70</span>
+            </div>
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[R]</span> Rockets</span>
+              <span class="team-score">59</span>
+            </div>
+          </div>
+          <div class="game-tag"><span class="league-pass-tag">League Pass</span> Coupang Play</div>
+        </div>
+        <div class="ticker-game">
+          <div class="game-status"><span class="status-live">END Q1</span></div>
+          <div class="game-teams">
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[T]</span> Timberwolves</span>
+              <span class="team-score">34</span>
+            </div>
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[J]</span> Jazz</span>
+              <span class="team-score">29</span>
+            </div>
+          </div>
+          <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. AD BANNER -->
+    <div class="ad-banner">
+      <div class="ad-image">[Product Image]<br>H60 Pro</div>
+      <div class="ad-content">
+        <div class="ad-logo">[Logo]</div>
+        <div class="ad-text">최대 90도 구부러지는 로보락 신제품 H60 Pro 청소기</div>
+        <button class="ad-cta">열기</button>
+      </div>
+      <div class="ad-promo">AWS<br>NBA<br>RIVALS WEEK<br><small>SEE SCHEDULE</small></div>
+    </div>
+
+    <!-- 3. GAME HEADER -->
+    <div class="game-header">
+      <div class="game-title">CLIPPERS @ BULLS</div>
+      <div class="broadcast-info">
+        <span class="icon">[B]</span>
+        <span>Bulls (In-Arena)</span>
+        <span>⏱</span>
+      </div>
+    </div>
+
+    <!-- 4. VIDEO PLAYER -->
+    <div class="video-player">
+      <div class="video-placeholder">[LIVE VIDEO STREAM]</div>
+    </div>
+
+    <!-- 5. STREAM TABS -->
+    <div class="stream-tabs">
+      <button class="stream-tab active">
+        <span class="tab-icon">📡</span>
+        Streams
+        <span class="tab-count">9</span>
+      </button>
+      <button class="stream-tab">
+        <span class="tab-icon">⊞</span>
+        MultiView
+      </button>
+      <button class="stream-tab">
+        <span class="tab-icon">🔥</span>
+        Key Plays
+      </button>
+    </div>
+
+    <!-- 6. TIMELINE -->
+    <div class="timeline">
+      <div class="timeline-time">01:35:55</div>
+      <div class="timeline-bar">
+        <div class="timeline-progress"></div>
+        <span class="timeline-live">LIVE</span>
+      </div>
+    </div>
+
+    <!-- 7. PLAYER CONTROLS -->
+    <div class="player-controls">
+      <div class="controls-left">
+        <button class="control-btn large">[||]</button>
+        <button class="control-btn">[<<]</button>
+        <button class="control-btn">[10]</button>
+        <button class="control-btn">[>>]</button>
+        <button class="control-btn">[🔊]</button>
+        <div class="volume-slider">
+          <div class="volume-level"></div>
+        </div>
+      </div>
+      <div class="controls-right">
+        <button class="control-btn">[CC]</button>
+        <button class="control-btn">[⚙]</button>
+        <button class="control-btn">[⊞]</button>
+        <button class="control-btn">[🖼]</button>
+        <button class="control-btn">[⛶]</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND PANEL -->
+  <div class="legend-panel">
+    <div class="legend-title">UI LAYER LEGEND</div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#00f"></div>
+      <span>① Scoreboard Ticker</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#f80"></div>
+      <span>② Ad Banner</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#0c0"></div>
+      <span>③ Game Header</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#111"></div>
+      <span>④ Video Player</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#f0f"></div>
+      <span>⑤ Stream Tabs</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#0ff"></div>
+      <span>⑥ Timeline</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#ff0"></div>
+      <span>⑦ Player Controls</span>
+    </div>
+  </div>
+</body>
+</html>

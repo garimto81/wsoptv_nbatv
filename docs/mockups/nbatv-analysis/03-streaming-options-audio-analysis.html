@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA TV Streaming Options (Audio) - Analysis Overlay</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: rgba(0,0,0,0.5);
+      color: #000;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    :root {
+      --border: 2px solid #000;
+      --border-thin: 1px solid #000;
+      --bg-light: #F5F5F5;
+      --bg-medium: #E0E0E0;
+      --text-muted: #666;
+    }
+
+    /* ========== ANALYSIS OVERLAY STYLES ========== */
+    .analysis-label {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff0;
+      color: #000;
+      padding: 8px 15px;
+      font-size: 11px;
+      font-weight: bold;
+      z-index: 2000;
+      border: 2px solid #000;
+    }
+
+    .annotation {
+      position: absolute;
+      background: #ff0;
+      color: #000;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border: 2px solid #000;
+      z-index: 200;
+      max-width: 240px;
+      line-height: 1.4;
+    }
+    .annotation::before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+    }
+    .annotation.arrow-left::before {
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 12px solid #000;
+    }
+    .annotation.arrow-right::before {
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid #000;
+    }
+
+    .num-badge {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      background: #c00;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 22px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+
+    .legend-panel {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      padding: 15px 20px;
+      border: 2px solid #ff0;
+      z-index: 2000;
+      font-size: 11px;
+      max-width: 300px;
+    }
+    .legend-title {
+      color: #ff0;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border: 1px solid #fff;
+    }
+
+    /* ========== SECTION OVERLAYS ========== */
+    .modal-wrapper {
+      position: relative;
+    }
+    .section-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .section-overlay.header {
+      top: 0;
+      height: 75px;
+      border: 4px solid #00f;
+      background: rgba(0, 0, 255, 0.05);
+    }
+    .section-overlay.tabs {
+      top: 75px;
+      height: 50px;
+      border: 4px solid #c90;
+      background: rgba(204, 153, 0, 0.05);
+    }
+    .section-overlay.radio {
+      top: 125px;
+      bottom: 0;
+      border: 4px solid #f0f;
+      background: rgba(255, 0, 255, 0.05);
+    }
+
+    /* ========== ORIGINAL WIREFRAME STYLES ========== */
+    .modal {
+      width: 480px;
+      background: #fff;
+      border: var(--border);
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 30px;
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .modal-close:hover { background: #000; color: #fff; }
+
+    /* Tabs */
+    .modal-tabs {
+      display: flex;
+      border-bottom: var(--border-thin);
+    }
+    .modal-tab {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .modal-tab:hover { background: var(--bg-light); }
+    .modal-tab.active {
+      font-weight: bold;
+      border-bottom-color: #c90;
+    }
+
+    /* Options List */
+    .options-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      padding: 18px 25px;
+      gap: 15px;
+      cursor: pointer;
+      border-bottom: var(--border-thin);
+    }
+    .option-item:last-child { border-bottom: none; }
+    .option-item:hover { background: var(--bg-light); }
+    .option-icon {
+      width: 36px;
+      height: 36px;
+      border: var(--border-thin);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      background: var(--bg-light);
+    }
+    .option-info {
+      flex: 1;
+    }
+    .option-title {
+      font-weight: bold;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="analysis-label">ANALYSIS OVERLAY - STREAMING OPTIONS (AUDIO)</div>
+
+  <div class="modal-wrapper">
+    <!-- ========== HIGHLIGHT OVERLAYS ========== -->
+    <div class="section-overlay header"></div>
+    <div class="section-overlay tabs"></div>
+    <div class="section-overlay radio"></div>
+
+    <!-- ========== ANNOTATIONS ========== -->
+    <div class="annotation arrow-left" style="top: 25px; right: -270px;">
+      <span class="num-badge">1</span>
+      <strong>MODAL HEADER</strong><br>
+      Title + Close Button<br>
+      <em style="color:#666">WSOP: Commentary Selection</em>
+    </div>
+
+    <div class="annotation arrow-left" style="top: 95px; right: -270px;">
+      <span class="num-badge">2</span>
+      <strong>AUDIO TAB (Active)</strong><br>
+      Broadcasts | Audio<br>
+      <em style="color:#666">WSOP: Commentary Language Selection</em>
+    </div>
+
+    <div class="annotation arrow-right" style="top: 220px; left: -270px;">
+      <span class="num-badge">3</span>
+      <strong>RADIO OPTIONS</strong><br>
+      Icon + Team Radio + Language<br>
+      <em style="color:#666">WSOP: EN/KO/ES Commentary 선택</em>
+    </div>
+
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">STREAMING OPTIONS</span>
+        <button class="modal-close">[X]</button>
+      </div>
+      <div class="modal-tabs">
+        <div class="modal-tab">Broadcasts</div>
+        <div class="modal-tab active">Audio</div>
+      </div>
+      <div class="options-list">
+        <div class="option-item">
+          <div class="option-icon">[🔊]</div>
+          <div class="option-info">
+            <div class="option-title">Bulls Radio</div>
+          </div>
+        </div>
+        <div class="option-item">
+          <div class="option-icon">[🔊]</div>
+          <div class="option-info">
+            <div class="option-title">Clippers Radio</div>
+          </div>
+        </div>
+        <div class="option-item">
+          <div class="option-icon">[🔊]</div>
+          <div class="option-info">
+            <div class="option-title">Bulls Radio - Spanish</div>
+          </div>
+        </div>
+        <div class="option-item">
+          <div class="option-icon">[🔊]</div>
+          <div class="option-info">
+            <div class="option-title">Clippers Radio - Spanish</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND PANEL -->
+  <div class="legend-panel">
+    <div class="legend-title">UI COMPONENT LEGEND</div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#00f"></div>
+      <span>① Modal Header</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#c90"></div>
+      <span>② Audio Tab (Active)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background:#f0f"></div>
+      <span>③ Radio Options</span>
+    </div>
+  </div>
+</body>
+</html>
