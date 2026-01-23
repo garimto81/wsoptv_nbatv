@@ -117,6 +117,19 @@
       border: 1px solid #fff;
     }
 
+    /* ========== PIXEL SIZE LABELS ========== */
+    .px-label {
+      position: absolute;
+      background: #000;
+      color: #0f0;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-family: monospace;
+      z-index: 300;
+      white-space: nowrap;
+    }
+    .px-label.inner { top: 4px; right: 4px; }
+
     /* ========== SECTION OVERLAYS ========== */
     .modal-wrapper {
       position: relative;
@@ -265,6 +278,7 @@
       <div class="section-overlay header"></div>
       <div class="section-overlay tabs"></div>
       <div class="section-overlay radio"></div>
+      <div class="px-label inner">486x674 | header:75px | radio:55px/row</div>
       <div class="modal-header">
         <span class="modal-title">STREAMING OPTIONS</span>
         <button class="modal-close">[X]</button>

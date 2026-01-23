@@ -120,6 +120,19 @@
       border: 1px solid #fff;
     }
 
+    /* ========== PIXEL SIZE LABELS ========== */
+    .px-label {
+      position: absolute;
+      background: #000;
+      color: #0f0;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-family: monospace;
+      z-index: 300;
+      white-space: nowrap;
+    }
+    .px-label.inner { top: 4px; right: 4px; }
+
     /* ========== SECTION OVERLAYS ========== */
     .page-wrapper {
       position: relative;
@@ -382,6 +395,7 @@
     <!-- Info Tabs -->
     <div class="info-tabs">
       <div class="section-highlight tabs-hl"></div>
+      <div class="px-label inner">h:50px | tab:15px 30px</div>
       <div class="info-tab active">Summary</div>
       <div class="info-tab">Box Score</div>
       <div class="info-tab">Game Charts</div>
@@ -391,6 +405,7 @@
     <!-- Ad Banner -->
     <div class="ad-banner">
       <div class="section-highlight ad-hl"></div>
+      <div class="px-label inner">h:90px</div>
       <div class="ad-image">[Product]<br>H60 Pro</div>
       <div class="ad-text">[AD TEXT: Product Description Here]</div>
       <button class="ad-cta">OPEN</button>
@@ -401,6 +416,7 @@
       <!-- Article Section -->
       <div class="article-section">
         <div class="section-highlight article-hl"></div>
+        <div class="px-label inner">w:70% | padding:30px</div>
         <h1 class="article-title">BULLS ENDEAVOR TO REVERSE SERIES TREND AGAINST CHARGING CLIPPERS</h1>
         <div class="article-meta">Tuesday, January 20th, 2026 11:20 AM</div>
         <span class="article-tag">Game Preview</span>
@@ -427,6 +443,7 @@
       <!-- Sidebar -->
       <div class="sidebar">
         <div class="section-highlight sidebar-hl"></div>
+        <div class="px-label inner">w:30% | infoRow:50px</div>
         <div class="sidebar-section">
           <div class="sidebar-title">GAME INFO</div>
           <div class="info-row">
