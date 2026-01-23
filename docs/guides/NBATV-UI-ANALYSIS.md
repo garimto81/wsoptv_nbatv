@@ -186,7 +186,7 @@
 > **HTML 목업**: [`nbatv/02-streaming-options-broadcasts.html`](../mockups/nbatv/02-streaming-options-broadcasts.html)
 
 **트리거**: Streams 버튼 클릭 또는 Video Player 내 설정
-**크기**: 약 400x500px
+**크기**: 480px (너비) × 가변 높이 (max-height: 450px for options list)
 **위치**: 화면 중앙
 
 **탭 구조**:
@@ -217,7 +217,7 @@
 > **HTML 목업**: [`nbatv/12-modal-keyplays.html`](../mockups/nbatv/12-modal-keyplays.html)
 
 **트리거**: Key Plays 탭 클릭
-**크기**: 약 400x600px
+**크기**: 480px (너비) × 가변 높이
 
 **Key Play Item 구조**:
 | 요소 | 크기/형식 |
