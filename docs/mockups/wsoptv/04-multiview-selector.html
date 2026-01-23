@@ -77,6 +77,17 @@
     .layout-cell {
       border: 1px solid currentColor;
     }
+    .layout-btn.extension {
+      border: 1px dashed #888;
+      opacity: 0.7;
+    }
+    .extension-note {
+      font-size: 10px;
+      color: #888;
+      text-align: center;
+      margin-top: 5px;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -107,8 +118,8 @@
           <div class="layout-cell" style="width:10px;height:8px"></div>
         </div>
       </button>
-      <!-- 3x3 (WSOP specific) -->
-      <button class="layout-btn">
+      <!-- 3x3 (Extension - 파이널 데이용) -->
+      <button class="layout-btn extension" title="Extension: 파이널 데이용">
         <div class="layout-icon" style="grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr">
           <div class="layout-cell" style="width:6px;height:5px"></div>
           <div class="layout-cell" style="width:6px;height:5px"></div>
@@ -122,6 +133,8 @@
         </div>
       </button>
     </div>
+    <!-- Extension Label -->
+    <div class="extension-note">3x3: Extension (파이널 데이용)</div>
   </div>
 </body>
 </html>
