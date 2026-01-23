@@ -285,26 +285,29 @@
     /* ========== 5. STREAM TABS (= Tables/MultiView/Featured Hands) ========== */
     .stream-tabs {
       display: flex;
-      gap: 10px;
-      padding: 15px 20px;
+      gap: 8px;
+      padding: 12px 20px;
       background: var(--bg-dark);
     }
     .stream-tab {
-      padding: 10px 20px;
-      border: var(--border);
-      background: #444;
+      padding: 8px 16px;
+      border: none;
+      background: #555;
       color: #fff;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 11px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      border-radius: 20px;
+      gap: 6px;
+      border-radius: 18px;
     }
     .stream-tab.active {
       background: #fff;
       color: #000;
+    }
+    .stream-tab:not(.active):hover {
+      background: #666;
     }
     .tab-icon {
       width: 16px;
