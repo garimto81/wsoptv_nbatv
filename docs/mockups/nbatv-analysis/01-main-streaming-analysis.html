@@ -169,17 +169,18 @@
       display: flex;
       border-bottom: var(--border);
       background: #fff;
-      height: 110px;
+      height: 105px;
       position: relative;
     }
     .ticker-date {
-      width: 60px;
+      width: 45px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       border-right: var(--border-thin);
-      font-size: 11px;
+      font-size: 10px;
+      padding: 5px;
     }
     .ticker-date .day { font-weight: bold; }
     .ticker-games {
@@ -188,8 +189,9 @@
       overflow-x: auto;
     }
     .ticker-game {
-      min-width: 180px;
-      padding: 10px 15px;
+      min-width: 145px;
+      max-width: 160px;
+      padding: 8px 12px;
       border-right: var(--border-thin);
     }
     .game-status {
@@ -244,20 +246,20 @@
     .ad-banner {
       display: flex;
       align-items: center;
-      height: 100px;
+      height: 90px;
       border-bottom: var(--border);
       background: var(--bg-light);
       position: relative;
     }
     .ad-image {
-      width: 180px;
-      height: 80px;
-      margin: 0 20px;
+      width: 150px;
+      height: 70px;
+      margin: 0 15px;
       border: var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      font-size: 10px;
       background: #fff;
     }
     .ad-content {
@@ -289,16 +291,19 @@
       cursor: pointer;
     }
     .ad-promo {
-      width: 200px;
-      height: 80px;
-      margin-right: 20px;
+      width: 170px;
+      height: 70px;
+      margin-right: 15px;
+      margin-left: auto;
       border: var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
-      background: #fff;
+      font-size: 9px;
+      background: #003087;
+      color: #fff;
       text-align: center;
+      line-height: 1.3;
     }
 
     .game-header {
@@ -345,27 +350,30 @@
 
     .stream-tabs {
       display: flex;
-      gap: 10px;
-      padding: 15px 20px;
+      gap: 8px;
+      padding: 12px 20px;
       background: var(--bg-dark);
       position: relative;
     }
     .stream-tab {
-      padding: 10px 20px;
-      border: var(--border);
-      background: #444;
+      padding: 8px 16px;
+      border: none;
+      background: #555;
       color: #fff;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 11px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      border-radius: 20px;
+      gap: 6px;
+      border-radius: 18px;
     }
     .stream-tab.active {
       background: #fff;
       color: #000;
+    }
+    .stream-tab:not(.active):hover {
+      background: #666;
     }
     .tab-icon {
       width: 16px;
@@ -563,12 +571,68 @@
           <div class="game-status"><span class="status-live">END Q1</span></div>
           <div class="game-teams">
             <div class="team-row">
-              <span class="team-name"><span class="team-logo">[T]</span> Timberwolves</span>
+              <span class="team-name"><span class="team-logo">[T]</span> T-Wolves</span>
               <span class="team-score">34</span>
             </div>
             <div class="team-row">
               <span class="team-name"><span class="team-logo">[J]</span> Jazz</span>
               <span class="team-score">29</span>
+            </div>
+          </div>
+          <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+        </div>
+        <div class="ticker-game">
+          <div class="game-status">PREGAME 12:00 PM</div>
+          <div class="game-teams">
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[L]</span> Lakers</span>
+              <span class="team-score">25-16</span>
+            </div>
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[N]</span> Nuggets</span>
+              <span class="team-score">29-14</span>
+            </div>
+          </div>
+          <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+        </div>
+        <div class="ticker-game">
+          <div class="game-status">PREGAME 12:00 PM</div>
+          <div class="game-teams">
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[R]</span> Raptors</span>
+              <span class="team-score">25-19</span>
+            </div>
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[W]</span> Warriors</span>
+              <span class="team-score">25-19</span>
+            </div>
+          </div>
+          <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+        </div>
+        <div class="ticker-game">
+          <div class="game-status">PREGAME 12:00 PM</div>
+          <div class="game-teams">
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[H]</span> Heat</span>
+              <span class="team-score">22-21</span>
+            </div>
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[K]</span> Kings</span>
+              <span class="team-score">12-31</span>
+            </div>
+          </div>
+          <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
+        </div>
+        <div class="ticker-game">
+          <div class="game-status">FINAL</div>
+          <div class="game-teams">
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[S]</span> Suns</span>
+              <span class="team-score">-</span>
+            </div>
+            <div class="team-row">
+              <span class="team-name"><span class="team-logo">[7]</span> 76ers</span>
+              <span class="team-score">-</span>
             </div>
           </div>
           <div class="game-tag"><span class="league-pass-tag">League Pass</span></div>
