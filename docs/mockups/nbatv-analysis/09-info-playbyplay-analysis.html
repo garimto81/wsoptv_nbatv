@@ -146,6 +146,19 @@
       color: #aaa;
       line-height: 1.4;
     }
+
+    /* ========== PIXEL SIZE LABELS ========== */
+    .px-label {
+      position: absolute;
+      background: #000;
+      color: #0f0;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-family: monospace;
+      z-index: 300;
+      white-space: nowrap;
+    }
+    .px-label.inner { top: 4px; right: 4px; }
   </style>
 </head>
 <body>
@@ -154,7 +167,8 @@
   <div class="page-title">NBA TV INFO TAB - PLAY-BY-PLAY ANALYSIS</div>
 
   <div class="content-grid">
-    <div class="diagram-panel">
+    <div class="diagram-panel" style="position:relative;">
+      <div class="px-label inner">tab:35px | opt:35px | row:40px | time:60px</div>
       <div class="panel-title">PLAY-BY-PLAY STRUCTURE</div>
 
       <div class="quarter-tabs">

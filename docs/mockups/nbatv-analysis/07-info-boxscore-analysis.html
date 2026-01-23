@@ -134,6 +134,19 @@
     .legend-color.player { background: rgba(0,170,255,0.3); }
     .legend-color.scoring { background: rgba(0,204,0,0.3); }
     .legend-color.other { background: rgba(255,136,0,0.3); }
+
+    /* ========== PIXEL SIZE LABELS ========== */
+    .px-label {
+      position: absolute;
+      background: #000;
+      color: #0f0;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-family: monospace;
+      z-index: 300;
+      white-space: nowrap;
+    }
+    .px-label.inner { top: 4px; right: 4px; }
   </style>
 </head>
 <body>
@@ -142,7 +155,8 @@
   <div class="page-title">NBA TV INFO TAB - BOX SCORE TABLE ANALYSIS</div>
 
   <div class="content-grid">
-    <div class="diagram-panel">
+    <div class="diagram-panel" style="position:relative;">
+      <div class="px-label inner">18cols | row:30px | tab:35px | cell:4-8px pad</div>
       <div class="panel-title">BOX SCORE TABLE STRUCTURE</div>
 
       <div class="team-tabs">

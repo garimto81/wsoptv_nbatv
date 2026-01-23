@@ -139,6 +139,19 @@
       color: #0c0;
       font-style: italic;
     }
+
+    /* ========== PIXEL SIZE LABELS ========== */
+    .px-label {
+      position: absolute;
+      background: #000;
+      color: #0f0;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-family: monospace;
+      z-index: 300;
+      white-space: nowrap;
+    }
+    .px-label.inner { top: 4px; right: 4px; }
   </style>
 </head>
 <body>
@@ -147,7 +160,8 @@
   <div class="page-title">NBA TV PLAYER CONTROLS - BUTTON ANALYSIS</div>
 
   <!-- Playback Controls -->
-  <div class="controls-section">
+  <div class="controls-section" style="position:relative;">
+    <div class="px-label inner">btn:45x45 | play:44x44 | ctrl:36x36 | vol:80x4</div>
     <div class="section-title">PLAYBACK CONTROLS (LEFT GROUP)</div>
     <div class="button-grid">
       <div class="button-item">

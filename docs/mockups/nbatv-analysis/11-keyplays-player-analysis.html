@@ -187,6 +187,19 @@
       font-size: 9px;
       color: #aaa;
     }
+
+    /* ========== PIXEL SIZE LABELS ========== */
+    .px-label {
+      position: absolute;
+      background: #000;
+      color: #0f0;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-family: monospace;
+      z-index: 300;
+      white-space: nowrap;
+    }
+    .px-label.inner { top: 4px; right: 4px; }
   </style>
 </head>
 <body>
@@ -195,7 +208,8 @@
   <div class="page-title">NBA TV KEY PLAYS PLAYER VIEW - ANALYSIS</div>
 
   <div class="content-grid">
-    <div class="diagram-panel">
+    <div class="diagram-panel" style="position:relative;">
+      <div class="px-label inner">video:250px | ctrl:50px | nav-btn:40px | label:25px</div>
       <div class="panel-title">KEY PLAYS PLAYER STRUCTURE</div>
 
       <div class="player-area">

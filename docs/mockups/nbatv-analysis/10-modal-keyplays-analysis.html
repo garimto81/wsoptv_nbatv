@@ -133,6 +133,20 @@
       color: #aaa;
       line-height: 1.4;
     }
+
+    /* ========== PIXEL SIZE LABELS ========== */
+    .px-label {
+      position: absolute;
+      background: #000;
+      color: #0f0;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-family: monospace;
+      z-index: 300;
+      white-space: nowrap;
+    }
+    .px-label.inner { top: 4px; right: 4px; }
+
     /* Card Structure Diagram */
     .card-structure {
       margin-top: 15px;
@@ -166,7 +180,8 @@
   <div class="page-title">NBA TV KEY PLAYS MODAL - STRUCTURE ANALYSIS</div>
 
   <div class="content-grid">
-    <div class="diagram-panel">
+    <div class="diagram-panel" style="position:relative;">
+      <div class="px-label inner">modal:400px | header:45px | card:80px | thumb:100x60</div>
       <div class="panel-title">KEY PLAYS MODAL UI</div>
 
       <div class="modal-header">
