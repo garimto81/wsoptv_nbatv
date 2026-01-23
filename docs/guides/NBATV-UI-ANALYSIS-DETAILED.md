@@ -3,6 +3,7 @@
 **Version**: 3.0.0
 **Date**: 2026-01-21
 **Purpose**: NBA TV 스크린샷을 기반으로 한 정밀 UI/UX 분석
+**목업**: B&W HTML 와이어프레임으로 변환됨
 
 ---
 
@@ -12,19 +13,19 @@
 
 | # | 원본 스크린샷 | B&W 목업 | 화면 유형 |
 |---|--------------|----------|----------|
-| 1 | 113524.png | 01-main-streaming.html | 메인 스트리밍 |
-| 2 | 113700.png | 02-streaming-options-broadcasts.html | 모달 - Broadcasts |
-| 3 | 113717.png | 03-streaming-options-audio.html | 모달 - Audio |
-| 4 | 113734.png | 04-multiview-selector.html | 컴포넌트 - 레이아웃 선택 |
-| 5 | 113750.png | 05-multiview-1x2.html | MultiView 1:2 |
-| 6 | 113755.png, 113825.png | 06-multiview-2x2.html | MultiView 2x2 |
-| 7 | 113855-113949.png | 07-player-controls.html | 플레이어 컨트롤 모음 |
-| 8 | 114505.png | 08-info-summary.html | 정보 - Summary 탭 |
-| 9 | 114529.png | 09-info-boxscore.html | 정보 - Box Score 탭 |
-| 10 | 114548.png, 114600.png, 114611.png | 10-info-gamecharts.html | 정보 - Game Charts 탭 |
-| 11 | 114928.png | 11-info-playbyplay.html | 정보 - Play-By-Play 탭 |
-| 12 | 115018.png | 12-modal-keyplays.html | 모달 - Key Plays |
-| 13 | 115031.png | 13-keyplays-player.html | Key Plays 재생 화면 |
+| 1 | 113524.png | [`01-main-streaming.html`](../mockups/nbatv/01-main-streaming.html) | 메인 스트리밍 |
+| 2 | 113700.png | [`02-streaming-options-broadcasts.html`](../mockups/nbatv/02-streaming-options-broadcasts.html) | 모달 - Broadcasts |
+| 3 | 113717.png | [`03-streaming-options-audio.html`](../mockups/nbatv/03-streaming-options-audio.html) | 모달 - Audio |
+| 4 | 113734.png | [`04-multiview-selector.html`](../mockups/nbatv/04-multiview-selector.html) | 컴포넌트 - 레이아웃 선택 |
+| 5 | 113750.png | [`05-multiview-1x2.html`](../mockups/nbatv/05-multiview-1x2.html) | MultiView 1:2 |
+| 6 | 113755.png, 113825.png | [`06-multiview-2x2.html`](../mockups/nbatv/06-multiview-2x2.html) | MultiView 2x2 |
+| 7 | 113855-113949.png | [`07-player-controls.html`](../mockups/nbatv/07-player-controls.html) | 플레이어 컨트롤 모음 |
+| 8 | 114505.png | [`08-info-summary.html`](../mockups/nbatv/08-info-summary.html) | 정보 - Summary 탭 |
+| 9 | 114529.png | [`09-info-boxscore.html`](../mockups/nbatv/09-info-boxscore.html) | 정보 - Box Score 탭 |
+| 10 | 114548.png, 114600.png, 114611.png | [`10-info-gamecharts.html`](../mockups/nbatv/10-info-gamecharts.html) | 정보 - Game Charts 탭 |
+| 11 | 114928.png | [`11-info-playbyplay.html`](../mockups/nbatv/11-info-playbyplay.html) | 정보 - Play-By-Play 탭 |
+| 12 | 115018.png | [`12-modal-keyplays.html`](../mockups/nbatv/12-modal-keyplays.html) | 모달 - Key Plays |
+| 13 | 115031.png | [`13-keyplays-player.html`](../mockups/nbatv/13-keyplays-player.html) | Key Plays 재생 화면 |
 
 ---
 
@@ -32,32 +33,11 @@
 
 ### 2.1 메인 스트리밍 화면 (7단 구조)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  SCOREBOARD TICKER (h: 105px)                               │
-│  [날짜 45px] [경기1 145px] [경기2] [경기3] ... →            │
-├─────────────────────────────────────────────────────────────┤
-│  AD BANNER (h: 90px)                                        │
-│  [이미지] [로고] [텍스트] [CTA버튼] [프로모]                │
-├─────────────────────────────────────────────────────────────┤
-│  GAME HEADER (h: 60px)                                      │
-│  CLIPPERS @ BULLS | Bulls (In-Arena) ⏱                     │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│                    VIDEO PLAYER                             │
-│                    (aspect-ratio: 16/9)                     │
-│                                                             │
-├─────────────────────────────────────────────────────────────┤
-│  STREAM TABS (h: 55px)                                      │
-│  [📡 Streams 9] [⊞ MultiView] [🔥 Key Plays]               │
-├─────────────────────────────────────────────────────────────┤
-│  TIMELINE (h: 40px)                                         │
-│  01:35:55 ═══════════════════════════════════●═══ LIVE     │
-├─────────────────────────────────────────────────────────────┤
-│  PLAYER CONTROLS (h: 65px)                                  │
-│  [⏸][⏪][10↺][⏩][🔊]▬▬▬  ...  [CC][⚙][⊞][🖼][⛶]        │
-└─────────────────────────────────────────────────────────────┘
-```
+![메인 스트리밍 화면](../images/mockups/nbatv/01-main-streaming.png)
+
+> **HTML 목업**: [`nbatv/01-main-streaming.html`](../mockups/nbatv/01-main-streaming.html)
+>
+> **분석 다이어그램**: [`nbatv-analysis/01-main-streaming-analysis.html`](../mockups/nbatv-analysis/01-main-streaming-analysis.html)
 
 ### 2.2 높이 분석 (픽셀 단위)
 
@@ -90,22 +70,16 @@
 
 ### 3.1 Scoreboard Ticker
 
-```
-┌──────┬────────────────────────────────────────────────────────┐
-│ DATE │  GAME CARD  │  GAME CARD  │  GAME CARD  │  ...   →   │
-│ TUE  │ ● Q3 4:49   │ ● Q2 :07.4  │ ● END Q1    │            │
-│ JAN  │ [C] CLP  74 │ [S] SAS  70 │ [T] MIN  34 │            │
-│ 20   │ [B] CHI  84 │ [R] HOU  59 │ [J] UTA  29 │            │
-│      │ League Pass │ LP  Coupang │ League Pass │            │
-└──────┴────────────────────────────────────────────────────────┘
-```
-
 **Game Card 구조**:
 - Status: 경기 상태 (LIVE/Q1-Q4/HALF/END/PREGAME/FINAL)
 - Teams: 로고(20x20) + 팀명 + 점수/전적
 - Tags: League Pass, Coupang Play, AWS Rivals Week
 
 ### 3.2 Streaming Options 모달
+
+![Streaming Options - Broadcasts](../images/mockups/nbatv/02-streaming-options-broadcasts.png)
+
+> **HTML 목업**: [`nbatv/02-streaming-options-broadcasts.html`](../mockups/nbatv/02-streaming-options-broadcasts.html)
 
 **Broadcasts 탭** (5개 옵션):
 | 옵션 | 설명 |
@@ -117,6 +91,11 @@
 | Mobile View (In-Arena) | Optimized viewing experience, focused on close up action |
 
 **Audio 탭** (4개 옵션):
+
+![Streaming Options - Audio](../images/mockups/nbatv/03-streaming-options-audio.png)
+
+> **HTML 목업**: [`nbatv/03-streaming-options-audio.html`](../mockups/nbatv/03-streaming-options-audio.html)
+
 | 옵션 |
 |------|
 | Bulls Radio |
@@ -125,6 +104,10 @@
 | Clippers Radio - Spanish |
 
 ### 3.3 MultiView 레이아웃
+
+![MultiView 선택기](../images/mockups/nbatv/04-multiview-selector.png)
+
+> **HTML 목업**: [`nbatv/04-multiview-selector.html`](../mockups/nbatv/04-multiview-selector.html)
 
 | 레이아웃 | 그리드 | 용도 |
 |----------|--------|------|
@@ -135,6 +118,12 @@
 **빈 슬롯 텍스트**: "Add a Game from Score Strip"
 
 ### 3.4 Player Controls 상세
+
+![플레이어 컨트롤](../images/mockups/nbatv/07-player-controls.png)
+
+> **HTML 목업**: [`nbatv/07-player-controls.html`](../mockups/nbatv/07-player-controls.html)
+>
+> **분석 다이어그램**: [`nbatv-analysis/12-player-controls-analysis.html`](../mockups/nbatv-analysis/12-player-controls-analysis.html)
 
 **왼쪽 컨트롤**:
 | 버튼 | 기능 | 단축키 |
@@ -158,12 +147,12 @@
 
 ### 3.5 Info Tabs (4개 탭)
 
-| 탭 | 내용 |
-|----|------|
-| **Summary** | 경기 프리뷰 기사 + Game Info (날짜/장소/심판/방송) + Line Scores |
-| **Box Score** | 선수별 상세 통계 테이블 (MIN, FGM, FGA, FG%, 3PM, 3PA, 3P% 등 20개 컬럼) |
-| **Game Charts** | Shot Charts (코트 다이어그램) + Lead Tracker (점수 차 그래프) + Team Comparison |
-| **Play-By-Play** | 쿼터별 타임라인 이벤트 (양 팀 대칭 레이아웃) |
+| 탭 | 내용 | 목업 |
+|----|------|------|
+| **Summary** | 경기 프리뷰 기사 + Game Info | [`08-info-summary.html`](../mockups/nbatv/08-info-summary.html) |
+| **Box Score** | 선수별 상세 통계 테이블 | [`09-info-boxscore.html`](../mockups/nbatv/09-info-boxscore.html) |
+| **Game Charts** | Shot Charts + Lead Tracker | [`10-info-gamecharts.html`](../mockups/nbatv/10-info-gamecharts.html) |
+| **Play-By-Play** | 쿼터별 타임라인 이벤트 | [`11-info-playbyplay.html`](../mockups/nbatv/11-info-playbyplay.html) |
 
 ---
 
@@ -171,56 +160,30 @@
 
 ### 4.1 사용자 네비게이션 흐름
 
-```
-                    ┌─────────────────┐
-                    │  MAIN STREAMING │
-                    │     SCREEN      │
-                    └────────┬────────┘
-                             │
-         ┌───────────────────┼───────────────────┐
-         │                   │                   │
-         ▼                   ▼                   ▼
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│   SCOREBOARD    │ │   STREAM TABS   │ │ PLAYER CONTROLS │
-│     TICKER      │ │                 │ │                 │
-└────────┬────────┘ └────────┬────────┘ └────────┬────────┘
-         │                   │                   │
-         ▼                   │                   ▼
-┌─────────────────┐          │          ┌─────────────────┐
-│   ADD TO        │          │          │   STREAMING     │
-│   MULTIVIEW     │          │          │   OPTIONS       │
-└─────────────────┘          │          └─────────────────┘
-                             │
-         ┌───────────────────┼───────────────────┐
-         │                   │                   │
-         ▼                   ▼                   ▼
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│   STREAMS       │ │   MULTIVIEW     │ │   KEY PLAYS     │
-│   (변경)        │ │   (레이아웃)    │ │   (하이라이트)  │
-└─────────────────┘ └─────────────────┘ └────────┬────────┘
-                                                 │
-                                                 ▼
-                                        ┌─────────────────┐
-                                        │   KEY PLAYS     │
-                                        │   PLAYER        │
-                                        └─────────────────┘
-```
+![UX 워크플로우 - 메인](../images/mockups/wsoptv/14-ux-workflow-main.png)
+
+> **HTML 목업**: [`wsoptv/14-ux-workflow-main.html`](../mockups/wsoptv/14-ux-workflow-main.html)
+
+**메인 화면 진입 후 경로**:
+1. **SCOREBOARD TICKER** → 경기 선택 → ADD TO MULTIVIEW
+2. **STREAM TABS**
+   - Streams → 방송 변경
+   - MultiView → 레이아웃 변경
+   - Key Plays → 하이라이트 → KEY PLAYS PLAYER
+3. **PLAYER CONTROLS** → STREAMING OPTIONS
 
 ### 4.2 게임 정보 접근 흐름
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      INFO TABS                               │
-├─────────────────┬─────────────────┬─────────────────┬───────┤
-│    Summary      │    Box Score    │   Game Charts   │ PbP   │
-├─────────────────┼─────────────────┼─────────────────┼───────┤
-│ • Article       │ • Team A Stats  │ • Shot Charts   │ • Q1  │
-│ • Game Info     │ • Team B Stats  │ • Lead Tracker  │ • Q2  │
-│ • Line Scores   │ • DNP List      │ • Team Compare  │ • Q3  │
-│ • Lead Changes  │ • Totals Row    │ • Leading Plyr  │ • Q4  │
-│ • Times Tied    │                 │                 │ • ALL │
-└─────────────────┴─────────────────┴─────────────────┴───────┘
-```
+![UX 워크플로우 - Info](../images/mockups/wsoptv/15-ux-workflow-info.png)
+
+> **HTML 목업**: [`wsoptv/15-ux-workflow-info.html`](../mockups/wsoptv/15-ux-workflow-info.html)
+
+| 탭 | 주요 내용 |
+|----|----------|
+| Summary | Article, Game Info, Line Scores, Lead Changes, Times Tied |
+| Box Score | Team A Stats, Team B Stats, DNP List, Totals Row |
+| Game Charts | Shot Charts, Lead Tracker, Team Compare, Leading Plyr |
+| Play-By-Play | Q1, Q2, Q3, Q4, ALL |
 
 ---
 
@@ -350,28 +313,45 @@
 
 ## 7. 목업 파일 목록
 
-### 6.1 NBA TV B&W Wireframes (13개)
+### 7.1 NBA TV B&W Wireframes (13개)
 
 | 파일명 | 크기 | 설명 |
 |--------|------|------|
-| 01-main-streaming.html | 1280x900 | 메인 스트리밍 화면 |
-| 02-streaming-options-broadcasts.html | 800x700 | Broadcasts 탭 모달 |
-| 03-streaming-options-audio.html | 800x600 | Audio 탭 모달 |
-| 04-multiview-selector.html | 400x200 | 레이아웃 선택기 |
-| 05-multiview-1x2.html | 1280x800 | 1:2 분할 레이아웃 |
-| 06-multiview-2x2.html | 1280x900 | 2x2 분할 레이아웃 |
-| 07-player-controls.html | 1200x900 | 컨트롤 모음 |
-| 08-info-summary.html | 1280x1000 | Summary 탭 |
-| 09-info-boxscore.html | 1400x900 | Box Score 탭 |
-| 10-info-gamecharts.html | 1280x1400 | Game Charts 탭 |
-| 11-info-playbyplay.html | 1280x1000 | Play-By-Play 탭 |
-| 12-modal-keyplays.html | 800x750 | Key Plays 모달 |
-| 13-keyplays-player.html | 1280x800 | Key Plays 재생 화면 |
+| [`01-main-streaming.html`](../mockups/nbatv/01-main-streaming.html) | 1280x900 | 메인 스트리밍 화면 |
+| [`02-streaming-options-broadcasts.html`](../mockups/nbatv/02-streaming-options-broadcasts.html) | 800x700 | Broadcasts 탭 모달 |
+| [`03-streaming-options-audio.html`](../mockups/nbatv/03-streaming-options-audio.html) | 800x600 | Audio 탭 모달 |
+| [`04-multiview-selector.html`](../mockups/nbatv/04-multiview-selector.html) | 400x200 | 레이아웃 선택기 |
+| [`05-multiview-1x2.html`](../mockups/nbatv/05-multiview-1x2.html) | 1280x800 | 1:2 분할 레이아웃 |
+| [`06-multiview-2x2.html`](../mockups/nbatv/06-multiview-2x2.html) | 1280x900 | 2x2 분할 레이아웃 |
+| [`07-player-controls.html`](../mockups/nbatv/07-player-controls.html) | 1200x900 | 컨트롤 모음 |
+| [`08-info-summary.html`](../mockups/nbatv/08-info-summary.html) | 1280x1000 | Summary 탭 |
+| [`09-info-boxscore.html`](../mockups/nbatv/09-info-boxscore.html) | 1400x900 | Box Score 탭 |
+| [`10-info-gamecharts.html`](../mockups/nbatv/10-info-gamecharts.html) | 1280x1400 | Game Charts 탭 |
+| [`11-info-playbyplay.html`](../mockups/nbatv/11-info-playbyplay.html) | 1280x1000 | Play-By-Play 탭 |
+| [`12-modal-keyplays.html`](../mockups/nbatv/12-modal-keyplays.html) | 800x750 | Key Plays 모달 |
+| [`13-keyplays-player.html`](../mockups/nbatv/13-keyplays-player.html) | 1280x800 | Key Plays 재생 화면 |
 
-### 6.2 스크린샷 경로
+### 7.2 분석 다이어그램 (12개)
+
+| 파일명 | 설명 |
+|--------|------|
+| [`01-main-streaming-analysis.html`](../mockups/nbatv-analysis/01-main-streaming-analysis.html) | 메인 화면 레이어 분석 |
+| [`02-streaming-options-broadcasts-analysis.html`](../mockups/nbatv-analysis/02-streaming-options-broadcasts-analysis.html) | Broadcasts 모달 분석 |
+| [`03-streaming-options-audio-analysis.html`](../mockups/nbatv-analysis/03-streaming-options-audio-analysis.html) | Audio 모달 분석 |
+| [`04-multiview-selector-analysis.html`](../mockups/nbatv-analysis/04-multiview-selector-analysis.html) | 레이아웃 선택기 분석 |
+| [`05-multiview-layout-analysis.html`](../mockups/nbatv-analysis/05-multiview-layout-analysis.html) | MultiView 레이아웃 분석 |
+| [`06-info-summary-analysis.html`](../mockups/nbatv-analysis/06-info-summary-analysis.html) | Summary 탭 분석 |
+| [`07-info-boxscore-analysis.html`](../mockups/nbatv-analysis/07-info-boxscore-analysis.html) | Box Score 탭 분석 |
+| [`08-info-gamecharts-analysis.html`](../mockups/nbatv-analysis/08-info-gamecharts-analysis.html) | Game Charts 탭 분석 |
+| [`09-info-playbyplay-analysis.html`](../mockups/nbatv-analysis/09-info-playbyplay-analysis.html) | Play-By-Play 탭 분석 |
+| [`10-modal-keyplays-analysis.html`](../mockups/nbatv-analysis/10-modal-keyplays-analysis.html) | Key Plays 모달 분석 |
+| [`11-keyplays-player-analysis.html`](../mockups/nbatv-analysis/11-keyplays-player-analysis.html) | Key Plays 재생 화면 분석 |
+| [`12-player-controls-analysis.html`](../mockups/nbatv-analysis/12-player-controls-analysis.html) | 플레이어 컨트롤 분석 |
+
+### 7.3 스크린샷 경로
 
 ```
-D:\AI\claude01\wsoptv_nbatv\docs\images\mockups\nbatv\
+docs/images/mockups/nbatv/
 ├── 01-main-streaming.png
 ├── 02-streaming-options-broadcasts.png
 ├── 03-streaming-options-audio.png
@@ -389,9 +369,9 @@ D:\AI\claude01\wsoptv_nbatv\docs\images\mockups\nbatv\
 
 ---
 
-## 7. NBA TV → WSOP TV 매핑 가이드
+## 8. NBA TV → WSOP TV 매핑 가이드
 
-### 7.1 용어 매핑
+### 8.1 용어 매핑
 
 | NBA TV | WSOP TV | 설명 |
 |--------|---------|------|
@@ -408,7 +388,7 @@ D:\AI\claude01\wsoptv_nbatv\docs\images\mockups\nbatv\
 | Broadcasts | Camera Views | 영상 소스 |
 | Radio | Commentary | 오디오 소스 |
 
-### 7.2 기능 매핑
+### 8.2 기능 매핑
 
 | NBA TV 기능 | WSOP TV 기능 |
 |------------|--------------|
@@ -423,16 +403,29 @@ D:\AI\claude01\wsoptv_nbatv\docs\images\mockups\nbatv\
 
 ---
 
-## 8. 다음 단계: WSOP TV Wireframe 설계
+## 9. WSOP TV Wireframe 목록
 
-Phase 4에서 구현할 WSOP TV 목업:
+Phase 4에서 구현된 WSOP TV 목업:
 
-1. **메인 스트리밍** - Tournament Ticker + Poker Table View
-2. **Streaming Options** - Camera/Commentary 탭
-3. **MultiView** - Multi-Table View (1/2/4/9 테이블)
-4. **Info Tabs** - Summary/Player Stats/Hand Charts/Hand History
-5. **Featured Hands** - Hand 리스트 + 재생 화면
+| # | 파일명 | 설명 |
+|---|--------|------|
+| 1 | [`01-main-streaming.html`](../mockups/wsoptv/01-main-streaming.html) | 메인 스트리밍 |
+| 2 | [`02-streaming-options-camera.html`](../mockups/wsoptv/02-streaming-options-camera.html) | Camera 탭 모달 |
+| 3 | [`03-streaming-options-commentary.html`](../mockups/wsoptv/03-streaming-options-commentary.html) | Commentary 탭 모달 |
+| 4 | [`04-multiview-selector.html`](../mockups/wsoptv/04-multiview-selector.html) | MultiView 선택기 |
+| 5 | [`05-multiview-2x2.html`](../mockups/wsoptv/05-multiview-2x2.html) | 2x2 레이아웃 |
+| 6 | [`06-info-summary.html`](../mockups/wsoptv/06-info-summary.html) | Summary 탭 |
+| 7 | [`07-info-playerstats.html`](../mockups/wsoptv/07-info-playerstats.html) | Player Stats 탭 |
+| 8 | [`08-info-handcharts.html`](../mockups/wsoptv/08-info-handcharts.html) | Hand Charts 탭 |
+| 9 | [`09-info-handhistory.html`](../mockups/wsoptv/09-info-handhistory.html) | Hand History 탭 |
+| 10 | [`10-modal-featuredhands.html`](../mockups/wsoptv/10-modal-featuredhands.html) | Featured Hands 모달 |
+| 11 | [`11-featuredhands-player.html`](../mockups/wsoptv/11-featuredhands-player.html) | Featured Hands 재생 |
+| 12 | [`12-multiview-1x2.html`](../mockups/wsoptv/12-multiview-1x2.html) | 1x2 레이아웃 |
+| 13 | [`13-player-controls.html`](../mockups/wsoptv/13-player-controls.html) | 플레이어 컨트롤 |
+| 14 | [`14-ux-workflow-main.html`](../mockups/wsoptv/14-ux-workflow-main.html) | UX 워크플로우 - 메인 |
+| 15 | [`15-ux-workflow-info.html`](../mockups/wsoptv/15-ux-workflow-info.html) | UX 워크플로우 - Info |
+| 16 | [`16-ux-workflow-featured-hands.html`](../mockups/wsoptv/16-ux-workflow-featured-hands.html) | UX 워크플로우 - Featured Hands |
 
 ---
 
-*Document generated from NBA TV UI analysis*
+*Document generated from NBA TV UI analysis - All ASCII mockups converted to HTML wireframes*
